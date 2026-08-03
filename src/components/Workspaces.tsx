@@ -18,7 +18,9 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
   return (
     <motion.section
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-6xl px-4 pb-28 pt-8 sm:px-6 lg:px-8"
+      className={`mx-auto w-full max-w-6xl px-4 pb-28 sm:px-6 lg:px-8 ${
+        activeWorkspace === 'overview' ? 'pt-8' : 'pt-4'
+      }`}
       initial={{ opacity: 0, y: 10 }}
       key={activeWorkspace}
       transition={{ duration: 0.22, ease: 'easeOut' }}

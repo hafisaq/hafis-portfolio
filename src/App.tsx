@@ -6,7 +6,13 @@ import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
 import { ProjectOrbit } from './components/ProjectOrbit'
 import { WorkspaceDock } from './components/WorkspaceDock'
-import { commandActions, getProjectById, type ProjectId, type WorkspaceId } from './data/portfolio'
+import {
+  commandActions,
+  getProjectById,
+  workspaces,
+  type ProjectId,
+  type WorkspaceId,
+} from './data/portfolio'
 
 const Workspaces = lazy(() =>
   import('./components/Workspaces').then((module) => ({ default: module.Workspaces })),
@@ -53,6 +59,8 @@ function App() {
 
   const openCommand = () => setIsCommandOpen(true)
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
+  const activeWorkspaceMeta = workspaces.find((workspace) => workspace.id === activeWorkspace)
+  const isHome = activeWorkspace === 'overview'
 
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
@@ -84,54 +92,70 @@ function App() {
           </button>
         </header>
 
-        <section
-          className="relative z-10 mx-auto grid w-full max-w-6xl gap-8 px-4 pb-8 pt-4 sm:px-6 sm:pt-10 lg:grid-cols-[1.08fr_0.92fr] lg:px-8"
-          id="top"
-        >
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            className="flex min-h-[58svh] flex-col justify-center"
-            initial={{ opacity: 0, y: 14 }}
-            transition={{ duration: 0.34, ease: 'easeOut' }}
-          >
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur">
-              <Zap aria-hidden="true" className="size-4 text-amber-600" />
-              Mobile-first product portfolio
-            </div>
-            <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl">
-              Product work, opened like a focused workspace.
-            </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
-              A focused place to scan my work, open the important details fast, and see how I
-              think through product interfaces.
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <button
-                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                onClick={openCommand}
-                type="button"
+        <AnimatePresence mode="wait">
+          {isHome ? (
+            <motion.section
+              animate={{ opacity: 1, y: 0 }}
+              className="relative z-10 mx-auto grid w-full max-w-6xl gap-8 px-4 pb-8 pt-4 sm:px-6 sm:pt-10 lg:grid-cols-[1.08fr_0.92fr] lg:px-8"
+              exit={{ opacity: 0, y: -12 }}
+              id="top"
+              initial={{ opacity: 0, y: 12 }}
+              key="hero"
+              transition={{ duration: 0.24, ease: 'easeOut' }}
+            >
+              <motion.div
+                animate={{ opacity: 1, y: 0 }}
+                className="flex min-h-[58svh] flex-col justify-center"
+                initial={{ opacity: 0, y: 14 }}
+                transition={{ duration: 0.34, ease: 'easeOut' }}
               >
-                Open command center
-              </button>
-              <button
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
-                onClick={() => setActiveWorkspace('projects')}
-                type="button"
-              >
-                View projects
-              </button>
-            </div>
-          </motion.div>
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur">
+                  <Zap aria-hidden="true" className="size-4 text-amber-600" />
+                  Mobile-first product portfolio
+                </div>
+                <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl">
+                  Product work, opened like a focused workspace.
+                </h1>
+                <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
+                  A focused place to scan my work, open the important details fast, and see how I
+                  think through product interfaces.
+                </p>
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <button
+                    className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    onClick={openCommand}
+                    type="button"
+                  >
+                    Open command center
+                  </button>
+                  <button
+                    className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+                    onClick={() => setActiveWorkspace('projects')}
+                    type="button"
+                  >
+                    View projects
+                  </button>
+                </div>
+              </motion.div>
 
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center justify-center pb-4 lg:pb-0"
-            initial={{ opacity: 0, scale: 0.97 }}
-            transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
-          >
-            <ProjectOrbit onOpenProject={setActiveProjectId} />
-          </motion.div>
-        </section>
+              <motion.div
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-center pb-4 lg:pb-0"
+                initial={{ opacity: 0, scale: 0.97 }}
+                transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
+              >
+                <ProjectOrbit onOpenProject={setActiveProjectId} />
+              </motion.div>
+            </motion.section>
+          ) : (
+            <WorkspaceStage
+              activeWorkspace={activeWorkspace}
+              description={activeWorkspaceMeta?.description ?? ''}
+              label={activeWorkspaceMeta?.label ?? ''}
+              onOpenCommand={openCommand}
+            />
+          )}
+        </AnimatePresence>
 
         <AnimatePresence mode="wait">
           <Suspense
@@ -219,6 +243,49 @@ function BootIntro({ isVisible }: { isVisible: boolean }) {
         </motion.div>
       ) : null}
     </AnimatePresence>
+  )
+}
+
+function WorkspaceStage({
+  activeWorkspace,
+  description,
+  label,
+  onOpenCommand,
+}: {
+  activeWorkspace: WorkspaceId
+  description: string
+  label: string
+  onOpenCommand: () => void
+}) {
+  return (
+    <motion.section
+      animate={{ opacity: 1, y: 0 }}
+      className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-2 pt-6 sm:px-6 sm:pt-10 lg:px-8"
+      exit={{ opacity: 0, y: -12 }}
+      id="top"
+      initial={{ opacity: 0, y: 12 }}
+      key={activeWorkspace}
+      transition={{ duration: 0.24, ease: 'easeOut' }}
+    >
+      <div className="overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="grid gap-5 p-5 sm:grid-cols-[1fr_auto] sm:items-end sm:p-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
+              Workspace
+            </p>
+            <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{label}</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{description}</p>
+          </div>
+          <button
+            className="inline-flex min-h-11 w-fit items-center rounded-xl border border-white/10 bg-white/10 px-4 text-sm font-semibold text-stone-50 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
+            onClick={onOpenCommand}
+            type="button"
+          >
+            Command
+          </button>
+        </div>
+      </div>
+    </motion.section>
   )
 }
 
