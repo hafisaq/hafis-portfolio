@@ -120,17 +120,57 @@ function ProjectsWorkspace() {
 
 function ExperienceWorkspace() {
   return (
-    <div className="rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm sm:p-6">
-      <h2 className="text-xl font-semibold text-stone-950">Story Mode</h2>
-      <div className="mt-5 grid gap-4">
-        {timeline.map((item) => (
-          <div className="grid gap-3 border-l border-stone-950/10 pl-4 sm:grid-cols-[6rem_1fr]" key={item.title}>
-            <span className="text-sm font-semibold text-amber-700">{item.year}</span>
-            <div>
-              <h3 className="font-semibold text-stone-950">{item.title}</h3>
-              <p className="mt-1 text-sm leading-6 text-stone-600">{item.detail}</p>
+    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
+      <div className="grid gap-4 border-b border-stone-950/10 px-4 py-5 sm:grid-cols-[1fr_16rem] sm:px-6">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+            Story Mode
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-stone-950">From banking releases to product systems</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+            A more useful timeline than a stack list. It shows the move from banking frontend
+            delivery into payments, spatial computing, architecture, AI workflows, and SaaS product building.
+          </p>
+        </div>
+        <div className="rounded-xl bg-stone-950 p-4 text-stone-50">
+          <p className="text-sm font-semibold">Current direction</p>
+          <p className="mt-2 text-sm leading-6 text-stone-300">
+            Front-end engineering, React Native, secure product flows, practical AI, and mobile-first systems.
+          </p>
+        </div>
+      </div>
+
+      <div className="relative px-4 py-2 sm:px-6">
+        <div className="absolute bottom-8 left-[2.7rem] top-8 hidden w-px bg-stone-950/10 sm:block" />
+        {timeline.map((item, index) => (
+          <article
+            className="relative grid gap-4 border-b border-stone-950/10 py-6 last:border-b-0 sm:grid-cols-[5.5rem_1fr]"
+            key={item.title}
+          >
+            <div className="flex items-center gap-3 sm:block">
+              <span className="relative z-10 grid size-9 place-items-center rounded-full bg-stone-950 text-xs font-semibold text-stone-50 shadow-lg shadow-stone-950/15">
+                {index + 1}
+              </span>
+              <span className="text-sm font-semibold text-amber-700 sm:mt-3 sm:block">{item.year}</span>
             </div>
-          </div>
+            <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                  {item.eyebrow}
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-stone-950">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-stone-650">{item.detail}</p>
+              </div>
+              <ul className="grid gap-2 rounded-xl bg-stone-950/[0.035] p-4">
+                {item.points.map((point) => (
+                  <li className="flex gap-3 text-sm leading-6 text-stone-650" key={point}>
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
         ))}
       </div>
     </div>
@@ -143,13 +183,22 @@ function ResumeWorkspace() {
       <section className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm">
         <h2 className="text-xl font-semibold text-stone-950">Hafis Firosh</h2>
         <p className="mt-2 text-sm leading-6 text-stone-600">
-          Frontend engineer focused on polished product interfaces, TypeScript systems, and practical AI workflows.
+          Front-End / React Native Developer with 4+ years building scalable mobile and web
+          applications for fintech and digital banking platforms.
         </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          {['Vision Pro lead', 'Easy Payment Plan', 'AI + MCP workflows'].map((item) => (
+            <div className="rounded-xl bg-stone-950/[0.035] p-3" key={item}>
+              <p className="text-xs font-semibold text-stone-600">{item}</p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
         <h2 className="text-lg font-semibold">Core stack</h2>
         <p className="mt-3 text-sm leading-6 text-stone-300">
-          React, TypeScript, Tailwind CSS, Motion, accessibility, responsive UI, and production release habits.
+          React Native, React.js, TypeScript, JavaScript, Redux, Swift, Node.js, SDK/API
+          integrations, CI/CD, micro-frontends, Supabase, PostgreSQL, Docker, and Tailwind CSS.
         </p>
       </section>
     </div>
