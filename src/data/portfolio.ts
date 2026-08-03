@@ -285,6 +285,6 @@ export const commandActions: CommandAction[] = [
     hint: 'Start a message',
     icon: Mail,
     workspace: 'contact',
-    external: 'mailto:hello@hafis.dev',
+    external: 'mailto:hafisaq@gmail.com',
   },
 ]

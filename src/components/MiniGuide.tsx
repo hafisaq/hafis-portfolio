@@ -44,7 +44,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
   }
 
   return (
-    <div className="fixed bottom-20 right-3 z-40 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-24 right-3 z-40 sm:bottom-6 sm:right-6">
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -99,12 +99,12 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
         ) : null}
       </AnimatePresence>
       <button
-        className="ml-auto flex min-h-12 items-center gap-2 rounded-2xl bg-stone-950 px-4 text-sm font-semibold text-stone-50 shadow-2xl shadow-stone-950/20 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+        className="ml-auto grid size-12 place-items-center rounded-2xl bg-stone-950 text-sm font-semibold text-stone-50 shadow-2xl shadow-stone-950/20 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:flex sm:min-h-12 sm:w-auto sm:gap-2 sm:px-4"
         onClick={() => setIsOpen((current) => !current)}
         type="button"
       >
         <Bot aria-hidden="true" className="size-4" />
-        Mini Hafis
+        <span className="sr-only sm:not-sr-only">Mini Hafis</span>
       </button>
     </div>
   )

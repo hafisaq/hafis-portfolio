@@ -16,6 +16,7 @@ function App() {
   const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceId>('overview')
   const [activeProjectId, setActiveProjectId] = useState<ProjectId | null>(null)
   const [isCommandOpen, setIsCommandOpen] = useState(false)
+  const [isBooting, setIsBooting] = useState(true)
   const reducedMotion = usePrefersReducedMotion()
   const currentTime = useMemo(
     () =>
@@ -40,6 +41,16 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  useEffect(() => {
+    if (reducedMotion) {
+      setIsBooting(false)
+      return
+    }
+
+    const bootTimer = window.setTimeout(() => setIsBooting(false), 1450)
+    return () => window.clearTimeout(bootTimer)
+  }, [reducedMotion])
+
   const openCommand = () => setIsCommandOpen(true)
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
 
@@ -58,7 +69,7 @@ function App() {
               HF
             </span>
             <span>
-              <span className="block text-sm font-semibold">Hafis Portfolio OS</span>
+              <span className="block text-sm font-semibold">Hafis Portfolio</span>
               <span className="block text-xs text-stone-500">v0.1 / {currentTime}</span>
             </span>
           </a>
@@ -88,7 +99,7 @@ function App() {
               Mobile-first product portfolio
             </div>
             <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl">
-              A portfolio that opens like an operating system.
+              Product work, opened like a focused workspace.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
               A focused place to scan my work, open the important details fast, and see how I
@@ -150,8 +161,64 @@ function App() {
         />
         <MiniGuide onSelectWorkspace={setActiveWorkspace} />
         <ProjectFocus project={activeProject} onClose={() => setActiveProjectId(null)} />
+        <BootIntro isVisible={isBooting} />
       </main>
     </MotionConfig>
+  )
+}
+
+function BootIntro({ isVisible }: { isVisible: boolean }) {
+  const bootLines = ['Loading profile', 'Preparing project workspaces', 'Ready']
+
+  return (
+    <AnimatePresence>
+      {isVisible ? (
+        <motion.div
+          aria-live="polite"
+          className="fixed inset-0 z-[60] grid place-items-center bg-[#0d0c0b] px-6 text-stone-50"
+          exit={{ opacity: 0 }}
+          role="status"
+        >
+          <motion.div
+            className="w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-2xl shadow-black/30"
+            initial={{ opacity: 0, y: 14, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="grid size-10 place-items-center rounded-xl bg-stone-50 text-sm font-bold text-stone-950">
+                HF
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Portfolio
+              </span>
+            </div>
+            <div className="mt-5 grid gap-2">
+              {bootLines.map((line, index) => (
+                <motion.div
+                  className="flex items-center justify-between rounded-xl bg-white/[0.06] px-3 py-2 text-sm"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.18 + index * 0.18, duration: 0.18 }}
+                  key={line}
+                >
+                  <span className="text-stone-300">{line}</span>
+                  <span className="text-amber-200">{index === bootLines.length - 1 ? 'done' : '...'}</span>
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                className="h-full rounded-full bg-amber-300"
+                initial={{ width: '12%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 1.05, ease: 'easeInOut' }}
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   )
 }
 
