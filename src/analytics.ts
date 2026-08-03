@@ -29,3 +29,11 @@ export function initializeAnalytics() {
     page_path: window.location.pathname,
   })
 }
+
+export function trackEvent(eventName: string, params: Record<string, unknown> = {}) {
+  if (!import.meta.env.PROD || !window.gtag) {
+    return
+  }
+
+  window.gtag('event', eventName, params)
+}

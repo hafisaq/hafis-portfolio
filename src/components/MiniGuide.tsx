@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { Bot, BriefcaseBusiness, ChevronRight, Layers3, MessageCircle, X } from 'lucide-react'
 import { useState } from 'react'
+import { trackEvent } from '../analytics'
 import type { WorkspaceId } from '../data/portfolio'
 
 type MiniGuideProps = {
@@ -40,6 +41,10 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
 
   const runPrompt = (prompt: (typeof guidePrompts)[number]) => {
     setActivePrompt(prompt)
+    trackEvent('mini_hafis_prompt_select', {
+      prompt_id: prompt.id,
+      workspace: prompt.workspace,
+    })
     onSelectWorkspace(prompt.workspace)
     setIsOpen(false)
   }
@@ -68,7 +73,10 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
               <button
                 aria-label="Close Mini Hafis"
                 className="grid size-8 place-items-center rounded-lg text-stone-500 hover:bg-stone-950/7 hover:text-stone-950 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-50 dark:focus:ring-stone-50"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  trackEvent('mini_hafis_close', { source: 'panel_close' })
+                  setIsOpen(false)
+                }}
                 type="button"
               >
                 <X aria-hidden="true" className="size-4" />
@@ -105,7 +113,14 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
       </AnimatePresence>
       <button
         className="ml-auto grid size-12 place-items-center rounded-2xl bg-stone-950 text-sm font-semibold text-stone-50 shadow-2xl shadow-stone-950/20 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:flex sm:min-h-12 sm:w-auto sm:gap-2 sm:px-4"
-        onClick={() => setIsOpen((current) => !current)}
+        onClick={() =>
+          setIsOpen((current) => {
+            trackEvent(current ? 'mini_hafis_close' : 'mini_hafis_open', {
+              source: 'launcher',
+            })
+            return !current
+          })
+        }
         type="button"
       >
         <Bot aria-hidden="true" className="size-4" />
