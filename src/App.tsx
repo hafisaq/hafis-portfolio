@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
-import { Command, Menu, Zap } from 'lucide-react'
+import { Command, Menu, Moon, Sun, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
 import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
@@ -18,11 +18,27 @@ const Workspaces = lazy(() =>
   import('./components/Workspaces').then((module) => ({ default: module.Workspaces })),
 )
 
+type ThemeMode = 'light' | 'dark'
+
 function App() {
   const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceId>('overview')
   const [activeProjectId, setActiveProjectId] = useState<ProjectId | null>(null)
   const [isCommandOpen, setIsCommandOpen] = useState(false)
+  const [isCommandPressed, setIsCommandPressed] = useState(false)
   const [isBooting, setIsBooting] = useState(true)
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    if (typeof window === 'undefined') {
+      return 'light'
+    }
+
+    const savedTheme = window.localStorage.getItem('hafis-theme')
+
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      return savedTheme
+    }
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
   const reducedMotion = usePrefersReducedMotion()
   const currentTime = useMemo(
     () =>
@@ -34,18 +50,31 @@ function App() {
   )
 
   useEffect(() => {
+    let pressedTimer: number | undefined
+
     const handleKeyDown = (event: KeyboardEvent) => {
       const isCommandShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k'
 
       if (isCommandShortcut) {
         event.preventDefault()
+        window.clearTimeout(pressedTimer)
+        setIsCommandPressed(true)
         setIsCommandOpen(true)
+        pressedTimer = window.setTimeout(() => setIsCommandPressed(false), 180)
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.clearTimeout(pressedTimer)
+    }
   }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', themeMode === 'dark')
+    window.localStorage.setItem('hafis-theme', themeMode)
+  }, [themeMode])
 
   useEffect(() => {
     if (reducedMotion) {
@@ -58,38 +87,68 @@ function App() {
   }, [reducedMotion])
 
   const openCommand = () => setIsCommandOpen(true)
+  const pressCommandButton = () => {
+    setIsCommandPressed(true)
+    window.setTimeout(() => setIsCommandPressed(false), 160)
+  }
+  const toggleTheme = () =>
+    setThemeMode((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
   const activeWorkspaceMeta = workspaces.find((workspace) => workspace.id === activeWorkspace)
   const isHome = activeWorkspace === 'overview'
 
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
-      <main className="min-h-svh overflow-hidden bg-[#f8f4eb] text-stone-950">
-        <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(28,25,23,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.05)_1px,transparent_1px)] bg-[size:44px_44px]" />
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_48%_0%,rgba(251,191,36,.22),transparent_34%),linear-gradient(180deg,rgba(255,255,255,.7),transparent_34%)]" />
+      <main className="min-h-svh overflow-hidden bg-[#f8f4eb] text-stone-950 transition-colors duration-300 dark:bg-[#080706] dark:text-stone-50">
+        <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(28,25,23,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.05)_1px,transparent_1px)] bg-[size:44px_44px] dark:bg-[linear-gradient(rgba(255,255,255,.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.055)_1px,transparent_1px)]" />
+        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_48%_0%,rgba(251,191,36,.22),transparent_34%),linear-gradient(180deg,rgba(255,255,255,.7),transparent_34%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(251,191,36,.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,.055),transparent_36%)]" />
 
         <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a
-            className="flex min-h-11 items-center gap-3 rounded-xl pr-3 text-left focus:outline-none focus:ring-2 focus:ring-stone-950"
+            className="flex min-h-11 items-center gap-3 rounded-xl pr-3 text-left focus:outline-none focus:ring-2 focus:ring-stone-950 dark:focus:ring-stone-50"
             href="#top"
           >
-            <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-sm font-bold text-stone-50">
+            <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-sm font-bold text-stone-50 dark:bg-stone-50 dark:text-stone-950">
               HF
             </span>
             <span>
               <span className="block text-sm font-semibold">Hafis Portfolio</span>
-              <span className="block text-xs text-stone-500">v0.1 / {currentTime}</span>
+              <span className="block text-xs text-stone-500 dark:text-stone-400">v0.1 / {currentTime}</span>
             </span>
           </a>
-          <button
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-stone-950/10 bg-white/70 px-3 text-sm font-medium text-stone-800 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
-            onClick={openCommand}
-            type="button"
-          >
-            <Command aria-hidden="true" className="hidden size-4 sm:block" />
-            <Menu aria-hidden="true" className="size-4 sm:hidden" />
-            <span>Command</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              aria-label={`Switch to ${themeMode === 'dark' ? 'light' : 'night'} mode`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-stone-950/10 bg-white/70 px-3 text-sm font-medium text-stone-800 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
+              onClick={toggleTheme}
+              type="button"
+            >
+              {themeMode === 'dark' ? (
+                <Sun aria-hidden="true" className="size-4 text-amber-200" />
+              ) : (
+                <Moon aria-hidden="true" className="size-4" />
+              )}
+              <span className="hidden sm:inline">{themeMode === 'dark' ? 'Light' : 'Night'}</span>
+            </button>
+            <button
+              aria-keyshortcuts="Meta+K Control+K"
+              className={`inline-flex min-h-11 items-center gap-2 rounded-xl border border-stone-950/10 bg-white/70 px-3 text-sm font-medium text-stone-800 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 active:scale-[0.98] dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50 ${
+                isCommandPressed
+                  ? 'scale-[0.98] ring-2 ring-amber-400 dark:ring-amber-300'
+                  : ''
+              }`}
+              onClick={openCommand}
+              onPointerDown={pressCommandButton}
+              type="button"
+            >
+              <Command aria-hidden="true" className="hidden size-4 sm:block" />
+              <Menu aria-hidden="true" className="size-4 sm:hidden" />
+              <span>Command</span>
+              <kbd className="hidden rounded-md border border-stone-950/10 bg-stone-950/[0.04] px-1.5 py-0.5 text-[0.68rem] font-semibold text-stone-500 sm:inline dark:border-white/10 dark:bg-white/10 dark:text-stone-300">
+                ⌘ K
+              </kbd>
+            </button>
+          </div>
         </header>
 
         <AnimatePresence mode="wait">
@@ -109,27 +168,27 @@ function App() {
                 initial={{ opacity: 0, y: 14 }}
                 transition={{ duration: 0.34, ease: 'easeOut' }}
               >
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur">
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-stone-200">
                   <Zap aria-hidden="true" className="size-4 text-amber-600" />
                   Mobile-first product portfolio
                 </div>
-                <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl">
+                <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
                   Product work, opened like a focused workspace.
                 </h1>
-                <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
+                <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
                   A focused place to scan my work, open the important details fast, and see how I
                   think through product interfaces.
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <button
-                    className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
                     onClick={openCommand}
                     type="button"
                   >
                     Open command center
                   </button>
                   <button
-                    className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+                    className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
                     onClick={() => setActiveWorkspace('projects')}
                     type="button"
                   >
@@ -160,7 +219,7 @@ function App() {
         <AnimatePresence mode="wait">
           <Suspense
             fallback={
-              <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-28 text-sm text-stone-500 sm:px-6 lg:px-8">
+              <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-28 text-sm text-stone-500 sm:px-6 lg:px-8 dark:text-stone-400">
                 Loading workspace...
               </div>
             }
