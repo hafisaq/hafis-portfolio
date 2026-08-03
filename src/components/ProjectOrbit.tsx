@@ -1,9 +1,13 @@
-import { projects } from '../data/portfolio'
+import { projects, type ProjectId } from '../data/portfolio'
 
-export function ProjectOrbit() {
+type ProjectOrbitProps = {
+  onOpenProject: (projectId: ProjectId) => void
+}
+
+export function ProjectOrbit({ onOpenProject }: ProjectOrbitProps) {
   return (
     <div
-      aria-hidden="true"
+      aria-label="Featured project workspaces"
       className="relative mx-auto w-full max-w-[24rem] overflow-hidden rounded-[2rem] border border-stone-950/10 bg-[#0d0c0b] p-3 shadow-2xl shadow-stone-950/25 sm:p-4"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(251,191,36,0.22),transparent_28%),radial-gradient(circle_at_82%_82%,rgba(14,165,233,0.2),transparent_30%)]" />
@@ -42,9 +46,11 @@ export function ProjectOrbit() {
             const Icon = project.icon
 
             return (
-              <div
-                className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.075] px-3 py-2.5 text-left shadow-sm backdrop-blur"
+              <button
+                className="grid min-h-16 grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.075] px-3 py-2.5 text-left shadow-sm backdrop-blur transition hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-amber-300"
                 key={project.id}
+                onClick={() => onOpenProject(project.id)}
+                type="button"
               >
                 <span className={`grid size-9 place-items-center rounded-xl ${project.accent} text-white`}>
                   <Icon className="size-4" />
@@ -60,7 +66,7 @@ export function ProjectOrbit() {
                 <span className="text-[0.68rem] font-semibold tabular-nums text-stone-500">
                   0{index + 1}
                 </span>
-              </div>
+              </button>
             )
           })}
         </div>
