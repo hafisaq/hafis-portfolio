@@ -48,18 +48,26 @@ const scanFindings = [
     target: 'accessibility',
   },
 ]
-const aiSuggestions = [
+const aiBuildStages = [
   {
-    title: 'Recruiter path',
-    copy: 'Start with Projects, open Digital Banking, then check Resume for CV proof.',
+    title: 'Direction',
+    copy: 'The portfolio started from a clear product direction: mobile-first, clean, command-driven, and not heavy or gimmicky.',
   },
   {
-    title: 'Engineering path',
-    copy: 'Inspect the Made workspace, then compare Motion, accessibility, and lazy-loaded sections.',
+    title: 'Instructions',
+    copy: 'AI was guided with constraints for performance, accessibility, reduced motion, restrained animation, and a premium product feel.',
   },
   {
-    title: 'Keyboard path',
-    copy: 'Press Command, search for Story or Resume, and jump without scrolling through the page.',
+    title: 'Agent Build',
+    copy: 'Codex worked as an implementation agent: creating branches, editing React components, checking builds, and opening PRs.',
+  },
+  {
+    title: 'Human Review',
+    copy: 'The design changed through your feedback: less vibe-coded, cleaner copy, better project screens, and this Made scan.',
+  },
+  {
+    title: 'Polish Loop',
+    copy: 'Each pass ended with lint, production build, browser smoke tests, and visual checks on mobile.',
   },
 ]
 
@@ -409,7 +417,7 @@ function BuildWorkspace() {
   ]
   const [revealedCount, setRevealedCount] = useState(0)
   const [activeFinding, setActiveFinding] = useState(0)
-  const [activeSuggestion, setActiveSuggestion] = useState(0)
+  const [activeAiStage, setActiveAiStage] = useState(0)
   const [scanRun, setScanRun] = useState(0)
   const activeScan = scanFindings[Math.min(activeFinding, scanFindings.length - 1)]
   const isScanComplete = revealedCount >= scanFindings.length
@@ -417,7 +425,7 @@ function BuildWorkspace() {
   useEffect(() => {
     setRevealedCount(0)
     setActiveFinding(0)
-    setActiveSuggestion(0)
+    setActiveAiStage(0)
 
     const timers = scanFindings.map((_, index) =>
       window.setTimeout(() => {
@@ -523,35 +531,48 @@ function BuildWorkspace() {
             </div>
             {isScanComplete ? (
               <motion.div
-                className="rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-3"
+                className="relative overflow-hidden rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-3"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.22, ease: 'easeOut' }}
               >
+                <motion.div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-cyan-200/14 to-transparent"
+                  animate={{ x: ['-120%', '430%'] }}
+                  transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 1.2 }}
+                />
                 <div className="flex items-start gap-3">
                   <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-cyan-200/14 text-cyan-100">
                     <Bot aria-hidden="true" className="size-5" />
                   </span>
-                  <div>
-                    <p className="text-sm font-semibold text-cyan-50">AI Help</p>
+                  <div className="relative">
+                    <p className="text-sm font-semibold text-cyan-50">AI Build Pipeline</p>
                     <p className="mt-1 text-sm leading-6 text-stone-300">
-                      {aiSuggestions[activeSuggestion].copy}
+                      {aiBuildStages[activeAiStage].copy}
                     </p>
                   </div>
                 </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {aiSuggestions.map((suggestion, index) => (
+                <div className="relative mt-4 grid gap-2">
+                  <div className="absolute bottom-4 left-4 top-4 w-px bg-cyan-200/18" />
+                  {aiBuildStages.map((stage, index) => (
                     <button
-                      className={`rounded-xl border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
-                        activeSuggestion === index
+                      className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
+                        activeAiStage === index
                           ? 'border-cyan-200/40 bg-cyan-200/16 text-cyan-50'
                           : 'border-white/10 bg-white/[0.06] text-stone-300 hover:bg-white/[0.1]'
                       }`}
-                      key={suggestion.title}
-                      onClick={() => setActiveSuggestion(index)}
+                      key={stage.title}
+                      onClick={() => setActiveAiStage(index)}
                       type="button"
                     >
-                      {suggestion.title}
+                      <span
+                        className={`relative z-10 size-2 rounded-full ${
+                          activeAiStage === index ? 'bg-cyan-100' : 'bg-cyan-200/45'
+                        }`}
+                      />
+                      <span>{stage.title}</span>
+                      <span className="text-[0.65rem] tabular-nums text-cyan-100/60">0{index + 1}</span>
                     </button>
                   ))}
                 </div>
