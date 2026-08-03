@@ -44,9 +44,12 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       {principles.map(([title, copy]) => (
-        <div className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm" key={title}>
-          <p className="text-sm font-semibold text-stone-950">{title}</p>
-          <p className="mt-2 text-sm leading-6 text-stone-600">
+        <div
+          className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]"
+          key={title}
+        >
+          <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">{title}</p>
+          <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">
             {copy}
           </p>
         </div>
@@ -57,7 +60,7 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
         type="button"
       >
         <span className="text-xs uppercase tracking-[0.18em] text-amber-200">Command center</span>
-        <span className="mt-3 block text-xl font-semibold">Press Cmd K or tap here to move through the portfolio.</span>
+        <span className="mt-3 block text-xl font-semibold">Press ⌘ K or tap here to move through the portfolio.</span>
       </button>
     </div>
   )
@@ -65,30 +68,32 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
 
 function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
-      <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-950/10 px-4 py-3 sm:px-5">
+    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+      <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-950/10 px-4 py-3 sm:px-5 dark:border-white/10">
         <div>
-          <h2 className="text-base font-semibold text-stone-950">Project Files</h2>
-          <p className="mt-1 text-sm text-stone-500">A quick read of what each piece is really showing.</p>
+          <h2 className="text-base font-semibold text-stone-950 dark:text-stone-50">Project Files</h2>
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+            A quick read of what each piece is really showing.
+          </p>
         </div>
-        <span className="self-start rounded-md bg-stone-950 px-2 py-1 text-xs font-medium text-stone-50">
+        <span className="self-start rounded-md bg-stone-950 px-2 py-1 text-xs font-medium text-stone-50 dark:bg-stone-50 dark:text-stone-950">
           04
         </span>
       </div>
 
-      <div className="divide-y divide-stone-950/10">
+      <div className="divide-y divide-stone-950/10 dark:divide-white/10">
         {projects.map((project, index) => {
           const Icon = project.icon
 
           return (
             <button
-              className="grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.025] focus:bg-stone-950/[0.025] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5"
+              className="grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.025] focus:bg-stone-950/[0.025] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.04] dark:focus:bg-white/[0.04] dark:focus:ring-stone-50"
               key={project.id}
               onClick={() => onOpenProject(project.id)}
               type="button"
             >
               <div className="flex items-center gap-3 sm:block">
-                <span className="block text-xs font-semibold tabular-nums text-stone-400">
+                <span className="block text-xs font-semibold tabular-nums text-stone-400 dark:text-stone-500">
                   0{index + 1}
                 </span>
                 <span
@@ -100,22 +105,22 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
               <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
                     {project.context}
                   </p>
-                  <h3 className="mt-2 text-2xl font-semibold leading-tight text-stone-950">
+                  <h3 className="mt-2 text-2xl font-semibold leading-tight text-stone-950 dark:text-stone-50">
                     {project.name}
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-stone-650">{project.summary}</p>
+                  <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{project.summary}</p>
                 </div>
 
-                <div className="rounded-xl bg-stone-950/[0.035] p-4">
-                  <p className="text-sm leading-6 text-stone-700">{project.signal}</p>
+                <div className="rounded-xl bg-stone-950/[0.035] p-4 dark:bg-white/[0.06]">
+                  <p className="text-sm leading-6 text-stone-700 dark:text-stone-200">{project.signal}</p>
                   <dl className="mt-4 grid gap-2 sm:grid-cols-3">
                     {project.metrics.map((metric) => (
                       <div key={metric}>
                         <dt className="sr-only">Signal</dt>
-                        <dd className="text-xs font-medium text-stone-500">{metric}</dd>
+                        <dd className="text-xs font-medium text-stone-500 dark:text-stone-400">{metric}</dd>
                       </div>
                     ))}
                   </dl>
@@ -131,14 +136,16 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
 function ExperienceWorkspace() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
-      <div className="grid gap-4 border-b border-stone-950/10 px-4 py-5 sm:grid-cols-[1fr_16rem] sm:px-6">
+    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+      <div className="grid gap-4 border-b border-stone-950/10 px-4 py-5 sm:grid-cols-[1fr_16rem] sm:px-6 dark:border-white/10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
             Story Mode
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-stone-950">From banking releases to product systems</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+          <h2 className="mt-2 text-2xl font-semibold text-stone-950 dark:text-stone-50">
+            From banking releases to product systems
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600 dark:text-stone-300">
             A more useful timeline than a stack list. It shows the move from banking frontend
             delivery into payments, spatial computing, architecture, AI workflows, and SaaS product building.
           </p>
@@ -152,29 +159,31 @@ function ExperienceWorkspace() {
       </div>
 
       <div className="relative px-4 py-2 sm:px-6">
-        <div className="absolute bottom-8 left-[2.7rem] top-8 hidden w-px bg-stone-950/10 sm:block" />
+        <div className="absolute bottom-8 left-[2.7rem] top-8 hidden w-px bg-stone-950/10 sm:block dark:bg-white/10" />
         {timeline.map((item, index) => (
           <article
-            className="relative grid gap-4 border-b border-stone-950/10 py-6 last:border-b-0 sm:grid-cols-[5.5rem_1fr]"
+            className="relative grid gap-4 border-b border-stone-950/10 py-6 last:border-b-0 sm:grid-cols-[5.5rem_1fr] dark:border-white/10"
             key={item.title}
           >
             <div className="flex items-center gap-3 sm:block">
-              <span className="relative z-10 grid size-9 place-items-center rounded-full bg-stone-950 text-xs font-semibold text-stone-50 shadow-lg shadow-stone-950/15">
+              <span className="relative z-10 grid size-9 place-items-center rounded-full bg-stone-950 text-xs font-semibold text-stone-50 shadow-lg shadow-stone-950/15 dark:bg-stone-50 dark:text-stone-950">
                 {index + 1}
               </span>
-              <span className="text-sm font-semibold text-amber-700 sm:mt-3 sm:block">{item.year}</span>
+              <span className="text-sm font-semibold text-amber-700 sm:mt-3 sm:block dark:text-amber-200">
+                {item.year}
+              </span>
             </div>
             <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
                   {item.eyebrow}
                 </p>
-                <h3 className="mt-2 text-xl font-semibold text-stone-950">{item.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-stone-650">{item.detail}</p>
+                <h3 className="mt-2 text-xl font-semibold text-stone-950 dark:text-stone-50">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{item.detail}</p>
               </div>
-              <ul className="grid gap-2 rounded-xl bg-stone-950/[0.035] p-4">
+              <ul className="grid gap-2 rounded-xl bg-stone-950/[0.035] p-4 dark:bg-white/[0.06]">
                 {item.points.map((point) => (
-                  <li className="flex gap-3 text-sm leading-6 text-stone-650" key={point}>
+                  <li className="flex gap-3 text-sm leading-6 text-stone-650 dark:text-stone-300" key={point}>
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />
                     <span>{point}</span>
                   </li>
@@ -192,16 +201,16 @@ function ResumeWorkspace() {
   return (
     <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
       <section className="grid gap-4">
-        <div className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-stone-950">Hafis Firosh</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-600">
+        <div className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+          <h2 className="text-xl font-semibold text-stone-950 dark:text-stone-50">Hafis Firosh</h2>
+          <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">
             Front-End / React Native Developer with 4+ years building scalable mobile and web
             applications for fintech and digital banking platforms.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {['Vision Pro lead', 'Easy Payment Plan', 'AI + MCP workflows'].map((item) => (
-              <div className="rounded-xl bg-stone-950/[0.035] p-3" key={item}>
-                <p className="text-xs font-semibold text-stone-600">{item}</p>
+              <div className="rounded-xl bg-stone-950/[0.035] p-3 dark:bg-white/[0.06]" key={item}>
+                <p className="text-xs font-semibold text-stone-600 dark:text-stone-300">{item}</p>
               </div>
             ))}
           </div>
@@ -215,15 +224,15 @@ function ResumeWorkspace() {
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
-        <div className="flex flex-col gap-3 border-b border-stone-950/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+        <div className="flex flex-col gap-3 border-b border-stone-950/10 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
           <div>
-            <h2 className="text-lg font-semibold text-stone-950">CV Preview</h2>
-            <p className="mt-1 text-sm text-stone-500">Open it in-browser or download the PDF.</p>
+            <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">CV Preview</h2>
+            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">Open it in-browser or download the PDF.</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <a
-              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
               href={cvUrl}
               rel="noreferrer"
               target="_blank"
@@ -232,7 +241,7 @@ function ResumeWorkspace() {
               Preview
             </a>
             <a
-              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
               download="Hafis_Firosh_CV.pdf"
               href={cvUrl}
             >
@@ -242,12 +251,12 @@ function ResumeWorkspace() {
           </div>
         </div>
         <iframe
-          className="hidden h-[34rem] w-full bg-stone-100 sm:block"
+          className="hidden h-[34rem] w-full bg-stone-100 sm:block dark:bg-stone-950"
           src={`${cvUrl}#toolbar=0&navpanes=0`}
           title="Hafis Firosh CV preview"
         />
         <div className="p-4 sm:hidden">
-          <p className="rounded-xl bg-stone-950/[0.035] p-4 text-sm leading-6 text-stone-650">
+          <p className="rounded-xl bg-stone-950/[0.035] p-4 text-sm leading-6 text-stone-650 dark:bg-white/[0.06] dark:text-stone-300">
             Mobile browsers handle embedded PDFs differently. Use Preview to open it, or Download
             to save the CV.
           </p>
@@ -272,31 +281,31 @@ function ContactWorkspace() {
 
       <section className="grid gap-3">
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`mailto:${email}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Mail aria-hidden="true" className="size-5" />
           </span>
           <span>
-            <span className="block text-sm font-semibold text-stone-950">Email</span>
-            <span className="text-sm text-stone-600">{email}</span>
+            <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Email</span>
+            <span className="text-sm text-stone-600 dark:text-stone-300">{email}</span>
           </span>
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`tel:${phone.replace(/\s/g, '')}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Phone aria-hidden="true" className="size-5" />
           </span>
           <span>
-            <span className="block text-sm font-semibold text-stone-950">Phone</span>
-            <span className="text-sm text-stone-600">{phone}</span>
+            <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Phone</span>
+            <span className="text-sm text-stone-600 dark:text-stone-300">{phone}</span>
           </span>
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={linkedInUrl}
           rel="noreferrer"
           target="_blank"
@@ -305,8 +314,8 @@ function ContactWorkspace() {
             <ExternalLink aria-hidden="true" className="size-5" />
           </span>
           <span>
-            <span className="block text-sm font-semibold text-stone-950">LinkedIn</span>
-            <span className="text-sm text-stone-600">hafis-firosh-211a06185</span>
+            <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">LinkedIn</span>
+            <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
         </a>
       </section>
