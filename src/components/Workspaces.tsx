@@ -21,6 +21,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { trackEvent } from '../analytics'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
 
@@ -356,6 +357,7 @@ function ResumeWorkspace() {
             <a
               className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
               href={cvUrl}
+              onClick={() => trackEvent('resume_preview', { source: 'resume_header' })}
               rel="noreferrer"
               target="_blank"
             >
@@ -366,6 +368,7 @@ function ResumeWorkspace() {
               className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
               download="Hafis_Firosh_CV.pdf"
               href={cvUrl}
+              onClick={() => trackEvent('resume_download', { source: 'resume_header' })}
             >
               <Download aria-hidden="true" className="size-4" />
               Download
@@ -399,6 +402,7 @@ function ResumeWorkspace() {
                       <a
                         className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:text-stone-100 dark:hover:bg-white/10 dark:focus:ring-stone-50"
                         href={cvUrl}
+                        onClick={() => trackEvent('resume_preview', { source: 'pdf_fallback' })}
                         rel="noreferrer"
                         target="_blank"
                       >
@@ -409,6 +413,7 @@ function ResumeWorkspace() {
                         className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
                         download="Hafis_Firosh_CV.pdf"
                         href={cvUrl}
+                        onClick={() => trackEvent('resume_download', { source: 'pdf_fallback' })}
                       >
                         <Download aria-hidden="true" className="size-4" />
                         Download
@@ -454,6 +459,7 @@ function ContactWorkspace() {
         <a
           className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`mailto:${email}`}
+          onClick={() => trackEvent('contact_click', { method: 'email' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Mail aria-hidden="true" className="size-5" />
@@ -467,6 +473,7 @@ function ContactWorkspace() {
         <a
           className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`tel:${phone.replace(/\s/g, '')}`}
+          onClick={() => trackEvent('contact_click', { method: 'phone' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Phone aria-hidden="true" className="size-5" />
@@ -480,6 +487,7 @@ function ContactWorkspace() {
         <a
           className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={linkedInUrl}
+          onClick={() => trackEvent('contact_click', { method: 'linkedin' })}
           rel="noreferrer"
           target="_blank"
         >
@@ -549,7 +557,10 @@ function BuildWorkspace() {
     return () => timers.forEach((timer) => window.clearTimeout(timer))
   }, [scanRun])
 
-  const replayScan = () => setScanRun((currentRun) => currentRun + 1)
+  const replayScan = () => {
+    trackEvent('made_scan_replay')
+    setScanRun((currentRun) => currentRun + 1)
+  }
 
   useEffect(() => {
     if (!isScanComplete) {
@@ -624,7 +635,13 @@ function BuildWorkspace() {
                     animate={{ opacity: isRevealed ? 1 : 0.35, x: isRevealed ? 0 : -12 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                     key={finding.title}
-                    onClick={() => setActiveFinding(index)}
+                    onClick={() => {
+                      trackEvent('made_scan_finding_select', {
+                        finding: finding.title,
+                        target: finding.target,
+                      })
+                      setActiveFinding(index)
+                    }}
                     type="button"
                   >
                     <span
@@ -681,7 +698,12 @@ function BuildWorkspace() {
                           : 'border-white/10 bg-white/[0.06] text-stone-300 hover:border-white/20 hover:bg-white/[0.1]'
                       }`}
                       key={stage.title}
-                      onClick={() => setActiveAiStage(index)}
+                      onClick={() => {
+                        trackEvent('made_ai_stage_select', {
+                          stage: stage.title,
+                        })
+                        setActiveAiStage(index)
+                      }}
                       type="button"
                     >
                       <span
@@ -886,7 +908,13 @@ function BuildWorkspace() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.08, duration: 0.22 }}
                     key={stage.title}
-                    onClick={() => setActiveCiStage(index)}
+                    onClick={() => {
+                      trackEvent('made_cicd_stage_select', {
+                        stage: stage.title,
+                        branch: stage.branch,
+                      })
+                      setActiveCiStage(index)
+                    }}
                     type="button"
                   >
                     <span

@@ -6,6 +6,7 @@ import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
 import { ProjectOrbit } from './components/ProjectOrbit'
 import { WorkspaceDock } from './components/WorkspaceDock'
+import { trackEvent } from './analytics'
 import {
   commandActions,
   getProjectById,
@@ -67,6 +68,7 @@ function App() {
         window.clearTimeout(pressedTimer)
         setIsCommandPressed(true)
         setIsCommandOpen(true)
+        trackEvent('command_open', { source: 'keyboard_shortcut' })
         pressedTimer = window.setTimeout(() => setIsCommandPressed(false), 180)
       }
     }
@@ -93,20 +95,33 @@ function App() {
     return () => window.clearTimeout(bootTimer)
   }, [reducedMotion])
 
-  const openCommand = () => setIsCommandOpen(true)
-  const selectWorkspace = (workspace: WorkspaceId) => {
+  const openCommand = (source = 'button') => {
+    setIsCommandOpen(true)
+    trackEvent('command_open', { source })
+  }
+  const selectWorkspace = (workspace: WorkspaceId, source = 'unknown') => {
     setActiveWorkspace(workspace)
+    trackEvent('workspace_select', { workspace, source })
     window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
+  const openProject = (projectId: ProjectId, source = 'unknown') => {
+    setActiveProjectId(projectId)
+    trackEvent('project_open', { project_id: projectId, source })
   }
   const pressCommandButton = () => {
     setIsCommandPressed(true)
     window.setTimeout(() => setIsCommandPressed(false), 160)
   }
   const toggleTheme = () =>
-    setThemeMode((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
+    setThemeMode((currentTheme) => {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark'
+      trackEvent('theme_toggle', { theme: nextTheme })
+      return nextTheme
+    })
   const closeGuide = () => {
     setIsGuideOpen(false)
     window.localStorage.setItem('hafis-first-load-guide', 'seen')
+    trackEvent('first_visit_guide_close')
   }
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
   const activeWorkspaceMeta = workspaces.find((workspace) => workspace.id === activeWorkspace)
@@ -124,7 +139,7 @@ function App() {
             href="#top"
             onClick={(event) => {
               event.preventDefault()
-              selectWorkspace('overview')
+              selectWorkspace('overview', 'header_logo')
             }}
           >
             <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-sm font-bold text-stone-50 dark:bg-stone-50 dark:text-stone-950">
@@ -156,7 +171,7 @@ function App() {
                   ? 'scale-[0.98] ring-2 ring-amber-400 dark:ring-amber-300'
                   : ''
               }`}
-              onClick={openCommand}
+              onClick={() => openCommand('header_button')}
               onPointerDown={pressCommandButton}
               type="button"
             >
@@ -201,14 +216,14 @@ function App() {
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <button
                     className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
-                    onClick={openCommand}
+                    onClick={() => openCommand('hero_primary')}
                     type="button"
                   >
                     Open command center
                   </button>
                   <button
                     className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
-                    onClick={() => selectWorkspace('projects')}
+                    onClick={() => selectWorkspace('projects', 'hero_secondary')}
                     type="button"
                   >
                     View projects
@@ -222,7 +237,7 @@ function App() {
                 initial={{ opacity: 0, scale: 0.97 }}
                 transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
               >
-                <ProjectOrbit onOpenProject={setActiveProjectId} />
+                <ProjectOrbit onOpenProject={(projectId) => openProject(projectId, 'hero_orbit')} />
               </motion.div>
             </motion.section>
           ) : (
@@ -230,7 +245,7 @@ function App() {
               activeWorkspace={activeWorkspace}
               description={activeWorkspaceMeta?.description ?? ''}
               label={activeWorkspaceMeta?.label ?? ''}
-              onOpenCommand={openCommand}
+              onOpenCommand={() => openCommand('workspace_header')}
             />
           )}
         </AnimatePresence>
@@ -245,35 +260,41 @@ function App() {
           >
             <Workspaces
               activeWorkspace={activeWorkspace}
-              onOpenCommand={openCommand}
-              onOpenProject={setActiveProjectId}
+              onOpenCommand={() => openCommand('overview_workspace')}
+              onOpenProject={(projectId) => openProject(projectId, 'projects_workspace')}
             />
           </Suspense>
         </AnimatePresence>
 
         <WorkspaceDock
           activeWorkspace={activeWorkspace}
-          onSelectWorkspace={selectWorkspace}
+          onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'dock')}
         />
         <CommandPalette
           actions={commandActions}
           isOpen={isCommandOpen}
           onClose={() => setIsCommandOpen(false)}
-          onSelectWorkspace={selectWorkspace}
+          onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'command_palette')}
         />
-        <MiniGuide onSelectWorkspace={selectWorkspace} />
-        <ProjectFocus project={activeProject} onClose={() => setActiveProjectId(null)} />
+        <MiniGuide onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'mini_hafis')} />
+        <ProjectFocus
+          project={activeProject}
+          onClose={() => {
+            trackEvent('project_close', { project_id: activeProject?.id })
+            setActiveProjectId(null)
+          }}
+        />
         <BootIntro isVisible={isBooting} />
         <FirstLoadGuide
           isVisible={!isBooting && isGuideOpen}
           onClose={closeGuide}
           onOpenCommand={() => {
             closeGuide()
-            openCommand()
+            openCommand('first_visit_guide')
           }}
           onSelectWorkspace={(workspace) => {
             closeGuide()
-            selectWorkspace(workspace)
+            selectWorkspace(workspace, 'first_visit_guide')
           }}
         />
       </main>
