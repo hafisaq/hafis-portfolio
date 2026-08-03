@@ -1,5 +1,19 @@
 import { motion } from 'motion/react'
-import { Code2, Download, ExternalLink, Eye, Gauge, Mail, Moon, PackageCheck, Phone, Sparkles } from 'lucide-react'
+import {
+  Bot,
+  Code2,
+  Download,
+  ExternalLink,
+  Eye,
+  Gauge,
+  Mail,
+  Moon,
+  PackageCheck,
+  Phone,
+  RefreshCcw,
+  Sparkles,
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
 
@@ -7,6 +21,55 @@ const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
 const email = 'hafisaq@gmail.com'
 const phone = '+971585017102'
 const linkedInUrl = 'https://www.linkedin.com/in/hafis-firosh-211a06185/'
+const scanFindings = [
+  {
+    title: 'Mobile-first shell',
+    detail: 'The layout starts from the phone view, then expands to desktop without changing the core flow.',
+    target: 'viewport',
+  },
+  {
+    title: 'Command navigation',
+    detail: 'The command palette and dock both route into the same workspace system.',
+    target: 'navigation',
+  },
+  {
+    title: 'Focused project screens',
+    detail: 'Projects open as their own focused surfaces so the important evidence is easier to scan.',
+    target: 'workspace',
+  },
+  {
+    title: 'Resume PDF actions',
+    detail: 'Recruiters can preview or download the CV without losing the portfolio context.',
+    target: 'resume',
+  },
+  {
+    title: 'Reduced-motion support',
+    detail: 'Motion is restrained, and the app respects reduced-motion preferences for comfort.',
+    target: 'accessibility',
+  },
+]
+const aiBuildStages = [
+  {
+    title: 'Direction',
+    copy: 'The portfolio started from a clear product direction: mobile-first, clean, command-driven, and not heavy or gimmicky.',
+  },
+  {
+    title: 'Instructions',
+    copy: 'AI was guided with constraints for performance, accessibility, reduced motion, restrained animation, and a premium product feel.',
+  },
+  {
+    title: 'Agent Build',
+    copy: 'Codex worked as an implementation agent: creating branches, editing React components, checking builds, and opening PRs.',
+  },
+  {
+    title: 'Human Review',
+    copy: 'The design changed through your feedback: less vibe-coded, cleaner copy, better project screens, and this Made scan.',
+  },
+  {
+    title: 'Polish Loop',
+    copy: 'Each pass ended with lint, production build, browser smoke tests, and visual checks on mobile.',
+  },
+]
 
 type WorkspacesProps = {
   activeWorkspace: WorkspaceId
@@ -352,31 +415,57 @@ function BuildWorkspace() {
       icon: Moon,
     },
   ]
-  const scanFindings = [
-    'Mobile-first shell',
-    'Command navigation',
-    'Focused project screens',
-    'Resume PDF actions',
-    'Reduced-motion support',
-  ]
+  const [revealedCount, setRevealedCount] = useState(0)
+  const [activeFinding, setActiveFinding] = useState(0)
+  const [activeAiStage, setActiveAiStage] = useState(0)
+  const [scanRun, setScanRun] = useState(0)
+  const activeScan = scanFindings[Math.min(activeFinding, scanFindings.length - 1)]
+  const isScanComplete = revealedCount >= scanFindings.length
+
+  useEffect(() => {
+    setRevealedCount(0)
+    setActiveFinding(0)
+    setActiveAiStage(0)
+
+    const timers = scanFindings.map((_, index) =>
+      window.setTimeout(() => {
+        setRevealedCount(index + 1)
+        setActiveFinding(index)
+      }, 650 + index * 520),
+    )
+
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [scanRun])
+
+  const replayScan = () => setScanRun((currentRun) => currentRun + 1)
 
   return (
     <div className="grid gap-4">
       <section className="relative min-h-[34rem] overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(251,191,36,.22),transparent_28%),radial-gradient(circle_at_88%_82%,rgba(14,165,233,.22),transparent_32%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] bg-[size:36px_36px]" />
-        <motion.div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-0 z-10 h-32 border-y border-amber-200/35 bg-gradient-to-b from-transparent via-amber-200/18 to-transparent shadow-[0_0_54px_rgba(251,191,36,.28)]"
-          animate={{ y: ['-45%', '430%'] }}
-          transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.8 }}
-        />
+        {!isScanComplete ? (
+          <motion.div
+            aria-hidden="true"
+            key={scanRun}
+            className="absolute inset-x-0 top-0 z-10 h-32 border-y border-amber-200/35 bg-gradient-to-b from-transparent via-amber-200/18 to-transparent shadow-[0_0_54px_rgba(251,191,36,.28)]"
+            initial={{ y: '-45%' }}
+            animate={{ y: '430%' }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 3.35, ease: 'easeInOut' }}
+          />
+        ) : null}
         <div className="relative z-20 grid gap-6 p-5 lg:grid-cols-[0.9fr_1.1fr] lg:p-6">
           <div className="flex flex-col justify-between gap-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
-                Page Scan
-              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+                  Page Scan
+                </p>
+                <span className="rounded-md bg-white/10 px-2 py-1 text-xs font-semibold text-stone-300">
+                  {isScanComplete ? 'complete' : 'scanning'}
+                </span>
+              </div>
               <h2 className="mt-3 max-w-xl text-3xl font-semibold leading-tight sm:text-5xl">
                 Scan the portfolio and reveal how it works.
               </h2>
@@ -384,34 +473,126 @@ function BuildWorkspace() {
                 This view treats the site like an interface inspection: scan the page, detect the
                 important layers, then show the stack behind the experience.
               </p>
+              <button
+                className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-3 text-sm font-semibold transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                onClick={replayScan}
+                type="button"
+              >
+                <RefreshCcw aria-hidden="true" className="size-4" />
+                Rescan
+              </button>
             </div>
-            <div className="grid gap-2">
-              {scanFindings.map((finding, index) => (
+            <div className="grid gap-2" aria-label="Scan findings">
+              {scanFindings.map((finding, index) => {
+                const isRevealed = index < revealedCount
+                const isActive = index === activeFinding
+
+                return (
+                  <motion.button
+                    aria-pressed={isActive}
+                    className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left backdrop-blur transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
+                      isActive
+                        ? 'border-amber-200/50 bg-amber-200/14'
+                        : 'border-white/10 bg-white/[0.07] hover:bg-white/[0.1]'
+                    } ${isRevealed ? '' : 'pointer-events-none opacity-35'}`}
+                    disabled={!isRevealed}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: isRevealed ? 1 : 0.35, x: isRevealed ? 0 : -12 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                    key={finding.title}
+                    onClick={() => setActiveFinding(index)}
+                    type="button"
+                  >
+                    <span
+                      className={`size-2 rounded-full ${
+                        isRevealed
+                          ? 'bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,.65)]'
+                          : 'bg-stone-600'
+                      }`}
+                    />
+                    <span>
+                      <span className="block text-sm font-medium">{finding.title}</span>
+                      {isActive ? (
+                        <span className="mt-1 block text-xs leading-5 text-stone-300">{finding.detail}</span>
+                      ) : null}
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-semibold ${
+                        isRevealed
+                          ? 'bg-emerald-300/12 text-emerald-200'
+                          : 'bg-white/5 text-stone-500'
+                      }`}
+                    >
+                      {isRevealed ? 'found' : '...'}
+                    </span>
+                  </motion.button>
+                )
+              })}
+            </div>
+            {isScanComplete ? (
+              <motion.div
+                className="relative overflow-hidden rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
                 <motion.div
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-3 py-3 backdrop-blur"
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.35 + index * 0.1, duration: 0.22, ease: 'easeOut' }}
-                  key={finding}
-                >
-                  <span className="size-2 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,.65)]" />
-                  <span className="text-sm font-medium">{finding}</span>
-                  <span className="rounded-md bg-emerald-300/12 px-2 py-1 text-xs font-semibold text-emerald-200">
-                    found
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-cyan-200/14 to-transparent"
+                  animate={{ x: ['-120%', '430%'] }}
+                  transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 1.2 }}
+                />
+                <div className="flex items-start gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-cyan-200/14 text-cyan-100">
+                    <Bot aria-hidden="true" className="size-5" />
                   </span>
-                </motion.div>
-              ))}
-            </div>
+                  <div className="relative">
+                    <p className="text-sm font-semibold text-cyan-50">AI Build Pipeline</p>
+                    <p className="mt-1 text-sm leading-6 text-stone-300">
+                      {aiBuildStages[activeAiStage].copy}
+                    </p>
+                  </div>
+                </div>
+                <div className="relative mt-4 grid gap-2">
+                  <div className="absolute bottom-4 left-4 top-4 w-px bg-cyan-200/18" />
+                  {aiBuildStages.map((stage, index) => (
+                    <button
+                      className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
+                        activeAiStage === index
+                          ? 'border-cyan-200/40 bg-cyan-200/16 text-cyan-50'
+                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:bg-white/[0.1]'
+                      }`}
+                      key={stage.title}
+                      onClick={() => setActiveAiStage(index)}
+                      type="button"
+                    >
+                      <span
+                        className={`relative z-10 size-2 rounded-full ${
+                          activeAiStage === index ? 'bg-cyan-100' : 'bg-cyan-200/45'
+                        }`}
+                      />
+                      <span>{stage.title}</span>
+                      <span className="text-[0.65rem] tabular-nums text-cyan-100/60">0{index + 1}</span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : null}
           </div>
 
           <div className="relative min-h-[27rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(28,25,23,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.06)_1px,transparent_1px)] bg-[size:30px_30px]" />
-            <motion.div
-              aria-hidden="true"
-              className="absolute inset-x-0 top-0 z-20 h-20 border-y border-amber-500/45 bg-gradient-to-b from-transparent via-amber-300/28 to-transparent"
-              animate={{ y: ['-35%', '560%'] }}
-              transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.8 }}
-            />
+            {!isScanComplete ? (
+              <motion.div
+                aria-hidden="true"
+                key={`mock-scan-${scanRun}`}
+                className="absolute inset-x-0 top-0 z-20 h-20 border-y border-amber-500/45 bg-gradient-to-b from-transparent via-amber-300/28 to-transparent"
+                initial={{ y: '-35%' }}
+                animate={{ y: '560%' }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 3.35, ease: 'easeInOut' }}
+              />
+            ) : null}
             <div className="relative grid h-full gap-3 rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
               <div className="flex items-center justify-between border-b border-stone-950/10 pb-3">
                 <div className="flex items-center gap-1.5">
@@ -426,10 +607,14 @@ function BuildWorkspace() {
 
               <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
                 <motion.div
-                  className="rounded-2xl bg-stone-950 p-4 text-stone-50"
+                  className={`rounded-2xl bg-stone-950 p-4 text-stone-50 transition ${
+                    activeScan.target === 'viewport' || activeScan.target === 'workspace'
+                      ? 'ring-2 ring-amber-300'
+                      : ''
+                  }`}
                   initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.18, duration: 0.22 }}
+                  animate={{ opacity: revealedCount >= 1 ? 1 : 0.2, y: revealedCount >= 1 ? 0 : 12 }}
+                  transition={{ duration: 0.22 }}
                 >
                   <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
                   <p className="mt-3 text-3xl font-semibold leading-tight">Product work.</p>
@@ -440,10 +625,12 @@ function BuildWorkspace() {
                   </div>
                 </motion.div>
                 <motion.div
-                  className="grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3"
+                  className={`grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3 transition ${
+                    activeScan.target === 'navigation' ? 'ring-2 ring-amber-300' : ''
+                  }`}
                   initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.28, duration: 0.22 }}
+                  animate={{ opacity: revealedCount >= 2 ? 1 : 0.2, y: revealedCount >= 2 ? 0 : 12 }}
+                  transition={{ duration: 0.22 }}
                 >
                   {['Projects', 'Story', 'Resume'].map((item) => (
                     <span
@@ -460,10 +647,15 @@ function BuildWorkspace() {
               <div className="grid gap-3 sm:grid-cols-3">
                 {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
                   <motion.div
-                    className="rounded-2xl border border-stone-950/10 bg-white p-3 shadow-sm"
+                    className={`rounded-2xl border border-stone-950/10 bg-white p-3 shadow-sm transition ${
+                      (activeScan.target === 'accessibility' && item === 'A11y') ||
+                      (activeScan.target === 'resume' && item === 'Tailwind')
+                        ? 'ring-2 ring-amber-400'
+                        : ''
+                    }`}
                     initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.42 + index * 0.07, duration: 0.2 }}
+                    animate={{ opacity: revealedCount >= 3 + index ? 1 : 0.18, y: revealedCount >= 3 + index ? 0 : 12 }}
+                    transition={{ duration: 0.2 }}
                     key={item}
                   >
                     <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
@@ -473,6 +665,18 @@ function BuildWorkspace() {
                   </motion.div>
                 ))}
               </div>
+              <motion.div
+                className="rounded-2xl border border-amber-400/30 bg-amber-50 p-3 text-stone-950"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: revealedCount > 0 ? 1 : 0, y: revealedCount > 0 ? 0 : 8 }}
+                transition={{ duration: 0.18 }}
+              >
+                <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+                  Inspecting
+                </span>
+                <span className="mt-1 block text-sm font-semibold">{activeScan.title}</span>
+                <span className="mt-1 block text-xs leading-5 text-stone-600">{activeScan.detail}</span>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -493,13 +697,16 @@ function BuildWorkspace() {
         <div className="divide-y divide-stone-950/10 dark:divide-white/10">
           {stack.map((item, index) => {
             const Icon = item.icon
+            const isUnlocked = index < revealedCount
 
             return (
               <motion.article
-                className="grid gap-3 px-4 py-4 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-5"
+                className={`grid gap-3 px-4 py-4 transition sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-5 ${
+                  isUnlocked ? '' : 'opacity-35'
+                } ${index === activeFinding ? 'bg-amber-400/[0.08]' : ''}`}
                 initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.06, duration: 0.2, ease: 'easeOut' }}
+                animate={{ opacity: isUnlocked ? 1 : 0.35, y: isUnlocked ? 0 : 12 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
                 key={item.title}
               >
                 <span className="grid size-11 place-items-center rounded-xl bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950">
