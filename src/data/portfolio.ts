@@ -17,12 +17,12 @@ export type WorkspaceId = 'overview' | 'projects' | 'experience' | 'resume' | 'c
 export type Project = {
   id: string
   name: string
-  role: string
+  context: string
   summary: string
+  signal: string
   accent: string
   icon: LucideIcon
   metrics: string[]
-  tags: string[]
 }
 
 export type CommandAction = {
@@ -75,47 +75,47 @@ export const workspaces: Array<{
 export const projects: Project[] = [
   {
     id: 'rakbank',
-    name: 'RAKBANK Digital Platform',
-    role: 'Frontend engineer shipping production banking flows',
+    name: 'RAKBANK',
+    context: 'Production banking frontend',
     summary:
-      'Built secure, responsive customer journeys with a focus on reliability, release quality, and day-to-day product velocity.',
-    accent: 'from-sky-500 to-cyan-300',
+      'Customer-facing banking flows where broken states, slow pages, and unclear feedback are not acceptable.',
+    signal: 'The signal here is discipline: careful UI states, release confidence, and screens that still work when the happy path breaks.',
+    accent: 'bg-cyan-500',
     icon: Banknote,
-    metrics: ['Banking UX', 'Production releases', 'Accessibility-minded UI'],
-    tags: ['React', 'TypeScript', 'Design systems'],
+    metrics: ['Banking UX', 'Production releases', 'Responsive flows'],
   },
   {
     id: 'ai-workflows',
-    name: 'AI Workflow Systems',
-    role: 'Automation and agentic product experiments',
+    name: 'AI Workflows',
+    context: 'Internal tools and experiments',
     summary:
-      'Designed practical AI-assisted workflows that reduce repetitive work without hiding core product decisions from users.',
-    accent: 'from-violet-500 to-fuchsia-300',
+      'Small systems that use AI to remove repetitive work while keeping the user in control.',
+    signal: 'Not a chatbot wrapper. The work is about where AI belongs in a real workflow and where it should stay out of the way.',
+    accent: 'bg-violet-500',
     icon: BrainCircuit,
-    metrics: ['Human-in-loop flows', 'Internal tools', 'Prompted interfaces'],
-    tags: ['OpenAI', 'Node.js', 'Product automation'],
+    metrics: ['Human review', 'Automation', 'Prompted interfaces'],
   },
   {
     id: 'vision-pro',
-    name: 'Spatial Product Concepts',
-    role: 'VisionOS-inspired interaction prototypes',
+    name: 'Spatial UI',
+    context: 'VisionOS-inspired browser prototypes',
     summary:
-      'Explored depth, focus states, and workspace-style navigation patterns that feel premium while staying browser-friendly.',
-    accent: 'from-slate-500 to-zinc-200',
+      'Depth, focus, and workspace transitions translated into lightweight web interactions.',
+    signal: 'The interesting part is restraint: making something feel spatial without turning the portfolio into a heavy demo.',
+    accent: 'bg-slate-500',
     icon: Cpu,
-    metrics: ['Spatial UI', 'Motion language', 'Prototype systems'],
-    tags: ['React', 'Motion', 'Interaction design'],
+    metrics: ['Focus mode', 'Motion language', 'Prototype systems'],
   },
   {
     id: 'saas',
-    name: 'SaaS Web Platform',
-    role: 'Dashboard and workflow architecture',
+    name: 'SaaS Platform',
+    context: 'Operational product surfaces',
     summary:
-      'Created fast, scannable interface patterns for operational software where repeated use matters more than decoration.',
-    accent: 'from-amber-500 to-rose-300',
+      'Dashboards and task flows designed for people who have to use them every day.',
+    signal: 'This is where layout density matters: fewer decorative cards, better scanning, clearer next actions.',
+    accent: 'bg-amber-500',
     icon: Sparkles,
     metrics: ['Dashboards', 'Command surfaces', 'Mobile-first layouts'],
-    tags: ['Vite', 'Tailwind CSS', 'React'],
   },
 ]
 

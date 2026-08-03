@@ -26,13 +26,19 @@ export function Workspaces({ activeWorkspace, onOpenCommand }: WorkspacesProps) 
 }
 
 function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
+  const principles = [
+    ['Frontend systems', 'Interfaces that hold up under real product constraints.'],
+    ['Product feel', 'Motion and layout used to guide attention, not decorate the page.'],
+    ['Mobile first', 'The small screen gets the real experience, not a compressed desktop.'],
+  ]
+
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      {['Frontend systems', 'Product feel', 'Mobile performance'].map((item) => (
-        <div className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm" key={item}>
-          <p className="text-sm font-semibold text-stone-950">{item}</p>
+      {principles.map(([title, copy]) => (
+        <div className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm" key={title}>
+          <p className="text-sm font-semibold text-stone-950">{title}</p>
           <p className="mt-2 text-sm leading-6 text-stone-600">
-            Built to feel like a product surface: direct navigation, quiet motion, and content that is easy to scan.
+            {copy}
           </p>
         </div>
       ))}
@@ -50,35 +56,64 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
 
 function ProjectsWorkspace() {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
-      {projects.map((project) => {
-        const Icon = project.icon
+    <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
+      <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-950/10 px-4 py-3 sm:px-5">
+        <div>
+          <h2 className="text-base font-semibold text-stone-950">Project Files</h2>
+          <p className="mt-1 text-sm text-stone-500">A quick read of what each piece is really showing.</p>
+        </div>
+        <span className="self-start rounded-md bg-stone-950 px-2 py-1 text-xs font-medium text-stone-50">
+          04
+        </span>
+      </div>
 
-        return (
-          <article
-            className="rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm sm:p-5"
-            key={project.id}
-          >
-            <div className="flex items-start gap-3">
-              <span className={`grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${project.accent}`}>
-                <Icon aria-hidden="true" className="size-5 text-white" />
-              </span>
-              <div>
-                <h2 className="text-lg font-semibold text-stone-950">{project.name}</h2>
-                <p className="mt-1 text-sm font-medium text-stone-600">{project.role}</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-stone-700">{project.summary}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span className="rounded-full border border-stone-950/10 px-3 py-1 text-xs text-stone-600" key={tag}>
-                  {tag}
+      <div className="divide-y divide-stone-950/10">
+        {projects.map((project, index) => {
+          const Icon = project.icon
+
+          return (
+            <article
+              className="grid gap-4 px-4 py-5 transition hover:bg-stone-950/[0.025] sm:grid-cols-[4.5rem_1fr] sm:px-5"
+              key={project.id}
+            >
+              <div className="flex items-center gap-3 sm:block">
+                <span className="block text-xs font-semibold tabular-nums text-stone-400">
+                  0{index + 1}
                 </span>
-              ))}
-            </div>
-          </article>
-        )
-      })}
+                <span
+                  className={`mt-0 grid size-9 place-items-center rounded-lg ${project.accent} text-white sm:mt-4`}
+                >
+                  <Icon aria-hidden="true" className="size-4" />
+                </span>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                    {project.context}
+                  </p>
+                  <h3 className="mt-2 text-2xl font-semibold leading-tight text-stone-950">
+                    {project.name}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-stone-650">{project.summary}</p>
+                </div>
+
+                <div className="rounded-xl bg-stone-950/[0.035] p-4">
+                  <p className="text-sm leading-6 text-stone-700">{project.signal}</p>
+                  <dl className="mt-4 grid gap-2 sm:grid-cols-3">
+                    {project.metrics.map((metric) => (
+                      <div key={metric}>
+                        <dt className="sr-only">Signal</dt>
+                        <dd className="text-xs font-medium text-stone-500">{metric}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
+            </article>
+          )
+        })}
+      </div>
     </div>
   )
 }
