@@ -41,6 +41,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
   const runPrompt = (prompt: (typeof guidePrompts)[number]) => {
     setActivePrompt(prompt)
     onSelectWorkspace(prompt.workspace)
+    setIsOpen(false)
   }
 
   return (

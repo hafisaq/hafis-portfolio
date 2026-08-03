@@ -192,11 +192,11 @@ function App() {
                   Mobile-first product portfolio
                 </div>
                 <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
-                  Product work, opened like a focused workspace.
+                  Banking-grade products, spatial ideas, and AI workflows.
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
-                  A focused place to scan my work, open the important details fast, and see how I
-                  think through product interfaces.
+                  A product-minded portfolio for scanning the systems I have shipped: secure
+                  fintech flows, Vision Pro ownership, full-stack SaaS, and practical AI tooling.
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <button
