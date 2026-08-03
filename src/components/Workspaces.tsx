@@ -1,7 +1,9 @@
 import { motion } from 'motion/react'
 import {
+  ArrowUpRight,
   Bot,
   CheckCircle2,
+  ChevronRight,
   Code2,
   Download,
   ExternalLink,
@@ -188,7 +190,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
           return (
             <button
-              className="grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.025] focus:bg-stone-950/[0.025] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.04] dark:focus:bg-white/[0.04] dark:focus:ring-stone-50"
+              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.035] focus:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.05] dark:focus:bg-white/[0.05] dark:focus:ring-stone-50"
               key={project.id}
               onClick={() => onOpenProject(project.id)}
               type="button"
@@ -209,10 +211,20 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
                     {project.context}
                   </p>
-                  <h3 className="mt-2 text-2xl font-semibold leading-tight text-stone-950 dark:text-stone-50">
-                    {project.name}
-                  </h3>
+                  <span className="mt-2 flex items-center gap-2">
+                    <h3 className="text-2xl font-semibold leading-tight text-stone-950 dark:text-stone-50">
+                      {project.name}
+                    </h3>
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="size-5 text-stone-400 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-amber-600 dark:group-hover:text-amber-200"
+                    />
+                  </span>
                   <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{project.summary}</p>
+                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-xs font-semibold text-stone-700 shadow-sm transition group-hover:border-stone-950/20 group-hover:bg-stone-950 group-hover:text-stone-50 dark:border-white/10 dark:bg-white/10 dark:text-stone-200 dark:group-hover:bg-stone-50 dark:group-hover:text-stone-950">
+                    Open project
+                    <ChevronRight aria-hidden="true" className="size-3.5" />
+                  </span>
                 </div>
 
                 <div className="rounded-xl bg-stone-950/[0.035] p-4 dark:bg-white/[0.06]">
@@ -440,7 +452,7 @@ function ContactWorkspace() {
 
       <section className="grid gap-3">
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`mailto:${email}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
@@ -450,9 +462,10 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Email</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">{email}</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`tel:${phone.replace(/\s/g, '')}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
@@ -462,9 +475,10 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Phone</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">{phone}</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={linkedInUrl}
           rel="noreferrer"
           target="_blank"
@@ -476,6 +490,7 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">LinkedIn</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
       </section>
     </div>
@@ -602,7 +617,7 @@ function BuildWorkspace() {
                     className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left backdrop-blur transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
                       isActive
                         ? 'border-amber-200/50 bg-amber-200/14'
-                        : 'border-white/10 bg-white/[0.07] hover:bg-white/[0.1]'
+                        : 'border-white/10 bg-white/[0.07] hover:border-white/20 hover:bg-white/[0.1]'
                     } ${isRevealed ? '' : 'pointer-events-none opacity-35'}`}
                     disabled={!isRevealed}
                     initial={{ opacity: 0, x: -12 }}
@@ -632,7 +647,7 @@ function BuildWorkspace() {
                           : 'bg-white/5 text-stone-500'
                       }`}
                     >
-                      {isRevealed ? 'found' : '...'}
+                      {isRevealed ? (isActive ? 'active' : 'inspect') : '...'}
                     </span>
                   </motion.button>
                 )
@@ -663,7 +678,7 @@ function BuildWorkspace() {
                       className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
                         activeAiStage === index
                           ? 'border-cyan-200/40 bg-cyan-200/16 text-cyan-50'
-                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:bg-white/[0.1]'
+                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:border-white/20 hover:bg-white/[0.1]'
                       }`}
                       key={stage.title}
                       onClick={() => setActiveAiStage(index)}
@@ -863,7 +878,7 @@ function BuildWorkspace() {
                     className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
                       isActive
                         ? 'border-amber-200/50 bg-amber-200/14'
-                        : 'border-white/10 bg-white/[0.05] hover:bg-white/[0.09]'
+                        : 'border-white/10 bg-white/[0.05] hover:border-white/20 hover:bg-white/[0.09]'
                     }`}
                     initial={{ opacity: 0, x: -14 }}
                     animate={{ opacity: 1, x: 0 }}
