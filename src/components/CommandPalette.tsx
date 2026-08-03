@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { Search, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { trackEvent } from '../analytics'
 import type { CommandAction, WorkspaceId } from '../data/portfolio'
 
 type CommandPaletteProps = {
@@ -56,6 +57,12 @@ export function CommandPalette({
   }, [isOpen, onClose])
 
   const runAction = (action: CommandAction) => {
+    trackEvent('command_action_select', {
+      action_id: action.id,
+      action_label: action.label,
+      workspace: action.workspace,
+      has_external: Boolean(action.external),
+    })
     onSelectWorkspace(action.workspace)
     onClose()
 
