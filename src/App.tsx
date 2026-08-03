@@ -87,8 +87,8 @@ function App() {
               A portfolio that opens like an operating system.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
-              Built for fast recruiter scanning, memorable navigation, and focused project
-              workspaces without heavy 3D or noisy AI-style visuals.
+              A focused place to scan my work, open the important details fast, and see how I
+              think through product interfaces.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <button
