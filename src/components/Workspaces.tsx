@@ -352,63 +352,142 @@ function BuildWorkspace() {
       icon: Moon,
     },
   ]
+  const scanFindings = [
+    'Mobile-first shell',
+    'Command navigation',
+    'Focused project screens',
+    'Resume PDF actions',
+    'Reduced-motion support',
+  ]
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
-      <section className="relative overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-2xl shadow-stone-950/20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(251,191,36,.22),transparent_30%),radial-gradient(circle_at_86%_86%,rgba(14,165,233,.18),transparent_34%)]" />
+    <div className="grid gap-4">
+      <section className="relative min-h-[34rem] overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(251,191,36,.22),transparent_28%),radial-gradient(circle_at_88%_82%,rgba(14,165,233,.22),transparent_32%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] bg-[size:36px_36px]" />
         <motion.div
           aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-amber-300/24 to-transparent"
-          animate={{ y: ['-35%', '360%'] }}
-          transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.45 }}
+          className="absolute inset-x-0 top-0 z-10 h-32 border-y border-amber-200/35 bg-gradient-to-b from-transparent via-amber-200/18 to-transparent shadow-[0_0_54px_rgba(251,191,36,.28)]"
+          animate={{ y: ['-45%', '430%'] }}
+          transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.8 }}
         />
-        <div className="relative">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
-            Build Scan
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
-            How this portfolio was made.
-          </h2>
-          <p className="mt-4 text-sm leading-6 text-stone-300">
-            The goal was a portfolio that feels like a product: fast on mobile, calm in motion,
-            easy to navigate, and clear enough for a recruiter to scan without learning a gimmick.
-          </p>
-
-          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-3">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
-                Runtime
-              </span>
-              <span className="rounded-md bg-emerald-400/15 px-2 py-1 text-xs font-semibold text-emerald-200">
-                optimized
-              </span>
+        <div className="relative z-20 grid gap-6 p-5 lg:grid-cols-[0.9fr_1.1fr] lg:p-6">
+          <div className="flex flex-col justify-between gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+                Page Scan
+              </p>
+              <h2 className="mt-3 max-w-xl text-3xl font-semibold leading-tight sm:text-5xl">
+                Scan the portfolio and reveal how it works.
+              </h2>
+              <p className="mt-4 max-w-lg text-sm leading-6 text-stone-300">
+                This view treats the site like an interface inspection: scan the page, detect the
+                important layers, then show the stack behind the experience.
+              </p>
             </div>
-            <div className="mt-3 grid gap-2">
-              {['Mobile-first layout', 'Command palette', 'Project focus screens', 'Light/Night mode'].map(
-                (item, index) => (
+            <div className="grid gap-2">
+              {scanFindings.map((finding, index) => (
+                <motion.div
+                  className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-3 py-3 backdrop-blur"
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.35 + index * 0.1, duration: 0.22, ease: 'easeOut' }}
+                  key={finding}
+                >
+                  <span className="size-2 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,.65)]" />
+                  <span className="text-sm font-medium">{finding}</span>
+                  <span className="rounded-md bg-emerald-300/12 px-2 py-1 text-xs font-semibold text-emerald-200">
+                    found
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative min-h-[27rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30">
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(28,25,23,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.06)_1px,transparent_1px)] bg-[size:30px_30px]" />
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 z-20 h-20 border-y border-amber-500/45 bg-gradient-to-b from-transparent via-amber-300/28 to-transparent"
+              animate={{ y: ['-35%', '560%'] }}
+              transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.8 }}
+            />
+            <div className="relative grid h-full gap-3 rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
+              <div className="flex items-center justify-between border-b border-stone-950/10 pb-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="size-2.5 rounded-full bg-red-400" />
+                  <span className="size-2.5 rounded-full bg-amber-400" />
+                  <span className="size-2.5 rounded-full bg-emerald-400" />
+                </div>
+                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  HafisFirosh.dev
+                </span>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
+                <motion.div
+                  className="rounded-2xl bg-stone-950 p-4 text-stone-50"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18, duration: 0.22 }}
+                >
+                  <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
+                  <p className="mt-3 text-3xl font-semibold leading-tight">Product work.</p>
+                  <div className="mt-5 grid gap-2">
+                    <span className="h-2 rounded-full bg-white/18" />
+                    <span className="h-2 w-4/5 rounded-full bg-white/18" />
+                    <span className="h-2 w-3/5 rounded-full bg-white/18" />
+                  </div>
+                </motion.div>
+                <motion.div
+                  className="grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.28, duration: 0.22 }}
+                >
+                  {['Projects', 'Story', 'Resume'].map((item) => (
+                    <span
+                      className="flex min-h-10 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold shadow-sm"
+                      key={item}
+                    >
+                      {item}
+                      <span className="size-2 rounded-full bg-amber-400" />
+                    </span>
+                  ))}
+                </motion.div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-3">
+                {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
                   <motion.div
-                    className="flex min-h-11 items-center justify-between rounded-xl bg-white/[0.07] px-3"
+                    className="rounded-2xl border border-stone-950/10 bg-white p-3 shadow-sm"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.42 + index * 0.07, duration: 0.2 }}
                     key={item}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.07, duration: 0.18 }}
                   >
-                    <span className="text-sm font-medium">{item}</span>
-                    <span className="text-xs tabular-nums text-stone-500">0{index + 1}</span>
+                    <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
+                      layer
+                    </span>
+                    <span className="mt-2 block text-sm font-semibold">{item}</span>
                   </motion.div>
-                ),
-              )}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
-        <div className="border-b border-stone-950/10 px-4 py-4 dark:border-white/10 sm:px-5">
-          <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">Tech Stack</h2>
-          <p className="mt-1 text-sm leading-6 text-stone-500 dark:text-stone-400">
-            Each layer has a reason. Nothing heavy was added just to look impressive.
+        <div className="grid gap-2 border-b border-stone-950/10 px-4 py-4 dark:border-white/10 sm:grid-cols-[1fr_auto] sm:items-end sm:px-5">
+          <div>
+            <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">Detected Build Layers</h2>
+            <p className="mt-1 text-sm leading-6 text-stone-500 dark:text-stone-400">
+              The scan resolves into the actual tools and product decisions behind the page.
+            </p>
+          </div>
+          <p className="rounded-xl bg-stone-950 px-3 py-2 text-xs font-semibold text-stone-50 dark:bg-stone-50 dark:text-stone-950">
+            05 layers
           </p>
         </div>
         <div className="divide-y divide-stone-950/10 dark:divide-white/10">
