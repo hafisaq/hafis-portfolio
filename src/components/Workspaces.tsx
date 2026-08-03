@@ -1,7 +1,9 @@
 import { motion } from 'motion/react'
 import {
+  ArrowUpRight,
   Bot,
   CheckCircle2,
+  ChevronRight,
   Code2,
   Download,
   ExternalLink,
@@ -188,7 +190,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
           return (
             <button
-              className="grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.025] focus:bg-stone-950/[0.025] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.04] dark:focus:bg-white/[0.04] dark:focus:ring-stone-50"
+              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.035] focus:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.05] dark:focus:bg-white/[0.05] dark:focus:ring-stone-50"
               key={project.id}
               onClick={() => onOpenProject(project.id)}
               type="button"
@@ -209,10 +211,20 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
                     {project.context}
                   </p>
-                  <h3 className="mt-2 text-2xl font-semibold leading-tight text-stone-950 dark:text-stone-50">
-                    {project.name}
-                  </h3>
+                  <span className="mt-2 flex items-center gap-2">
+                    <h3 className="text-2xl font-semibold leading-tight text-stone-950 dark:text-stone-50">
+                      {project.name}
+                    </h3>
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="size-5 text-stone-400 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-amber-600 dark:group-hover:text-amber-200"
+                    />
+                  </span>
                   <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{project.summary}</p>
+                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-xs font-semibold text-stone-700 shadow-sm transition group-hover:border-stone-950/20 group-hover:bg-stone-950 group-hover:text-stone-50 dark:border-white/10 dark:bg-white/10 dark:text-stone-200 dark:group-hover:bg-stone-50 dark:group-hover:text-stone-950">
+                    Open project
+                    <ChevronRight aria-hidden="true" className="size-3.5" />
+                  </span>
                 </div>
 
                 <div className="rounded-xl bg-stone-950/[0.035] p-4 dark:bg-white/[0.06]">
@@ -299,6 +311,15 @@ function ExperienceWorkspace() {
 }
 
 function ResumeWorkspace() {
+  const [isPdfLoaded, setIsPdfLoaded] = useState(false)
+  const [showPdfFallback, setShowPdfFallback] = useState(false)
+
+  useEffect(() => {
+    const fallbackTimer = window.setTimeout(() => setShowPdfFallback(true), 3500)
+
+    return () => window.clearTimeout(fallbackTimer)
+  }, [])
+
   return (
     <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
       <section className="grid gap-4">
@@ -351,11 +372,60 @@ function ResumeWorkspace() {
             </a>
           </div>
         </div>
-        <iframe
-          className="hidden h-[34rem] w-full bg-stone-100 sm:block dark:bg-stone-950"
-          src={`${cvUrl}#toolbar=0&navpanes=0`}
-          title="Hafis Firosh CV preview"
-        />
+        <div className="relative hidden h-[34rem] bg-stone-100 sm:block dark:bg-stone-950">
+          {!isPdfLoaded ? (
+            <div className="absolute inset-0 z-10 grid place-items-center bg-stone-100 px-5 text-center dark:bg-stone-950">
+              <div className="w-full max-w-sm rounded-2xl border border-stone-950/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.07]">
+                <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950">
+                  <Eye aria-hidden="true" className="size-5" />
+                </div>
+                <p className="mt-4 text-sm font-semibold text-stone-950 dark:text-stone-50">
+                  Loading CV preview
+                </p>
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-stone-950/10 dark:bg-white/10">
+                  <motion.div
+                    className="h-full rounded-full bg-amber-400"
+                    animate={{ x: ['-45%', '145%'] }}
+                    transition={{ duration: 1.1, ease: 'easeInOut', repeat: Infinity }}
+                    style={{ width: '55%' }}
+                  />
+                </div>
+                {showPdfFallback ? (
+                  <div className="mt-4">
+                    <p className="text-sm leading-6 text-stone-600 dark:text-stone-300">
+                      Browser PDF previews can be slow. Open or download the CV if the preview stays blank.
+                    </p>
+                    <div className="mt-3 flex justify-center gap-2">
+                      <a
+                        className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:text-stone-100 dark:hover:bg-white/10 dark:focus:ring-stone-50"
+                        href={cvUrl}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <Eye aria-hidden="true" className="size-4" />
+                        Preview
+                      </a>
+                      <a
+                        className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
+                        download="Hafis_Firosh_CV.pdf"
+                        href={cvUrl}
+                      >
+                        <Download aria-hidden="true" className="size-4" />
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+          <iframe
+            className="h-full w-full"
+            onLoad={() => setIsPdfLoaded(true)}
+            src={`${cvUrl}#toolbar=0&navpanes=0`}
+            title="Hafis Firosh CV preview"
+          />
+        </div>
         <div className="p-4 sm:hidden">
           <p className="rounded-xl bg-stone-950/[0.035] p-4 text-sm leading-6 text-stone-650 dark:bg-white/[0.06] dark:text-stone-300">
             Mobile browsers handle embedded PDFs differently. Use Preview to open it, or Download
@@ -382,7 +452,7 @@ function ContactWorkspace() {
 
       <section className="grid gap-3">
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`mailto:${email}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
@@ -392,9 +462,10 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Email</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">{email}</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={`tel:${phone.replace(/\s/g, '')}`}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
@@ -404,9 +475,10 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Phone</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">{phone}</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
         <a
-          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
           href={linkedInUrl}
           rel="noreferrer"
           target="_blank"
@@ -418,6 +490,7 @@ function ContactWorkspace() {
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">LinkedIn</span>
             <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
+          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
         </a>
       </section>
     </div>
@@ -544,7 +617,7 @@ function BuildWorkspace() {
                     className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left backdrop-blur transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
                       isActive
                         ? 'border-amber-200/50 bg-amber-200/14'
-                        : 'border-white/10 bg-white/[0.07] hover:bg-white/[0.1]'
+                        : 'border-white/10 bg-white/[0.07] hover:border-white/20 hover:bg-white/[0.1]'
                     } ${isRevealed ? '' : 'pointer-events-none opacity-35'}`}
                     disabled={!isRevealed}
                     initial={{ opacity: 0, x: -12 }}
@@ -574,7 +647,7 @@ function BuildWorkspace() {
                           : 'bg-white/5 text-stone-500'
                       }`}
                     >
-                      {isRevealed ? 'found' : '...'}
+                      {isRevealed ? (isActive ? 'active' : 'inspect') : '...'}
                     </span>
                   </motion.button>
                 )
@@ -605,7 +678,7 @@ function BuildWorkspace() {
                       className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
                         activeAiStage === index
                           ? 'border-cyan-200/40 bg-cyan-200/16 text-cyan-50'
-                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:bg-white/[0.1]'
+                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:border-white/20 hover:bg-white/[0.1]'
                       }`}
                       key={stage.title}
                       onClick={() => setActiveAiStage(index)}
@@ -625,7 +698,7 @@ function BuildWorkspace() {
             ) : null}
           </div>
 
-          <div className="relative min-h-[27rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30">
+          <div className="relative h-[32rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30 lg:h-[34rem]">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(28,25,23,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.06)_1px,transparent_1px)] bg-[size:30px_30px]" />
             {!isScanComplete ? (
               <motion.div
@@ -638,7 +711,7 @@ function BuildWorkspace() {
                 transition={{ duration: 3.35, ease: 'easeInOut' }}
               />
             ) : null}
-            <div className="relative grid h-full gap-3 rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
+            <div className="relative grid h-full grid-rows-[auto_1fr] gap-3 overflow-hidden rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
               <div className="flex items-center justify-between border-b border-stone-950/10 pb-3">
                 <div className="flex items-center gap-1.5">
                   <span className="size-2.5 rounded-full bg-red-400" />
@@ -650,47 +723,48 @@ function BuildWorkspace() {
                 </span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
-                <motion.div
-                  className={`rounded-2xl bg-stone-950 p-4 text-stone-50 transition ${
-                    activeScan.target === 'viewport' || activeScan.target === 'workspace'
-                      ? 'ring-2 ring-amber-300'
-                      : ''
-                  }`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: revealedCount >= 1 ? 1 : 0.2, y: revealedCount >= 1 ? 0 : 12 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
-                  <p className="mt-3 text-3xl font-semibold leading-tight">Product work.</p>
-                  <div className="mt-5 grid gap-2">
-                    <span className="h-2 rounded-full bg-white/18" />
-                    <span className="h-2 w-4/5 rounded-full bg-white/18" />
-                    <span className="h-2 w-3/5 rounded-full bg-white/18" />
-                  </div>
-                </motion.div>
-                <motion.div
-                  className={`grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3 transition ${
-                    activeScan.target === 'navigation' ? 'ring-2 ring-amber-300' : ''
-                  }`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: revealedCount >= 2 ? 1 : 0.2, y: revealedCount >= 2 ? 0 : 12 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  {['Projects', 'Story', 'Resume'].map((item) => (
-                    <span
-                      className="flex min-h-10 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold shadow-sm"
-                      key={item}
-                    >
-                      {item}
-                      <span className="size-2 rounded-full bg-amber-400" />
-                    </span>
-                  ))}
-                </motion.div>
-              </div>
+              <div className="min-h-0 overflow-y-auto pr-1">
+                <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
+                  <motion.div
+                    className={`rounded-2xl bg-stone-950 p-4 text-stone-50 transition ${
+                      activeScan.target === 'viewport' || activeScan.target === 'workspace'
+                        ? 'ring-2 ring-amber-300'
+                        : ''
+                    }`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: revealedCount >= 1 ? 1 : 0.2, y: revealedCount >= 1 ? 0 : 12 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
+                    <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">Product work.</p>
+                    <div className="mt-5 grid gap-2">
+                      <span className="h-2 rounded-full bg-white/18" />
+                      <span className="h-2 w-4/5 rounded-full bg-white/18" />
+                      <span className="h-2 w-3/5 rounded-full bg-white/18" />
+                    </div>
+                  </motion.div>
+                  <motion.div
+                    className={`grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3 transition ${
+                      activeScan.target === 'navigation' ? 'ring-2 ring-amber-300' : ''
+                    }`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: revealedCount >= 2 ? 1 : 0.2, y: revealedCount >= 2 ? 0 : 12 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    {['Projects', 'Story', 'Resume'].map((item) => (
+                      <span
+                        className="flex min-h-10 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold shadow-sm"
+                        key={item}
+                      >
+                        {item}
+                        <span className="size-2 rounded-full bg-amber-400" />
+                      </span>
+                    ))}
+                  </motion.div>
+                </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                  {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
                   <motion.div
                     className={`rounded-2xl border border-stone-950/10 bg-white p-3 shadow-sm transition ${
                       (activeScan.target === 'accessibility' && item === 'A11y') ||
@@ -709,19 +783,20 @@ function BuildWorkspace() {
                     <span className="mt-2 block text-sm font-semibold">{item}</span>
                   </motion.div>
                 ))}
+                </div>
+                <motion.div
+                  className="mt-3 rounded-2xl border border-amber-400/30 bg-amber-50 p-3 text-stone-950"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: revealedCount > 0 ? 1 : 0, y: revealedCount > 0 ? 0 : 8 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+                    Inspecting
+                  </span>
+                  <span className="mt-1 block text-sm font-semibold">{activeScan.title}</span>
+                  <span className="mt-1 block text-xs leading-5 text-stone-600">{activeScan.detail}</span>
+                </motion.div>
               </div>
-              <motion.div
-                className="rounded-2xl border border-amber-400/30 bg-amber-50 p-3 text-stone-950"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: revealedCount > 0 ? 1 : 0, y: revealedCount > 0 ? 0 : 8 }}
-                transition={{ duration: 0.18 }}
-              >
-                <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
-                  Inspecting
-                </span>
-                <span className="mt-1 block text-sm font-semibold">{activeScan.title}</span>
-                <span className="mt-1 block text-xs leading-5 text-stone-600">{activeScan.detail}</span>
-              </motion.div>
             </div>
           </div>
         </div>
@@ -805,7 +880,7 @@ function BuildWorkspace() {
                     className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
                       isActive
                         ? 'border-amber-200/50 bg-amber-200/14'
-                        : 'border-white/10 bg-white/[0.05] hover:bg-white/[0.09]'
+                        : 'border-white/10 bg-white/[0.05] hover:border-white/20 hover:bg-white/[0.09]'
                     }`}
                     initial={{ opacity: 0, x: -14 }}
                     animate={{ opacity: 1, x: 0 }}

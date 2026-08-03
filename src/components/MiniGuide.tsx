@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { Bot, BriefcaseBusiness, Layers3, MessageCircle, X } from 'lucide-react'
+import { Bot, BriefcaseBusiness, ChevronRight, Layers3, MessageCircle, X } from 'lucide-react'
 import { useState } from 'react'
 import type { WorkspaceId } from '../data/portfolio'
 
@@ -41,6 +41,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
   const runPrompt = (prompt: (typeof guidePrompts)[number]) => {
     setActivePrompt(prompt)
     onSelectWorkspace(prompt.workspace)
+    setIsOpen(false)
   }
 
   return (
@@ -83,13 +84,17 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
 
                   return (
                     <button
-                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-medium text-stone-700 transition hover:bg-stone-950/7 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:text-stone-200 dark:hover:bg-white/10 dark:focus:ring-stone-50"
+                      className="group flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-medium text-stone-700 transition hover:bg-stone-950/7 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:text-stone-200 dark:hover:bg-white/10 dark:focus:ring-stone-50"
                       key={prompt.id}
                       onClick={() => runPrompt(prompt)}
                       type="button"
                     >
                       <Icon aria-hidden="true" className="size-4 text-stone-500 dark:text-stone-400" />
-                      {prompt.label}
+                      <span className="flex-1">{prompt.label}</span>
+                      <ChevronRight
+                        aria-hidden="true"
+                        className="size-4 text-stone-400 transition group-hover:translate-x-0.5 group-hover:text-stone-950 dark:group-hover:text-stone-50"
+                      />
                     </button>
                   )
                 })}
