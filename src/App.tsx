@@ -486,6 +486,8 @@ function WorkspaceStage({
   label: string
   onOpenCommand: () => void
 }) {
+  const isBuildWorkspace = activeWorkspace === 'build'
+
   return (
     <motion.section
       animate={{ opacity: 1, y: 0 }}
@@ -504,6 +506,18 @@ function WorkspaceStage({
             </p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{label}</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{description}</p>
+            {isBuildWorkspace ? (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {['Page scan', 'AI build pipeline', 'CI/CD release flow'].map((item) => (
+                  <span
+                    className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-stone-200"
+                    key={item}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <button
             className="inline-flex min-h-11 w-fit items-center rounded-xl border border-white/10 bg-white/10 px-4 text-sm font-semibold text-stone-50 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
