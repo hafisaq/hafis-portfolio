@@ -1,4 +1,6 @@
-const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined
+const defaultMeasurementId = 'G-HQ7LT588GD'
+const gaMeasurementId =
+  (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) ?? defaultMeasurementId
 
 declare global {
   interface Window {
