@@ -299,6 +299,15 @@ function ExperienceWorkspace() {
 }
 
 function ResumeWorkspace() {
+  const [isPdfLoaded, setIsPdfLoaded] = useState(false)
+  const [showPdfFallback, setShowPdfFallback] = useState(false)
+
+  useEffect(() => {
+    const fallbackTimer = window.setTimeout(() => setShowPdfFallback(true), 3500)
+
+    return () => window.clearTimeout(fallbackTimer)
+  }, [])
+
   return (
     <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
       <section className="grid gap-4">
@@ -351,11 +360,60 @@ function ResumeWorkspace() {
             </a>
           </div>
         </div>
-        <iframe
-          className="hidden h-[34rem] w-full bg-stone-100 sm:block dark:bg-stone-950"
-          src={`${cvUrl}#toolbar=0&navpanes=0`}
-          title="Hafis Firosh CV preview"
-        />
+        <div className="relative hidden h-[34rem] bg-stone-100 sm:block dark:bg-stone-950">
+          {!isPdfLoaded ? (
+            <div className="absolute inset-0 z-10 grid place-items-center bg-stone-100 px-5 text-center dark:bg-stone-950">
+              <div className="w-full max-w-sm rounded-2xl border border-stone-950/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.07]">
+                <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950">
+                  <Eye aria-hidden="true" className="size-5" />
+                </div>
+                <p className="mt-4 text-sm font-semibold text-stone-950 dark:text-stone-50">
+                  Loading CV preview
+                </p>
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-stone-950/10 dark:bg-white/10">
+                  <motion.div
+                    className="h-full rounded-full bg-amber-400"
+                    animate={{ x: ['-45%', '145%'] }}
+                    transition={{ duration: 1.1, ease: 'easeInOut', repeat: Infinity }}
+                    style={{ width: '55%' }}
+                  />
+                </div>
+                {showPdfFallback ? (
+                  <div className="mt-4">
+                    <p className="text-sm leading-6 text-stone-600 dark:text-stone-300">
+                      Browser PDF previews can be slow. Open or download the CV if the preview stays blank.
+                    </p>
+                    <div className="mt-3 flex justify-center gap-2">
+                      <a
+                        className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:text-stone-100 dark:hover:bg-white/10 dark:focus:ring-stone-50"
+                        href={cvUrl}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <Eye aria-hidden="true" className="size-4" />
+                        Preview
+                      </a>
+                      <a
+                        className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
+                        download="Hafis_Firosh_CV.pdf"
+                        href={cvUrl}
+                      >
+                        <Download aria-hidden="true" className="size-4" />
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+          <iframe
+            className="h-full w-full"
+            onLoad={() => setIsPdfLoaded(true)}
+            src={`${cvUrl}#toolbar=0&navpanes=0`}
+            title="Hafis Firosh CV preview"
+          />
+        </div>
         <div className="p-4 sm:hidden">
           <p className="rounded-xl bg-stone-950/[0.035] p-4 text-sm leading-6 text-stone-650 dark:bg-white/[0.06] dark:text-stone-300">
             Mobile browsers handle embedded PDFs differently. Use Preview to open it, or Download

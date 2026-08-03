@@ -192,7 +192,7 @@ function App() {
                   Mobile-first product portfolio
                 </div>
                 <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
-                  Product Engineer building engaging experiences across mobile, web, and AI.
+                  Creating enganging user experiences
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
                   I build fast, reliable interfaces across mobile, web, fintech, spatial products,
