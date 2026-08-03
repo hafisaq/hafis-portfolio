@@ -1,6 +1,12 @@
 import { motion } from 'motion/react'
+import { Download, ExternalLink, Eye, Mail, Phone } from 'lucide-react'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
+
+const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
+const email = 'hafisaq@gmail.com'
+const phone = '+971585017102'
+const linkedInUrl = 'https://www.linkedin.com/in/hafis-firosh-211a06185/'
 
 type WorkspacesProps = {
   activeWorkspace: WorkspaceId
@@ -182,27 +188,68 @@ function ExperienceWorkspace() {
 
 function ResumeWorkspace() {
   return (
-    <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
-      <section className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm">
-        <h2 className="text-xl font-semibold text-stone-950">Hafis Firosh</h2>
-        <p className="mt-2 text-sm leading-6 text-stone-600">
-          Front-End / React Native Developer with 4+ years building scalable mobile and web
-          applications for fintech and digital banking platforms.
-        </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          {['Vision Pro lead', 'Easy Payment Plan', 'AI + MCP workflows'].map((item) => (
-            <div className="rounded-xl bg-stone-950/[0.035] p-3" key={item}>
-              <p className="text-xs font-semibold text-stone-600">{item}</p>
-            </div>
-          ))}
+    <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+      <section className="grid gap-4">
+        <div className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm">
+          <h2 className="text-xl font-semibold text-stone-950">Hafis Firosh</h2>
+          <p className="mt-2 text-sm leading-6 text-stone-600">
+            Front-End / React Native Developer with 4+ years building scalable mobile and web
+            applications for fintech and digital banking platforms.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {['Vision Pro lead', 'Easy Payment Plan', 'AI + MCP workflows'].map((item) => (
+              <div className="rounded-xl bg-stone-950/[0.035] p-3" key={item}>
+                <p className="text-xs font-semibold text-stone-600">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
+          <h2 className="text-lg font-semibold">Core stack</h2>
+          <p className="mt-3 text-sm leading-6 text-stone-300">
+            React Native, React.js, TypeScript, JavaScript, Redux, Swift, Node.js, SDK/API
+            integrations, CI/CD, micro-frontends, Supabase, PostgreSQL, Docker, and Tailwind CSS.
+          </p>
         </div>
       </section>
-      <section className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
-        <h2 className="text-lg font-semibold">Core stack</h2>
-        <p className="mt-3 text-sm leading-6 text-stone-300">
-          React Native, React.js, TypeScript, JavaScript, Redux, Swift, Node.js, SDK/API
-          integrations, CI/CD, micro-frontends, Supabase, PostgreSQL, Docker, and Tailwind CSS.
-        </p>
+
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-stone-950/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-stone-950">CV Preview</h2>
+            <p className="mt-1 text-sm text-stone-500">Open it in-browser or download the PDF.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <a
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950"
+              href={cvUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Eye aria-hidden="true" className="size-4" />
+              Preview
+            </a>
+            <a
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-950 px-3 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              download="Hafis_Firosh_CV.pdf"
+              href={cvUrl}
+            >
+              <Download aria-hidden="true" className="size-4" />
+              Download
+            </a>
+          </div>
+        </div>
+        <iframe
+          className="hidden h-[34rem] w-full bg-stone-100 sm:block"
+          src={`${cvUrl}#toolbar=0&navpanes=0`}
+          title="Hafis Firosh CV preview"
+        />
+        <div className="p-4 sm:hidden">
+          <p className="rounded-xl bg-stone-950/[0.035] p-4 text-sm leading-6 text-stone-650">
+            Mobile browsers handle embedded PDFs differently. Use Preview to open it, or Download
+            to save the CV.
+          </p>
+        </div>
       </section>
     </div>
   )
@@ -210,17 +257,57 @@ function ResumeWorkspace() {
 
 function ContactWorkspace() {
   return (
-    <div className="rounded-2xl border border-stone-950/10 bg-white/75 p-5 shadow-sm">
-      <h2 className="text-xl font-semibold text-stone-950">Contact</h2>
-      <p className="mt-2 text-sm leading-6 text-stone-600">
-        Keep this lightweight for v1: direct email, LinkedIn, GitHub, and resume download actions can be wired to final URLs next.
-      </p>
-      <a
-        className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-stone-950 px-4 text-sm font-semibold text-stone-50 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
-        href="mailto:hello@hafis.dev"
-      >
-        Email Hafis
-      </a>
+    <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+          Contact
+        </p>
+        <h2 className="mt-3 text-3xl font-semibold leading-tight">Let’s build something people remember.</h2>
+        <p className="mt-4 text-sm leading-6 text-stone-300">
+          Best for frontend, React Native, fintech, AI workflow, and product engineering roles.
+        </p>
+      </section>
+
+      <section className="grid gap-3">
+        <a
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          href={`mailto:${email}`}
+        >
+          <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
+            <Mail aria-hidden="true" className="size-5" />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold text-stone-950">Email</span>
+            <span className="text-sm text-stone-600">{email}</span>
+          </span>
+        </a>
+        <a
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          href={`tel:${phone.replace(/\s/g, '')}`}
+        >
+          <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
+            <Phone aria-hidden="true" className="size-5" />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold text-stone-950">Phone</span>
+            <span className="text-sm text-stone-600">{phone}</span>
+          </span>
+        </a>
+        <a
+          className="flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+          href={linkedInUrl}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
+            <ExternalLink aria-hidden="true" className="size-5" />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold text-stone-950">LinkedIn</span>
+            <span className="text-sm text-stone-600">hafis-firosh-211a06185</span>
+          </span>
+        </a>
+      </section>
     </div>
   )
 }
