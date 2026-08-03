@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
-import { Command, Menu, Moon, Sun, Zap } from 'lucide-react'
+import { Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
 import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
@@ -37,7 +37,14 @@ function App() {
       return savedTheme
     }
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    return 'light'
+  })
+  const [isGuideOpen, setIsGuideOpen] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    return window.localStorage.getItem('hafis-first-load-guide') !== 'seen'
   })
   const reducedMotion = usePrefersReducedMotion()
   const currentTime = useMemo(
@@ -87,12 +94,20 @@ function App() {
   }, [reducedMotion])
 
   const openCommand = () => setIsCommandOpen(true)
+  const selectWorkspace = (workspace: WorkspaceId) => {
+    setActiveWorkspace(workspace)
+    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
   const pressCommandButton = () => {
     setIsCommandPressed(true)
     window.setTimeout(() => setIsCommandPressed(false), 160)
   }
   const toggleTheme = () =>
     setThemeMode((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
+  const closeGuide = () => {
+    setIsGuideOpen(false)
+    window.localStorage.setItem('hafis-first-load-guide', 'seen')
+  }
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
   const activeWorkspaceMeta = workspaces.find((workspace) => workspace.id === activeWorkspace)
   const isHome = activeWorkspace === 'overview'
@@ -107,6 +122,10 @@ function App() {
           <a
             className="flex min-h-11 items-center gap-3 rounded-xl pr-3 text-left focus:outline-none focus:ring-2 focus:ring-stone-950 dark:focus:ring-stone-50"
             href="#top"
+            onClick={(event) => {
+              event.preventDefault()
+              selectWorkspace('overview')
+            }}
           >
             <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-sm font-bold text-stone-50 dark:bg-stone-50 dark:text-stone-950">
               HF
@@ -189,7 +208,7 @@ function App() {
                   </button>
                   <button
                     className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
-                    onClick={() => setActiveWorkspace('projects')}
+                    onClick={() => selectWorkspace('projects')}
                     type="button"
                   >
                     View projects
@@ -234,19 +253,170 @@ function App() {
 
         <WorkspaceDock
           activeWorkspace={activeWorkspace}
-          onSelectWorkspace={setActiveWorkspace}
+          onSelectWorkspace={selectWorkspace}
         />
         <CommandPalette
           actions={commandActions}
           isOpen={isCommandOpen}
           onClose={() => setIsCommandOpen(false)}
-          onSelectWorkspace={setActiveWorkspace}
+          onSelectWorkspace={selectWorkspace}
         />
-        <MiniGuide onSelectWorkspace={setActiveWorkspace} />
+        <MiniGuide onSelectWorkspace={selectWorkspace} />
         <ProjectFocus project={activeProject} onClose={() => setActiveProjectId(null)} />
         <BootIntro isVisible={isBooting} />
+        <FirstLoadGuide
+          isVisible={!isBooting && isGuideOpen}
+          onClose={closeGuide}
+          onOpenCommand={() => {
+            closeGuide()
+            openCommand()
+          }}
+          onSelectWorkspace={(workspace) => {
+            closeGuide()
+            selectWorkspace(workspace)
+          }}
+        />
       </main>
     </MotionConfig>
+  )
+}
+
+function FirstLoadGuide({
+  isVisible,
+  onClose,
+  onOpenCommand,
+  onSelectWorkspace,
+}: {
+  isVisible: boolean
+  onClose: () => void
+  onOpenCommand: () => void
+  onSelectWorkspace: (workspace: WorkspaceId) => void
+}) {
+  const guideItems = [
+    {
+      title: 'Open workspaces',
+      copy: 'Projects, Story, Resume, Contact, and Made each open as their own focused screen.',
+      icon: Layers3,
+    },
+    {
+      title: 'Use command',
+      copy: 'Press ⌘ K or tap Command to jump anywhere without hunting through the page.',
+      icon: Command,
+    },
+    {
+      title: 'Scan the proof',
+      copy: 'Project files and the timeline are built for quick recruiter reading first.',
+      icon: Eye,
+    },
+  ]
+
+  return (
+    <AnimatePresence>
+      {isVisible ? (
+        <motion.div
+          aria-labelledby="first-load-guide-title"
+          aria-modal="true"
+          className="fixed inset-0 z-[70] flex items-end bg-stone-950/45 px-3 pb-3 backdrop-blur-sm sm:items-center sm:justify-center sm:p-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          role="dialog"
+        >
+          <motion.div
+            className="w-full max-w-3xl overflow-hidden rounded-3xl border border-white/12 bg-[#11100f]/96 text-stone-50 shadow-2xl shadow-black/40"
+            initial={{ opacity: 0, y: 26, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 18, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            <div className="grid gap-5 p-5 sm:grid-cols-[0.9fr_1.1fr] sm:p-6">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                <motion.div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-amber-300/24 to-transparent"
+                  animate={{ y: ['-35%', '285%'] }}
+                  transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.5 }}
+                />
+                <div className="relative">
+                  <div className="mb-7 flex items-center justify-between border-b border-white/10 pb-3">
+                    <span className="grid size-9 place-items-center rounded-xl bg-stone-50 text-sm font-bold text-stone-950">
+                      HF
+                    </span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
+                      Quick Tour
+                    </span>
+                  </div>
+                  <div className="grid gap-3">
+                    {['Home', 'Projects', 'Story', 'Resume', 'Made'].map((item, index) => (
+                      <motion.div
+                        className="flex min-h-12 items-center justify-between rounded-xl border border-white/10 bg-white/[0.07] px-3"
+                        key={item}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.08 + index * 0.06, duration: 0.18 }}
+                      >
+                        <span className="text-sm font-medium">{item}</span>
+                        <span className="text-xs tabular-nums text-stone-500">0{index + 1}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-amber-200">
+                  <Compass aria-hidden="true" className="size-4" />
+                  First visit
+                </p>
+                <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl" id="first-load-guide-title">
+                  This works more like a product than a normal portfolio.
+                </h2>
+                <div className="mt-5 grid gap-3">
+                  {guideItems.map((item) => {
+                    const Icon = item.icon
+
+                    return (
+                      <div className="grid grid-cols-[auto_1fr] gap-3 rounded-2xl bg-white/[0.06] p-3" key={item.title}>
+                        <span className="grid size-10 place-items-center rounded-xl bg-white/10 text-amber-200">
+                          <Icon aria-hidden="true" className="size-5" />
+                        </span>
+                        <span>
+                          <span className="block text-sm font-semibold">{item.title}</span>
+                          <span className="mt-1 block text-sm leading-6 text-stone-300">{item.copy}</span>
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+                  <button
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-stone-50 px-4 text-sm font-semibold text-stone-950 transition hover:bg-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                    onClick={() => onSelectWorkspace('projects')}
+                    type="button"
+                  >
+                    Show projects
+                  </button>
+                  <button
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-white/10 px-4 text-sm font-semibold transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                    onClick={onOpenCommand}
+                    type="button"
+                  >
+                    Open command
+                  </button>
+                  <button
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold text-stone-300 transition hover:bg-white/10 hover:text-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                    onClick={onClose}
+                    type="button"
+                  >
+                    Got it
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   )
 }
 

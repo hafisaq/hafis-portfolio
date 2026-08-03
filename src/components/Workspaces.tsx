@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { Download, ExternalLink, Eye, Mail, Phone } from 'lucide-react'
+import { Code2, Download, ExternalLink, Eye, Gauge, Mail, Moon, PackageCheck, Phone, Sparkles } from 'lucide-react'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
 
@@ -30,6 +30,7 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
       {activeWorkspace === 'experience' ? <ExperienceWorkspace /> : null}
       {activeWorkspace === 'resume' ? <ResumeWorkspace /> : null}
       {activeWorkspace === 'contact' ? <ContactWorkspace /> : null}
+      {activeWorkspace === 'build' ? <BuildWorkspace /> : null}
     </motion.section>
   )
 }
@@ -318,6 +319,128 @@ function ContactWorkspace() {
             <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
         </a>
+      </section>
+    </div>
+  )
+}
+
+function BuildWorkspace() {
+  const stack = [
+    {
+      title: 'Vite + React + TypeScript',
+      copy: 'Fast local development, typed components, and a small production bundle for the first version.',
+      icon: Code2,
+    },
+    {
+      title: 'Tailwind CSS',
+      copy: 'A restrained design system using utility classes, responsive spacing, and custom light/dark surfaces.',
+      icon: Sparkles,
+    },
+    {
+      title: 'Motion',
+      copy: 'Short transitions for workspace changes, startup, command surfaces, and focused project screens.',
+      icon: Gauge,
+    },
+    {
+      title: 'Lazy-loaded workspaces',
+      copy: 'The heavier portfolio sections load after the shell so the first screen stays quick.',
+      icon: PackageCheck,
+    },
+    {
+      title: 'Accessible controls',
+      copy: 'Keyboard command navigation, focus rings, semantic dialogs, visible labels, and reduced-motion support.',
+      icon: Moon,
+    },
+  ]
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+      <section className="relative overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(251,191,36,.22),transparent_30%),radial-gradient(circle_at_86%_86%,rgba(14,165,233,.18),transparent_34%)]" />
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-amber-300/24 to-transparent"
+          animate={{ y: ['-35%', '360%'] }}
+          transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.45 }}
+        />
+        <div className="relative">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+            Build Scan
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
+            How this portfolio was made.
+          </h2>
+          <p className="mt-4 text-sm leading-6 text-stone-300">
+            The goal was a portfolio that feels like a product: fast on mobile, calm in motion,
+            easy to navigate, and clear enough for a recruiter to scan without learning a gimmick.
+          </p>
+
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
+                Runtime
+              </span>
+              <span className="rounded-md bg-emerald-400/15 px-2 py-1 text-xs font-semibold text-emerald-200">
+                optimized
+              </span>
+            </div>
+            <div className="mt-3 grid gap-2">
+              {['Mobile-first layout', 'Command palette', 'Project focus screens', 'Light/Night mode'].map(
+                (item, index) => (
+                  <motion.div
+                    className="flex min-h-11 items-center justify-between rounded-xl bg-white/[0.07] px-3"
+                    key={item}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.07, duration: 0.18 }}
+                  >
+                    <span className="text-sm font-medium">{item}</span>
+                    <span className="text-xs tabular-nums text-stone-500">0{index + 1}</span>
+                  </motion.div>
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+        <div className="border-b border-stone-950/10 px-4 py-4 dark:border-white/10 sm:px-5">
+          <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">Tech Stack</h2>
+          <p className="mt-1 text-sm leading-6 text-stone-500 dark:text-stone-400">
+            Each layer has a reason. Nothing heavy was added just to look impressive.
+          </p>
+        </div>
+        <div className="divide-y divide-stone-950/10 dark:divide-white/10">
+          {stack.map((item, index) => {
+            const Icon = item.icon
+
+            return (
+              <motion.article
+                className="grid gap-3 px-4 py-4 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-5"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.06, duration: 0.2, ease: 'easeOut' }}
+                key={item.title}
+              >
+                <span className="grid size-11 place-items-center rounded-xl bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950">
+                  <Icon aria-hidden="true" className="size-5" />
+                </span>
+                <span>
+                  <span className="block text-base font-semibold text-stone-950 dark:text-stone-50">
+                    {item.title}
+                  </span>
+                  <span className="mt-1 block text-sm leading-6 text-stone-600 dark:text-stone-300">
+                    {item.copy}
+                  </span>
+                </span>
+                <span className="hidden text-xs font-semibold tabular-nums text-stone-400 sm:block">
+                  0{index + 1}
+                </span>
+              </motion.article>
+            )
+          })}
+        </div>
       </section>
     </div>
   )
