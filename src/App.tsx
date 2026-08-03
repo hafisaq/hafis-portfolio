@@ -132,7 +132,7 @@ function App() {
             </span>
             <span>
               <span className="block text-sm font-semibold">Hafis Portfolio</span>
-              <span className="block text-xs text-stone-500 dark:text-stone-400">v0.1 / {currentTime}</span>
+              <span className="block text-xs text-stone-500 dark:text-stone-400">v1.0 / {currentTime}</span>
             </span>
           </a>
           <div className="flex items-center gap-2">
@@ -192,7 +192,7 @@ function App() {
                   Mobile-first product portfolio
                 </div>
                 <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
-                  Product engineer for systems that need to feel effortless.
+                  Product Engineer building engaging experiences across mobile, web, and AI.
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
                   I build fast, reliable interfaces across mobile, web, fintech, spatial products,
