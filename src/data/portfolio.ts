@@ -3,6 +3,7 @@ import {
   Banknote,
   BrainCircuit,
   BriefcaseBusiness,
+  Code2,
   Contact,
   Cpu,
   FileDown,
@@ -12,7 +13,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-export type WorkspaceId = 'overview' | 'projects' | 'experience' | 'resume' | 'contact'
+export type WorkspaceId = 'overview' | 'projects' | 'experience' | 'resume' | 'contact' | 'build'
 export type ProjectId = 'rakbank' | 'ai-workflows' | 'vision-pro' | 'saas'
 
 export type Project = {
@@ -84,6 +85,12 @@ export const workspaces: Array<{
     label: 'Contact',
     description: 'Email and professional links',
     icon: Contact,
+  },
+  {
+    id: 'build',
+    label: 'Made',
+    description: 'How this portfolio was designed and built',
+    icon: Code2,
   },
 ]
 
@@ -286,5 +293,12 @@ export const commandActions: CommandAction[] = [
     icon: Mail,
     workspace: 'contact',
     external: 'mailto:hafisaq@gmail.com',
+  },
+  {
+    id: 'open-build',
+    label: 'How This Was Made',
+    hint: 'Tech stack and interaction system',
+    icon: Code2,
+    workspace: 'build',
   },
 ]

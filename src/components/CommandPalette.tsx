@@ -93,7 +93,7 @@ export function CommandPalette({
                 aria-label="Search portfolio commands"
                 className="min-h-11 flex-1 bg-transparent text-base text-stone-50 outline-none placeholder:text-stone-500"
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search projects, story, resume..."
+                placeholder="Search projects, story, resume, made..."
                 value={query}
               />
               <button
