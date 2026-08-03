@@ -1,9 +1,12 @@
 import { motion } from 'motion/react'
 import {
   Bot,
+  CheckCircle2,
   Code2,
   Download,
   ExternalLink,
+  GitBranch,
+  GitCommit,
   Eye,
   Gauge,
   Mail,
@@ -11,6 +14,8 @@ import {
   PackageCheck,
   Phone,
   RefreshCcw,
+  Rocket,
+  Server,
   Sparkles,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -68,6 +73,38 @@ const aiBuildStages = [
   {
     title: 'Polish Loop',
     copy: 'Each pass ended with lint, production build, browser smoke tests, and visual checks on mobile.',
+  },
+]
+const ciCdStages = [
+  {
+    title: 'Commit',
+    detail: 'Changes land on a feature branch with a scoped PR.',
+    icon: GitCommit,
+    branch: 'feature',
+  },
+  {
+    title: 'Validate',
+    detail: 'GitHub Actions runs lint and production build checks.',
+    icon: CheckCircle2,
+    branch: 'main',
+  },
+  {
+    title: 'Replica',
+    detail: 'A staging copy receives the build for review before production.',
+    icon: GitBranch,
+    branch: 'replica',
+  },
+  {
+    title: 'Release',
+    detail: 'Approved changes move through the release branch.',
+    icon: Rocket,
+    branch: 'release',
+  },
+  {
+    title: 'Hostinger',
+    detail: 'The final static build deploys to the live domain.',
+    icon: Server,
+    branch: 'live',
   },
 ]
 
@@ -418,6 +455,7 @@ function BuildWorkspace() {
   const [revealedCount, setRevealedCount] = useState(0)
   const [activeFinding, setActiveFinding] = useState(0)
   const [activeAiStage, setActiveAiStage] = useState(0)
+  const [activeCiStage, setActiveCiStage] = useState(0)
   const [scanRun, setScanRun] = useState(0)
   const activeScan = scanFindings[Math.min(activeFinding, scanFindings.length - 1)]
   const isScanComplete = revealedCount >= scanFindings.length
@@ -426,6 +464,7 @@ function BuildWorkspace() {
     setRevealedCount(0)
     setActiveFinding(0)
     setActiveAiStage(0)
+    setActiveCiStage(0)
 
     const timers = scanFindings.map((_, index) =>
       window.setTimeout(() => {
@@ -438,6 +477,18 @@ function BuildWorkspace() {
   }, [scanRun])
 
   const replayScan = () => setScanRun((currentRun) => currentRun + 1)
+
+  useEffect(() => {
+    if (!isScanComplete) {
+      return
+    }
+
+    const timers = ciCdStages.map((_, index) =>
+      window.setTimeout(() => setActiveCiStage(index), 420 + index * 560),
+    )
+
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [isScanComplete])
 
   return (
     <div className="grid gap-4">
@@ -536,12 +587,6 @@ function BuildWorkspace() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.22, ease: 'easeOut' }}
               >
-                <motion.div
-                  aria-hidden="true"
-                  className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-cyan-200/14 to-transparent"
-                  animate={{ x: ['-120%', '430%'] }}
-                  transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 1.2 }}
-                />
                 <div className="flex items-start gap-3">
                   <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-cyan-200/14 text-cyan-100">
                     <Bot aria-hidden="true" className="size-5" />
@@ -726,6 +771,120 @@ function BuildWorkspace() {
               </motion.article>
             )
           })}
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="grid gap-2 border-b border-white/10 px-4 py-4 sm:grid-cols-[1fr_auto] sm:items-end sm:px-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+              CI/CD Strategy
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold">Main → Replica → Release → Hostinger</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-300">
+              This is the deployment flow we can wire once the Hostinger access details are ready.
+              The UI shows the planned release path before the automation exists.
+            </p>
+          </div>
+          <span className="w-fit rounded-xl bg-emerald-300/12 px-3 py-2 text-xs font-semibold text-emerald-200">
+            planned pipeline
+          </span>
+        </div>
+
+        <div className="grid gap-5 p-4 sm:p-5 lg:grid-cols-[1fr_0.82fr]">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+            <div className="absolute left-8 top-10 hidden h-[calc(100%-5rem)] w-px bg-white/12 sm:block" />
+            <div className="grid gap-3">
+              {ciCdStages.map((stage, index) => {
+                const Icon = stage.icon
+                const isActive = index === activeCiStage
+                const isPassed = index < activeCiStage
+
+                return (
+                  <motion.button
+                    className={`relative grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
+                      isActive
+                        ? 'border-amber-200/50 bg-amber-200/14'
+                        : 'border-white/10 bg-white/[0.05] hover:bg-white/[0.09]'
+                    }`}
+                    initial={{ opacity: 0, x: -14 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.08, duration: 0.22 }}
+                    key={stage.title}
+                    onClick={() => setActiveCiStage(index)}
+                    type="button"
+                  >
+                    <span
+                      className={`relative z-10 grid size-11 place-items-center rounded-xl ${
+                        isActive || isPassed
+                          ? 'bg-amber-200 text-stone-950'
+                          : 'bg-white/10 text-stone-400'
+                      }`}
+                    >
+                      <Icon aria-hidden="true" className="size-5" />
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold">{stage.title}</span>
+                      <span className="mt-1 block text-xs leading-5 text-stone-400">{stage.detail}</span>
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-semibold ${
+                        isActive || isPassed
+                          ? 'bg-emerald-300/12 text-emerald-200'
+                          : 'bg-white/5 text-stone-500'
+                      }`}
+                    >
+                      {isPassed ? 'done' : isActive ? 'active' : stage.branch}
+                    </span>
+                  </motion.button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="grid gap-3">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-400">
+                Branch Model
+              </p>
+              <div className="mt-4 grid gap-3">
+                {[
+                  ['main', 'source of truth after PR review'],
+                  ['replica', 'staging environment for review'],
+                  ['release', 'production-ready deploy branch'],
+                ].map(([branch, detail], index) => (
+                  <motion.div
+                    className="grid grid-cols-[auto_1fr] items-center gap-3 rounded-xl bg-white/[0.06] p-3"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + index * 0.08, duration: 0.2 }}
+                    key={branch}
+                  >
+                    <span className="rounded-lg bg-white/10 px-2 py-1 text-xs font-semibold text-amber-200">
+                      {branch}
+                    </span>
+                    <span className="text-sm leading-6 text-stone-300">{detail}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.08] p-4">
+              <p className="text-sm font-semibold text-emerald-100">
+                {ciCdStages[activeCiStage].title}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-stone-300">
+                {ciCdStages[activeCiStage].detail}
+              </p>
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  className="h-full rounded-full bg-emerald-300"
+                  animate={{ width: `${((activeCiStage + 1) / ciCdStages.length) * 100}%` }}
+                  transition={{ duration: 0.24, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
