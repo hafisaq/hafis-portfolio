@@ -89,7 +89,7 @@ export const workspaces: Array<{
   {
     id: 'build',
     label: 'Made',
-    description: 'How this portfolio was designed and built',
+    description: 'Scan the build system behind this portfolio: UI layers, AI-assisted workflow, checks, and release strategy.',
     icon: Code2,
   },
 ]
