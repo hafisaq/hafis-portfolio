@@ -487,6 +487,7 @@ function WorkspaceStage({
   onOpenCommand: () => void
 }) {
   const isBuildWorkspace = activeWorkspace === 'build'
+  const workspaceTitle = isBuildWorkspace ? 'Behind the Build' : label
 
   return (
     <motion.section
@@ -504,7 +505,7 @@ function WorkspaceStage({
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
               Workspace
             </p>
-            <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{label}</h1>
+            <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{workspaceTitle}</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{description}</p>
             {isBuildWorkspace ? (
               <div className="mt-5 flex flex-wrap gap-2">
