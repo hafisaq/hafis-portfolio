@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import {
+  Bot,
   Code2,
   Download,
   ExternalLink,
@@ -45,6 +46,20 @@ const scanFindings = [
     title: 'Reduced-motion support',
     detail: 'Motion is restrained, and the app respects reduced-motion preferences for comfort.',
     target: 'accessibility',
+  },
+]
+const aiSuggestions = [
+  {
+    title: 'Recruiter path',
+    copy: 'Start with Projects, open Digital Banking, then check Resume for CV proof.',
+  },
+  {
+    title: 'Engineering path',
+    copy: 'Inspect the Made workspace, then compare Motion, accessibility, and lazy-loaded sections.',
+  },
+  {
+    title: 'Keyboard path',
+    copy: 'Press Command, search for Story or Resume, and jump without scrolling through the page.',
   },
 ]
 
@@ -394,6 +409,7 @@ function BuildWorkspace() {
   ]
   const [revealedCount, setRevealedCount] = useState(0)
   const [activeFinding, setActiveFinding] = useState(0)
+  const [activeSuggestion, setActiveSuggestion] = useState(0)
   const [scanRun, setScanRun] = useState(0)
   const activeScan = scanFindings[Math.min(activeFinding, scanFindings.length - 1)]
   const isScanComplete = revealedCount >= scanFindings.length
@@ -401,6 +417,7 @@ function BuildWorkspace() {
   useEffect(() => {
     setRevealedCount(0)
     setActiveFinding(0)
+    setActiveSuggestion(0)
 
     const timers = scanFindings.map((_, index) =>
       window.setTimeout(() => {
@@ -419,14 +436,17 @@ function BuildWorkspace() {
       <section className="relative min-h-[34rem] overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(251,191,36,.22),transparent_28%),radial-gradient(circle_at_88%_82%,rgba(14,165,233,.22),transparent_32%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] bg-[size:36px_36px]" />
-        <motion.div
-          aria-hidden="true"
-          key={scanRun}
-          className="absolute inset-x-0 top-0 z-10 h-32 border-y border-amber-200/35 bg-gradient-to-b from-transparent via-amber-200/18 to-transparent shadow-[0_0_54px_rgba(251,191,36,.28)]"
-          initial={{ y: '-45%' }}
-          animate={{ y: '430%' }}
-          transition={{ duration: 3.35, ease: 'easeInOut' }}
-        />
+        {!isScanComplete ? (
+          <motion.div
+            aria-hidden="true"
+            key={scanRun}
+            className="absolute inset-x-0 top-0 z-10 h-32 border-y border-amber-200/35 bg-gradient-to-b from-transparent via-amber-200/18 to-transparent shadow-[0_0_54px_rgba(251,191,36,.28)]"
+            initial={{ y: '-45%' }}
+            animate={{ y: '430%' }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 3.35, ease: 'easeInOut' }}
+          />
+        ) : null}
         <div className="relative z-20 grid gap-6 p-5 lg:grid-cols-[0.9fr_1.1fr] lg:p-6">
           <div className="flex flex-col justify-between gap-6">
             <div>
@@ -501,18 +521,57 @@ function BuildWorkspace() {
                 )
               })}
             </div>
+            {isScanComplete ? (
+              <motion.div
+                className="rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-cyan-200/14 text-cyan-100">
+                    <Bot aria-hidden="true" className="size-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-cyan-50">AI Help</p>
+                    <p className="mt-1 text-sm leading-6 text-stone-300">
+                      {aiSuggestions[activeSuggestion].copy}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {aiSuggestions.map((suggestion, index) => (
+                    <button
+                      className={`rounded-xl border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-cyan-200 ${
+                        activeSuggestion === index
+                          ? 'border-cyan-200/40 bg-cyan-200/16 text-cyan-50'
+                          : 'border-white/10 bg-white/[0.06] text-stone-300 hover:bg-white/[0.1]'
+                      }`}
+                      key={suggestion.title}
+                      onClick={() => setActiveSuggestion(index)}
+                      type="button"
+                    >
+                      {suggestion.title}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : null}
           </div>
 
           <div className="relative min-h-[27rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(28,25,23,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.06)_1px,transparent_1px)] bg-[size:30px_30px]" />
-            <motion.div
-              aria-hidden="true"
-              key={`mock-scan-${scanRun}`}
-              className="absolute inset-x-0 top-0 z-20 h-20 border-y border-amber-500/45 bg-gradient-to-b from-transparent via-amber-300/28 to-transparent"
-              initial={{ y: '-35%' }}
-              animate={{ y: '560%' }}
-              transition={{ duration: 3.35, ease: 'easeInOut' }}
-            />
+            {!isScanComplete ? (
+              <motion.div
+                aria-hidden="true"
+                key={`mock-scan-${scanRun}`}
+                className="absolute inset-x-0 top-0 z-20 h-20 border-y border-amber-500/45 bg-gradient-to-b from-transparent via-amber-300/28 to-transparent"
+                initial={{ y: '-35%' }}
+                animate={{ y: '560%' }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 3.35, ease: 'easeInOut' }}
+              />
+            ) : null}
             <div className="relative grid h-full gap-3 rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
               <div className="flex items-center justify-between border-b border-stone-950/10 pb-3">
                 <div className="flex items-center gap-1.5">
