@@ -48,25 +48,25 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="mb-3 w-[min(calc(100vw-1.5rem),22rem)] overflow-hidden rounded-2xl border border-stone-950/10 bg-white/92 shadow-2xl shadow-stone-950/15 backdrop-blur-xl"
+            className="mb-3 w-[min(calc(100vw-1.5rem),22rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#11100f]/94 shadow-2xl shadow-black/35 backdrop-blur-xl"
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
-            <div className="flex items-center justify-between border-b border-stone-950/10 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="grid size-8 place-items-center rounded-xl bg-stone-950 text-stone-50">
+                <span className="grid size-8 place-items-center rounded-xl bg-stone-50 text-stone-950">
                   <Bot aria-hidden="true" className="size-4" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-stone-950">Mini Hafis</p>
+                  <p className="text-sm font-semibold text-stone-50">Mini Hafis</p>
                   <p className="text-xs text-stone-500">Quick portfolio guide</p>
                 </div>
               </div>
               <button
                 aria-label="Close Mini Hafis"
-                className="grid size-8 place-items-center rounded-lg text-stone-500 hover:bg-stone-950/7 hover:text-stone-950 focus:outline-none focus:ring-2 focus:ring-stone-950"
+                className="grid size-8 place-items-center rounded-lg text-stone-500 hover:bg-white/8 hover:text-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-300"
                 onClick={() => setIsOpen(false)}
                 type="button"
               >
@@ -74,7 +74,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
               </button>
             </div>
             <div className="p-4">
-              <p className="rounded-xl bg-stone-950/[0.045] p-3 text-sm leading-6 text-stone-650">
+              <p className="rounded-xl bg-white/[0.07] p-3 text-sm leading-6 text-stone-300">
                 {activePrompt.answer}
               </p>
               <div className="mt-3 grid gap-2">
@@ -83,7 +83,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
 
                   return (
                     <button
-                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-medium text-stone-700 transition hover:bg-stone-950/7 focus:outline-none focus:ring-2 focus:ring-stone-950"
+                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-medium text-stone-300 transition hover:bg-white/8 focus:outline-none focus:ring-2 focus:ring-amber-300"
                       key={prompt.id}
                       onClick={() => runPrompt(prompt)}
                       type="button"
@@ -99,7 +99,7 @@ export function MiniGuide({ onSelectWorkspace }: MiniGuideProps) {
         ) : null}
       </AnimatePresence>
       <button
-        className="ml-auto grid size-12 place-items-center rounded-2xl bg-stone-950 text-sm font-semibold text-stone-50 shadow-2xl shadow-stone-950/20 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:flex sm:min-h-12 sm:w-auto sm:gap-2 sm:px-4"
+        className="ml-auto grid size-12 place-items-center rounded-2xl bg-stone-50 text-sm font-semibold text-stone-950 shadow-2xl shadow-amber-300/10 transition hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-300 sm:flex sm:min-h-12 sm:w-auto sm:gap-2 sm:px-4"
         onClick={() => setIsOpen((current) => !current)}
         type="button"
       >

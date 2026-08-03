@@ -47,34 +47,41 @@ function App() {
       return
     }
 
-    const bootTimer = window.setTimeout(() => setIsBooting(false), 1450)
+    const bootTimer = window.setTimeout(() => setIsBooting(false), 1150)
     return () => window.clearTimeout(bootTimer)
   }, [reducedMotion])
 
   const openCommand = () => setIsCommandOpen(true)
   const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
+  const heroLines = ['Product work,', 'opened like', 'a focused', 'workspace.']
 
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
-      <main className="min-h-svh overflow-hidden bg-[#f8f4eb] text-stone-950">
-        <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(28,25,23,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.05)_1px,transparent_1px)] bg-[size:44px_44px]" />
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_48%_0%,rgba(251,191,36,.22),transparent_34%),linear-gradient(180deg,rgba(255,255,255,.7),transparent_34%)]" />
+      <main className="min-h-svh overflow-hidden bg-[#070706] text-stone-50">
+        <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] bg-[size:44px_44px]" />
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(251,191,36,.28),transparent_30%),radial-gradient(circle_at_78%_18%,rgba(14,165,233,.24),transparent_28%),radial-gradient(circle_at_68%_82%,rgba(139,92,246,.18),transparent_32%)]"
+          animate={{ opacity: [0.75, 1, 0.82], scale: [1, 1.03, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(180deg,rgba(7,7,6,.28),rgba(7,7,6,.92)_72%)]" />
 
         <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a
-            className="flex min-h-11 items-center gap-3 rounded-xl pr-3 text-left focus:outline-none focus:ring-2 focus:ring-stone-950"
+            className="flex min-h-11 items-center gap-3 rounded-xl pr-3 text-left focus:outline-none focus:ring-2 focus:ring-amber-300"
             href="#top"
           >
-            <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-sm font-bold text-stone-50">
+            <span className="grid size-10 place-items-center rounded-xl bg-stone-50 text-sm font-bold text-stone-950 shadow-lg shadow-amber-300/10">
               HF
             </span>
             <span>
-              <span className="block text-sm font-semibold">Hafis Portfolio</span>
-              <span className="block text-xs text-stone-500">v0.1 / {currentTime}</span>
+              <span className="block text-sm font-semibold text-stone-50">Hafis Portfolio</span>
+              <span className="block text-xs text-stone-500">live workspace / {currentTime}</span>
             </span>
           </a>
           <button
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-stone-950/10 bg-white/70 px-3 text-sm font-medium text-stone-800 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.08] px-3 text-sm font-medium text-stone-100 shadow-sm backdrop-blur transition hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-amber-300"
             onClick={openCommand}
             type="button"
           >
@@ -94,33 +101,58 @@ function App() {
             initial={{ opacity: 0, y: 14 }}
             transition={{ duration: 0.34, ease: 'easeOut' }}
           >
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur">
-              <Zap aria-hidden="true" className="size-4 text-amber-600" />
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-stone-200 shadow-sm backdrop-blur"
+              initial={{ opacity: 0, y: 8 }}
+              transition={{ delay: 0.1, duration: 0.22 }}
+            >
+              <Zap aria-hidden="true" className="size-4 text-amber-300" />
               Mobile-first product portfolio
-            </div>
-            <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl">
-              Product work, opened like a focused workspace.
+            </motion.div>
+            <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-50 sm:text-7xl lg:text-8xl">
+              {heroLines.map((line, index) => (
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, y: 28, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ delay: 0.18 + index * 0.08, duration: 0.48, ease: 'easeOut' }}
+                  key={line}
+                >
+                  {line}
+                </motion.span>
+              ))}
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg">
+            <motion.p
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-5 max-w-xl text-base leading-7 text-stone-300 sm:text-lg"
+              initial={{ opacity: 0, y: 10 }}
+              transition={{ delay: 0.58, duration: 0.3 }}
+            >
               A focused place to scan my work, open the important details fast, and see how I
               think through product interfaces.
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            </motion.p>
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-7 flex flex-col gap-3 sm:flex-row"
+              initial={{ opacity: 0, y: 10 }}
+              transition={{ delay: 0.68, duration: 0.3 }}
+            >
               <button
-                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-50 px-5 text-sm font-semibold text-stone-950 shadow-xl shadow-amber-300/10 transition hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-300"
                 onClick={openCommand}
                 type="button"
               >
                 Open command center
               </button>
               <button
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/12 bg-white/[0.08] px-5 text-sm font-semibold text-stone-100 transition hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-amber-300"
                 onClick={() => setActiveWorkspace('projects')}
                 type="button"
               >
                 View projects
               </button>
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -168,7 +200,7 @@ function App() {
 }
 
 function BootIntro({ isVisible }: { isVisible: boolean }) {
-  const bootLines = ['Loading profile', 'Preparing project workspaces', 'Ready']
+  const bootLines = ['Syncing profile', 'Composing workspaces', 'Ready']
 
   return (
     <AnimatePresence>
@@ -177,6 +209,7 @@ function BootIntro({ isVisible }: { isVisible: boolean }) {
           aria-live="polite"
           className="fixed inset-0 z-[60] grid place-items-center bg-[#0d0c0b] px-6 text-stone-50"
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           role="status"
         >
           <motion.div
@@ -193,6 +226,12 @@ function BootIntro({ isVisible }: { isVisible: boolean }) {
                 Portfolio
               </span>
             </div>
+            <motion.div
+              aria-hidden="true"
+              className="mx-auto mt-2 size-24 rounded-full border border-white/10 bg-[radial-gradient(circle,rgba(251,191,36,.22),transparent_62%)]"
+              animate={{ rotate: 360, scale: [1, 1.04, 1] }}
+              transition={{ rotate: { duration: 6, repeat: Infinity, ease: 'linear' }, scale: { duration: 1.2, repeat: Infinity } }}
+            />
             <div className="mt-5 grid gap-2">
               {bootLines.map((line, index) => (
                 <motion.div

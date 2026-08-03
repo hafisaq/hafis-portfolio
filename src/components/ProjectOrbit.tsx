@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import { projects, type ProjectId } from '../data/portfolio'
 
 type ProjectOrbitProps = {
@@ -41,13 +42,22 @@ export function ProjectOrbit({ onOpenProject }: ProjectOrbitProps) {
           </span>
         </div>
 
-        <div className="grid gap-2.5">
+        <div className="relative grid gap-2.5 overflow-hidden rounded-2xl">
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-white/12 to-transparent"
+            animate={{ y: ['-120%', '520%'] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.2 }}
+          />
           {projects.map((project, index) => {
             const Icon = project.icon
 
             return (
-              <button
+              <motion.button
                 className="grid min-h-16 grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.075] px-3 py-2.5 text-left shadow-sm backdrop-blur transition hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-amber-300"
+                initial={{ opacity: 0, x: 18 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.16 + index * 0.08, duration: 0.28, ease: 'easeOut' }}
                 key={project.id}
                 onClick={() => onOpenProject(project.id)}
                 type="button"
@@ -66,7 +76,7 @@ export function ProjectOrbit({ onOpenProject }: ProjectOrbitProps) {
                 <span className="text-[0.68rem] font-semibold tabular-nums text-stone-500">
                   0{index + 1}
                 </span>
-              </button>
+              </motion.button>
             )
           })}
         </div>

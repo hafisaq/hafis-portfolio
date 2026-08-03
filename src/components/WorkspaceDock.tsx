@@ -10,7 +10,7 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
   return (
     <nav
       aria-label="Portfolio workspaces"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-900/10 bg-[#f8f4eb]/88 px-2 py-2 shadow-2xl shadow-stone-950/10 backdrop-blur-xl sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2 sm:rounded-2xl sm:border"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0d0c0b]/86 px-2 py-2 shadow-2xl shadow-black/35 backdrop-blur-xl sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2 sm:rounded-2xl sm:border"
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1 sm:flex sm:max-w-none">
         {workspaces.map((workspace) => {
@@ -20,10 +20,10 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
           return (
             <button
               aria-current={isActive ? 'page' : undefined}
-              className={`flex min-h-12 items-center justify-center gap-2 rounded-xl px-2 text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-stone-950 sm:min-w-28 sm:px-4 ${
+              className={`flex min-h-12 items-center justify-center gap-2 rounded-xl px-2 text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-amber-300 sm:min-w-28 sm:px-4 ${
                 isActive
-                  ? 'bg-stone-950 text-stone-50 shadow-lg shadow-stone-950/20'
-                  : 'text-stone-600 hover:bg-stone-950/7 hover:text-stone-950'
+                  ? 'bg-stone-50 text-stone-950 shadow-lg shadow-amber-300/10'
+                  : 'text-stone-400 hover:bg-white/8 hover:text-stone-50'
               }`}
               key={workspace.id}
               onClick={() => onSelectWorkspace(workspace.id)}
