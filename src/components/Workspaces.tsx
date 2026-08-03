@@ -698,7 +698,7 @@ function BuildWorkspace() {
             ) : null}
           </div>
 
-          <div className="relative min-h-[27rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30">
+          <div className="relative h-[32rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#f8f4eb] p-3 text-stone-950 shadow-2xl shadow-black/30 lg:h-[34rem]">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(28,25,23,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.06)_1px,transparent_1px)] bg-[size:30px_30px]" />
             {!isScanComplete ? (
               <motion.div
@@ -711,7 +711,7 @@ function BuildWorkspace() {
                 transition={{ duration: 3.35, ease: 'easeInOut' }}
               />
             ) : null}
-            <div className="relative grid h-full gap-3 rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
+            <div className="relative grid h-full grid-rows-[auto_1fr] gap-3 overflow-hidden rounded-[1.35rem] border border-stone-950/10 bg-white/74 p-3 backdrop-blur">
               <div className="flex items-center justify-between border-b border-stone-950/10 pb-3">
                 <div className="flex items-center gap-1.5">
                   <span className="size-2.5 rounded-full bg-red-400" />
@@ -723,47 +723,48 @@ function BuildWorkspace() {
                 </span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
-                <motion.div
-                  className={`rounded-2xl bg-stone-950 p-4 text-stone-50 transition ${
-                    activeScan.target === 'viewport' || activeScan.target === 'workspace'
-                      ? 'ring-2 ring-amber-300'
-                      : ''
-                  }`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: revealedCount >= 1 ? 1 : 0.2, y: revealedCount >= 1 ? 0 : 12 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
-                  <p className="mt-3 text-3xl font-semibold leading-tight">Product work.</p>
-                  <div className="mt-5 grid gap-2">
-                    <span className="h-2 rounded-full bg-white/18" />
-                    <span className="h-2 w-4/5 rounded-full bg-white/18" />
-                    <span className="h-2 w-3/5 rounded-full bg-white/18" />
-                  </div>
-                </motion.div>
-                <motion.div
-                  className={`grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3 transition ${
-                    activeScan.target === 'navigation' ? 'ring-2 ring-amber-300' : ''
-                  }`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: revealedCount >= 2 ? 1 : 0.2, y: revealedCount >= 2 ? 0 : 12 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  {['Projects', 'Story', 'Resume'].map((item) => (
-                    <span
-                      className="flex min-h-10 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold shadow-sm"
-                      key={item}
-                    >
-                      {item}
-                      <span className="size-2 rounded-full bg-amber-400" />
-                    </span>
-                  ))}
-                </motion.div>
-              </div>
+              <div className="min-h-0 overflow-y-auto pr-1">
+                <div className="grid gap-3 sm:grid-cols-[1fr_0.8fr]">
+                  <motion.div
+                    className={`rounded-2xl bg-stone-950 p-4 text-stone-50 transition ${
+                      activeScan.target === 'viewport' || activeScan.target === 'workspace'
+                        ? 'ring-2 ring-amber-300'
+                        : ''
+                    }`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: revealedCount >= 1 ? 1 : 0.2, y: revealedCount >= 1 ? 0 : 12 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <p className="text-xs uppercase tracking-[0.16em] text-amber-200">Hero</p>
+                    <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">Product work.</p>
+                    <div className="mt-5 grid gap-2">
+                      <span className="h-2 rounded-full bg-white/18" />
+                      <span className="h-2 w-4/5 rounded-full bg-white/18" />
+                      <span className="h-2 w-3/5 rounded-full bg-white/18" />
+                    </div>
+                  </motion.div>
+                  <motion.div
+                    className={`grid gap-2 rounded-2xl border border-stone-950/10 bg-stone-950/[0.04] p-3 transition ${
+                      activeScan.target === 'navigation' ? 'ring-2 ring-amber-300' : ''
+                    }`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: revealedCount >= 2 ? 1 : 0.2, y: revealedCount >= 2 ? 0 : 12 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    {['Projects', 'Story', 'Resume'].map((item) => (
+                      <span
+                        className="flex min-h-10 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold shadow-sm"
+                        key={item}
+                      >
+                        {item}
+                        <span className="size-2 rounded-full bg-amber-400" />
+                      </span>
+                    ))}
+                  </motion.div>
+                </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                  {['Motion', 'Tailwind', 'A11y'].map((item, index) => (
                   <motion.div
                     className={`rounded-2xl border border-stone-950/10 bg-white p-3 shadow-sm transition ${
                       (activeScan.target === 'accessibility' && item === 'A11y') ||
@@ -782,19 +783,20 @@ function BuildWorkspace() {
                     <span className="mt-2 block text-sm font-semibold">{item}</span>
                   </motion.div>
                 ))}
+                </div>
+                <motion.div
+                  className="mt-3 rounded-2xl border border-amber-400/30 bg-amber-50 p-3 text-stone-950"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: revealedCount > 0 ? 1 : 0, y: revealedCount > 0 ? 0 : 8 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+                    Inspecting
+                  </span>
+                  <span className="mt-1 block text-sm font-semibold">{activeScan.title}</span>
+                  <span className="mt-1 block text-xs leading-5 text-stone-600">{activeScan.detail}</span>
+                </motion.div>
               </div>
-              <motion.div
-                className="rounded-2xl border border-amber-400/30 bg-amber-50 p-3 text-stone-950"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: revealedCount > 0 ? 1 : 0, y: revealedCount > 0 ? 0 : 8 }}
-                transition={{ duration: 0.18 }}
-              >
-                <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
-                  Inspecting
-                </span>
-                <span className="mt-1 block text-sm font-semibold">{activeScan.title}</span>
-                <span className="mt-1 block text-xs leading-5 text-stone-600">{activeScan.detail}</span>
-              </motion.div>
             </div>
           </div>
         </div>
