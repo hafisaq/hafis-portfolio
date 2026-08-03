@@ -1,13 +1,14 @@
 import { motion } from 'motion/react'
-import type { WorkspaceId } from '../data/portfolio'
+import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
 
 type WorkspacesProps = {
   activeWorkspace: WorkspaceId
+  onOpenProject: (projectId: ProjectId) => void
   onOpenCommand: () => void
 }
 
-export function Workspaces({ activeWorkspace, onOpenCommand }: WorkspacesProps) {
+export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: WorkspacesProps) {
   return (
     <motion.section
       animate={{ opacity: 1, y: 0 }}
@@ -17,7 +18,7 @@ export function Workspaces({ activeWorkspace, onOpenCommand }: WorkspacesProps) 
       transition={{ duration: 0.22, ease: 'easeOut' }}
     >
       {activeWorkspace === 'overview' ? <OverviewWorkspace onOpenCommand={onOpenCommand} /> : null}
-      {activeWorkspace === 'projects' ? <ProjectsWorkspace /> : null}
+      {activeWorkspace === 'projects' ? <ProjectsWorkspace onOpenProject={onOpenProject} /> : null}
       {activeWorkspace === 'experience' ? <ExperienceWorkspace /> : null}
       {activeWorkspace === 'resume' ? <ResumeWorkspace /> : null}
       {activeWorkspace === 'contact' ? <ContactWorkspace /> : null}
@@ -54,7 +55,7 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
   )
 }
 
-function ProjectsWorkspace() {
+function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm">
       <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-950/10 px-4 py-3 sm:px-5">
@@ -72,9 +73,11 @@ function ProjectsWorkspace() {
           const Icon = project.icon
 
           return (
-            <article
-              className="grid gap-4 px-4 py-5 transition hover:bg-stone-950/[0.025] sm:grid-cols-[4.5rem_1fr] sm:px-5"
+            <button
+              className="grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.025] focus:bg-stone-950/[0.025] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5"
               key={project.id}
+              onClick={() => onOpenProject(project.id)}
+              type="button"
             >
               <div className="flex items-center gap-3 sm:block">
                 <span className="block text-xs font-semibold tabular-nums text-stone-400">
@@ -110,7 +113,7 @@ function ProjectsWorkspace() {
                   </dl>
                 </div>
               </div>
-            </article>
+            </button>
           )
         })}
       </div>

@@ -2,9 +2,11 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { Command, Menu, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
+import { MiniGuide } from './components/MiniGuide'
+import { ProjectFocus } from './components/ProjectFocus'
 import { ProjectOrbit } from './components/ProjectOrbit'
 import { WorkspaceDock } from './components/WorkspaceDock'
-import { commandActions, type WorkspaceId } from './data/portfolio'
+import { commandActions, getProjectById, type ProjectId, type WorkspaceId } from './data/portfolio'
 
 const Workspaces = lazy(() =>
   import('./components/Workspaces').then((module) => ({ default: module.Workspaces })),
@@ -12,6 +14,7 @@ const Workspaces = lazy(() =>
 
 function App() {
   const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceId>('overview')
+  const [activeProjectId, setActiveProjectId] = useState<ProjectId | null>(null)
   const [isCommandOpen, setIsCommandOpen] = useState(false)
   const reducedMotion = usePrefersReducedMotion()
   const currentTime = useMemo(
@@ -38,6 +41,7 @@ function App() {
   }, [])
 
   const openCommand = () => setIsCommandOpen(true)
+  const activeProject = activeProjectId ? getProjectById(activeProjectId) ?? null : null
 
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
@@ -114,7 +118,7 @@ function App() {
             initial={{ opacity: 0, scale: 0.97 }}
             transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
           >
-            <ProjectOrbit />
+            <ProjectOrbit onOpenProject={setActiveProjectId} />
           </motion.div>
         </section>
 
@@ -126,7 +130,11 @@ function App() {
               </div>
             }
           >
-            <Workspaces activeWorkspace={activeWorkspace} onOpenCommand={openCommand} />
+            <Workspaces
+              activeWorkspace={activeWorkspace}
+              onOpenCommand={openCommand}
+              onOpenProject={setActiveProjectId}
+            />
           </Suspense>
         </AnimatePresence>
 
@@ -140,6 +148,8 @@ function App() {
           onClose={() => setIsCommandOpen(false)}
           onSelectWorkspace={setActiveWorkspace}
         />
+        <MiniGuide onSelectWorkspace={setActiveWorkspace} />
+        <ProjectFocus project={activeProject} onClose={() => setActiveProjectId(null)} />
       </main>
     </MotionConfig>
   )
