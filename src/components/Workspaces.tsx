@@ -28,6 +28,7 @@ import { projects, timeline } from '../data/portfolio'
 import packageJson from '../../package.json'
 
 const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
+const memojiVideoUrl = '/assets/aw.MOV'
 const email = 'hafisaq@gmail.com'
 const phone = '+971585017102'
 const linkedInUrl = 'https://www.linkedin.com/in/hafis-firosh-211a06185/'
@@ -700,14 +701,32 @@ function ResumeWorkspace() {
 function ContactWorkspace() {
   return (
     <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-      <section className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
-          Contact
-        </p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight">Let’s build something people remember.</h2>
-        <p className="mt-4 text-sm leading-6 text-stone-300">
-          Best for frontend, React Native, fintech, AI workflow, and product engineering roles.
-        </p>
+      <section className="relative overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-xl shadow-stone-950/15">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_10%,rgba(251,191,36,.22),transparent_30%),radial-gradient(circle_at_86%_70%,rgba(14,165,233,.16),transparent_28%)]" />
+        <div className="relative grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+              Contact
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight">Let’s build something people remember.</h2>
+            <p className="mt-4 text-sm leading-6 text-stone-300">
+              Best for frontend, React Native, fintech, AI workflow, and product engineering roles.
+            </p>
+          </div>
+          <div className="relative mx-auto grid size-36 shrink-0 place-items-end overflow-hidden rounded-3xl border border-white/10 bg-white/[0.08] shadow-2xl shadow-black/20 sm:mx-0 sm:size-44">
+            <video
+              aria-label="Animated Hafis memoji"
+              autoPlay
+              className="h-full w-full object-cover"
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              src={memojiVideoUrl}
+            />
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+          </div>
+        </div>
       </section>
 
       <section className="grid gap-3">
