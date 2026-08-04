@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import type { WorkspaceId } from '../data/portfolio'
 import { workspaces } from '../data/portfolio'
 
@@ -18,21 +19,24 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
           const isActive = workspace.id === activeWorkspace
 
           return (
-            <button
+            <motion.button
               aria-current={isActive ? 'page' : undefined}
-              className={`flex min-h-12 items-center justify-center gap-2 rounded-xl px-2 text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-stone-950 sm:min-w-28 sm:px-4 ${
+              className={`flex min-h-12 items-center justify-center gap-2 rounded-xl px-2 text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-stone-950 sm:min-w-28 sm:px-4 sm:hover:shadow-xl sm:hover:shadow-stone-950/12 dark:sm:hover:shadow-black/30 ${
                 isActive
                   ? 'bg-stone-950 text-stone-50 shadow-lg shadow-stone-950/20 dark:bg-stone-50 dark:text-stone-950 dark:shadow-black/30'
                   : 'text-stone-600 hover:bg-stone-950/7 hover:text-stone-950 dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-50'
               }`}
               key={workspace.id}
               onClick={() => onSelectWorkspace(workspace.id)}
+              transition={{ duration: 0.16, ease: 'easeOut' }}
               type="button"
+              whileHover={{ scale: 1.08, y: -8 }}
+              whileTap={{ scale: 0.98, y: 0 }}
             >
               <Icon aria-hidden="true" className="size-5 shrink-0" />
               <span className="hidden sm:inline">{workspace.label}</span>
               <span className="sr-only sm:hidden">{workspace.label}</span>
-            </button>
+            </motion.button>
           )
         })}
       </div>
