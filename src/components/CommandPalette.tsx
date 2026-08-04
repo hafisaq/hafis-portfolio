@@ -77,17 +77,17 @@ export function CommandPalette({
         <motion.div
           aria-labelledby="command-palette-title"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-end bg-stone-950/40 px-3 pb-3 backdrop-blur-sm sm:items-start sm:justify-center sm:px-6 sm:pt-[12vh]"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-stone-950/40 px-3 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-sm sm:px-6 sm:pt-[12vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           role="dialog"
         >
           <motion.div
-            className="w-full max-w-2xl overflow-hidden rounded-t-2xl border border-white/14 bg-[#11100f]/95 shadow-2xl shadow-black/40 sm:rounded-2xl"
-            initial={{ opacity: 0, y: 28, scale: 0.98 }}
+            className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/14 bg-[#11100f]/95 shadow-2xl shadow-black/40"
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 18, scale: 0.98 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
@@ -112,7 +112,7 @@ export function CommandPalette({
                 <X aria-hidden="true" className="size-5" />
               </button>
             </div>
-            <div className="max-h-[58vh] overflow-y-auto p-2">
+            <div className="max-h-[min(58vh,22rem)] overflow-y-auto p-2 sm:max-h-[58vh]">
               {filteredActions.map((action) => {
                 const Icon = action.icon
 

@@ -88,7 +88,7 @@ export const workspaces: Array<{
   },
   {
     id: 'build',
-    label: 'Made',
+    label: 'Build',
     description: 'Scan the build system behind this portfolio: UI layers, AI-assisted workflow, checks, and release strategy.',
     icon: Code2,
   },
@@ -296,7 +296,7 @@ export const commandActions: CommandAction[] = [
   },
   {
     id: 'open-build',
-    label: 'How This Was Made',
+    label: 'Behind the Build',
     hint: 'Tech stack and interaction system',
     icon: Code2,
     workspace: 'build',
