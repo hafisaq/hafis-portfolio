@@ -141,7 +141,6 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
 }
 
 function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
-  const [jobDescription, setJobDescription] = useState('')
   const [activeRole, setActiveRole] = useState('Product Engineer')
   const [activePlaybackStep, setActivePlaybackStep] = useState(0)
   const fitSignals = [
@@ -153,43 +152,6 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
     ['Hire signal', 'I ship polished interfaces without losing sight of reliability, release quality, and product constraints.'],
     ['Strongest proof', 'Banking flows, payment platform ownership, Vision Pro delivery, AI workflows, and full-stack SaaS range.'],
     ['Role fit', 'Product engineering, React Native, fintech, frontend systems, AI workflow, and full-stack product roles.'],
-  ]
-  const matchSignals: Array<{
-    label: string
-    proof: string
-    projectId: ProjectId
-    terms: string[]
-  }> = [
-    {
-      label: 'Mobile product engineering',
-      proof: 'React Native, React.js, TypeScript, secure banking flows, and customer-facing mobile delivery.',
-      projectId: 'rakbank',
-      terms: ['react native', 'mobile', 'ios', 'android', 'frontend', 'typescript', 'react.js', 'react'],
-    },
-    {
-      label: 'Fintech and payments',
-      proof: 'Payment gateways, Easy Payment Plan ownership, 3D Secure alternative work, SDKs, and banking-grade UX.',
-      projectId: 'rakbank',
-      terms: ['fintech', 'banking', 'payment', 'payments', 'gateway', '3d secure', 'sdk', 'security'],
-    },
-    {
-      label: 'AI workflow systems',
-      proof: 'MCP integrations, agent workflows, Copilot instructions, documentation automation, and engineering productivity.',
-      projectId: 'ai-workflows',
-      terms: ['ai', 'mcp', 'agent', 'agents', 'automation', 'copilot', 'llm', 'workflow'],
-    },
-    {
-      label: 'Spatial product ownership',
-      proof: 'Vision Pro product owner and lead developer, from concept to delivery, with performance award recognition.',
-      projectId: 'vision-pro',
-      terms: ['vision pro', 'spatial', 'apple', 'swift', 'product owner', 'lead developer', 'xr'],
-    },
-    {
-      label: 'Full-stack product range',
-      proof: 'Supabase Auth, RBAC, PostgreSQL, REST APIs, Docker, analytics, billing, and CI/CD.',
-      projectId: 'saas',
-      terms: ['full-stack', 'fullstack', 'backend', 'node', 'express', 'supabase', 'postgresql', 'docker', 'ci/cd', 'api', 'apis'],
-    },
   ]
   const roleProfiles = [
     {
@@ -226,27 +188,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
     ['Systems', 'Micro-frontends, CI/CD, tests, AI workflows, and MCP integrations.'],
     ['SaaS', 'Full-stack SaaS platform with auth, RBAC, database, billing, analytics, and AI features.'],
   ]
-  const normalizedJob = jobDescription.toLowerCase()
-  const matchedSignals = matchSignals
-    .map((signal) => ({
-      ...signal,
-      score: signal.terms.filter((term) => normalizedJob.includes(term)).length,
-    }))
-    .filter((signal) => signal.score > 0)
-    .sort((first, second) => second.score - first.score)
-  const scannerResults = matchedSignals.length > 0
-    ? matchedSignals
-    : matchSignals.slice(0, 3).map((signal) => ({ ...signal, score: 0 }))
-  const matchScore = jobDescription.trim()
-    ? Math.min(98, 54 + matchedSignals.reduce((total, signal) => total + signal.score, 0) * 9)
-    : 0
   const activeRoleProfile = roleProfiles.find((role) => role.label === activeRole) ?? roleProfiles[0]
-  const receiptItems = [
-    ['Best role angle', activeRole],
-    ['Fit signal', jobDescription.trim() ? `${matchScore}%` : 'Ready to scan'],
-    ['Strongest proof', scannerResults[0]?.label ?? 'Product engineering range'],
-    ['Next action', 'Open projects or download CV'],
-  ]
 
   useEffect(() => {
     const timer = window.setTimeout(
@@ -354,75 +296,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
         </motion.div>
       </section>
 
-      <section className="overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-white/82 shadow-xl shadow-stone-950/10 dark:border-white/10 dark:bg-white/[0.07]">
-        <div className="grid gap-4 border-b border-stone-950/10 p-4 dark:border-white/10 sm:grid-cols-[1fr_auto] sm:items-end sm:p-5">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
-              Hiring Match Scanner
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-stone-950 dark:text-stone-50">
-              Paste a job description. Get matched proof.
-            </h2>
-          </div>
-          <span className="w-fit rounded-xl bg-stone-950 px-3 py-2 text-xs font-semibold text-stone-50 dark:bg-stone-50 dark:text-stone-950">
-            {jobDescription.trim() ? `${matchScore}% fit signal` : 'local scan'}
-          </span>
-        </div>
-        <div className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[0.95fr_1.05fr]">
-          <textarea
-            aria-label="Paste job description"
-            className="min-h-48 resize-none rounded-2xl border border-stone-950/10 bg-white/80 p-4 text-sm leading-6 text-stone-800 outline-none transition placeholder:text-stone-400 focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-stone-950/40 dark:text-stone-100 dark:focus:ring-stone-50"
-            onChange={(event) => {
-              setJobDescription(event.target.value)
-              if (event.target.value.length > 40) {
-                trackEvent('recruiter_match_scan_input')
-              }
-            }}
-            placeholder="Paste a role here: React Native, fintech, AI workflows, full-stack, Supabase, payments..."
-            value={jobDescription}
-          />
-          <div className="grid gap-3">
-            {scannerResults.map((signal, index) => (
-              <motion.button
-                className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-2 focus:ring-stone-950 dark:focus:ring-stone-50 ${
-                  signal.score > 0
-                    ? 'border-emerald-600/30 bg-emerald-500/[0.08]'
-                    : 'border-stone-950/10 bg-stone-950/[0.035] dark:border-white/10 dark:bg-white/[0.06]'
-                }`}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05, duration: 0.18 }}
-                key={signal.label}
-                onClick={() => {
-                  trackEvent('recruiter_match_project_open', {
-                    match: signal.label,
-                    project_id: signal.projectId,
-                  })
-                  onOpenProject(signal.projectId)
-                }}
-                type="button"
-              >
-                <span className={`grid size-10 place-items-center rounded-xl ${
-                  signal.score > 0 ? 'bg-emerald-600 text-white' : 'bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950'
-                }`}>
-                  <CheckCircle2 aria-hidden="true" className="size-5" />
-                </span>
-                <span>
-                  <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">
-                    {signal.label}
-                  </span>
-                  <span className="mt-1 block text-sm leading-6 text-stone-600 dark:text-stone-300">
-                    {signal.proof}
-                  </span>
-                </span>
-                <ChevronRight aria-hidden="true" className="size-4 text-stone-400" />
-              </motion.button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="grid gap-4">
         <div className="overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-2xl shadow-stone-950/20">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -463,31 +337,6 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
                 </button>
               )
             })}
-          </div>
-        </div>
-
-        <div className="overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-white/82 shadow-xl shadow-stone-950/10 dark:border-white/10 dark:bg-white/[0.07]">
-          <div className="border-b border-stone-950/10 p-5 dark:border-white/10">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
-              Portfolio Receipt
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-stone-950 dark:text-stone-50">
-              Recruiter takeaway
-            </h2>
-          </div>
-          <div className="grid gap-3 p-5">
-            {receiptItems.map(([label, value]) => (
-              <div className="flex items-start justify-between gap-4 rounded-2xl bg-stone-950/[0.035] p-3 dark:bg-white/[0.06]" key={label}>
-                <span className="text-sm text-stone-500 dark:text-stone-400">{label}</span>
-                <span className="max-w-[12rem] text-right text-sm font-semibold text-stone-950 dark:text-stone-50">{value}</span>
-              </div>
-            ))}
-            <div className="rounded-2xl bg-amber-100 p-4 text-stone-950 dark:bg-amber-200">
-              <p className="text-sm font-semibold">Suggested next step</p>
-              <p className="mt-1 text-sm leading-6">
-                Open the strongest matched project, then preview or download the CV.
-              </p>
-            </div>
           </div>
         </div>
       </section>
