@@ -30,6 +30,11 @@ body {
 }
 
 button,
+a {
+  cursor: pointer;
+}
+
+button,
 a,
 input {
   -webkit-tap-highlight-color: transparent;
