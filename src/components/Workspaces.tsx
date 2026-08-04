@@ -28,7 +28,7 @@ import { projects, timeline } from '../data/portfolio'
 import packageJson from '../../package.json'
 
 const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
-const memojiVideoUrl = '/assets/aw.MOV'
+const memojiVideoUrl = '/assets/aqmemoji.mov'
 const email = 'hafisaq@gmail.com'
 const phone = '+971585017102'
 const linkedInUrl = 'https://www.linkedin.com/in/hafis-firosh-211a06185/'
