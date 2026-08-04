@@ -43,10 +43,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Merge main into release
+      - name: Merge replica into release
         run: |
-          git fetch origin main release/v1
-          git merge --no-ff origin/main -m "chore(release): merge main into release/v1"
+          git fetch origin replica release/v1
+          git merge --no-ff origin/replica -m "chore(release): merge replica into release/v1"
 
       - name: Install dependencies
         run: npm ci
