@@ -15,6 +15,7 @@ import {
   Moon,
   PackageCheck,
   Phone,
+  Play,
   RefreshCcw,
   Rocket,
   Server,
@@ -306,6 +307,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
               <h2 className="mt-2 text-2xl font-semibold">Play the proof, not a resume list.</h2>
             </div>
             <button
+              aria-label="Play next proof timeline step"
               className="grid size-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/10 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
               onClick={() => {
                 trackEvent('recruiter_timeline_playback_next')
@@ -313,7 +315,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
               }}
               type="button"
             >
-              <ChevronRight aria-hidden="true" className="size-5" />
+              <Play aria-hidden="true" className="size-4 fill-current" />
             </button>
           </div>
           <div className="mt-5 grid gap-3">
