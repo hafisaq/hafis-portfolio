@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react'
+import { useRef, useState } from 'react'
 import type { WorkspaceId } from '../data/portfolio'
 import { workspaces } from '../data/portfolio'
 
@@ -9,12 +10,64 @@ type WorkspaceDockProps = {
 
 export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceDockProps) {
   const shouldReduceMotion = useReducedMotion()
+  const mobileDockRef = useRef<HTMLDivElement | null>(null)
+  const dragStartXRef = useRef<number | null>(null)
+  const [draggedWorkspace, setDraggedWorkspace] = useState<WorkspaceId | null>(null)
   const mobileWorkspaces = workspaces.filter(
     (workspace) => workspace.id !== 'recruiter' && workspace.id !== 'build',
   )
+  const activeMobileWorkspace = mobileWorkspaces.some((workspace) => workspace.id === activeWorkspace)
+    ? activeWorkspace
+    : null
+  const visibleMobileWorkspace = draggedWorkspace ?? activeMobileWorkspace
   const liquidTransition = shouldReduceMotion
     ? { duration: 0 }
     : { type: 'spring' as const, stiffness: 420, damping: 34, mass: 0.7 }
+
+  const findMobileWorkspaceFromPoint = (clientX: number) => {
+    const dockRect = mobileDockRef.current?.getBoundingClientRect()
+
+    if (!dockRect) {
+      return null
+    }
+
+    const itemWidth = dockRect.width / mobileWorkspaces.length
+    const index = Math.min(
+      mobileWorkspaces.length - 1,
+      Math.max(0, Math.floor((clientX - dockRect.left) / itemWidth)),
+    )
+
+    return mobileWorkspaces[index]?.id ?? null
+  }
+
+  const previewMobileWorkspace = (clientX: number) => {
+    if (shouldReduceMotion) {
+      return
+    }
+
+    const workspace = findMobileWorkspaceFromPoint(clientX)
+
+    if (workspace) {
+      setDraggedWorkspace(workspace)
+    }
+  }
+
+  const selectDraggedWorkspace = (clientX: number) => {
+    const dragStartX = dragStartXRef.current
+    dragStartXRef.current = null
+
+    if (dragStartX === null || Math.abs(clientX - dragStartX) < 10) {
+      setDraggedWorkspace(null)
+      return
+    }
+
+    const workspace = draggedWorkspace ?? findMobileWorkspaceFromPoint(clientX)
+    setDraggedWorkspace(null)
+
+    if (workspace) {
+      onSelectWorkspace(workspace)
+    }
+  }
 
   return (
     <>
@@ -28,10 +81,27 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
           className="pointer-events-none absolute inset-y-1 left-2 w-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,.55),transparent_64%)] blur-2xl"
           transition={{ duration: 8, ease: 'easeInOut', repeat: Infinity }}
         />
-        <div className="relative z-10 mx-auto grid max-w-md grid-cols-5 gap-1">
+        <div
+          className="relative z-10 mx-auto grid max-w-md touch-pan-y select-none grid-cols-5 gap-1"
+          onPointerCancel={() => {
+            dragStartXRef.current = null
+            setDraggedWorkspace(null)
+          }}
+          onPointerDown={(event) => {
+            event.currentTarget.setPointerCapture(event.pointerId)
+            dragStartXRef.current = event.clientX
+            previewMobileWorkspace(event.clientX)
+          }}
+          onPointerMove={(event) => previewMobileWorkspace(event.clientX)}
+          onPointerUp={(event) => {
+            event.currentTarget.releasePointerCapture(event.pointerId)
+            selectDraggedWorkspace(event.clientX)
+          }}
+          ref={mobileDockRef}
+        >
           {mobileWorkspaces.map((workspace) => {
             const Icon = workspace.icon
-            const isActive = workspace.id === activeWorkspace
+            const isActive = workspace.id === visibleMobileWorkspace
 
             return (
               <motion.button
