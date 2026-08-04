@@ -7,6 +7,7 @@ import { ProjectFocus } from './components/ProjectFocus'
 import { ProjectOrbit } from './components/ProjectOrbit'
 import { WorkspaceDock } from './components/WorkspaceDock'
 import { trackEvent } from './analytics'
+import packageJson from '../package.json'
 import {
   commandActions,
   getProjectById,
@@ -147,7 +148,9 @@ function App() {
             </span>
             <span>
               <span className="block text-sm font-semibold">Hafis Portfolio</span>
-              <span className="block text-xs text-stone-500 dark:text-stone-400">v1.0 / {currentTime}</span>
+              <span className="block text-xs text-stone-500 dark:text-stone-400">
+                v{packageJson.version} / {currentTime}
+              </span>
             </span>
           </a>
           <div className="flex items-center gap-2">
