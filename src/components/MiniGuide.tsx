@@ -14,7 +14,7 @@ const guidePrompts = [
     id: 'why-hafis',
     label: 'Why Hafis?',
     answer:
-      'I have 4+ years building production mobile and web experiences across fintech, secure payments, Vision Pro delivery, AI/MCP workflows, and full-stack SaaS systems.',
+      'I build production mobile and web products across fintech, Vision Pro, AI workflows, and full-stack SaaS.',
     workspace: 'recruiter' as const,
     cta: 'Open recruiter mode',
     keywords: ['why', 'hire', 'fit', 'summary', 'recruiter'],
@@ -24,7 +24,7 @@ const guidePrompts = [
     id: 'best-proof',
     label: 'Best proof?',
     answer:
-      'Vision Pro ownership, Easy Payment Plan delivery, 3D Secure alternative work, wallet integrations, micro-frontends, and the SaaS platform.',
+      'Vision Pro ownership, payment platform delivery, wallet integrations, micro-frontends, and SaaS product work.',
     workspace: 'projects' as const,
     cta: 'Open projects',
     keywords: ['proof', 'projects', 'strongest', 'award', 'banking'],
@@ -34,7 +34,7 @@ const guidePrompts = [
     id: 'not-only-frontend',
     label: 'Only frontend?',
     answer:
-      'No. The strongest signal is product range: React Native and React.js depth, plus Supabase Auth, RBAC, PostgreSQL, Docker, analytics, CI/CD, APIs, and AI-powered SaaS features.',
+      'No. I work across React Native, React.js, Supabase Auth, RBAC, PostgreSQL, APIs, CI/CD, Docker, and AI features.',
     workspace: 'recruiter' as const,
     cta: 'Open recruiter mode',
     keywords: ['frontend', 'fullstack', 'backend', 'supabase', 'node', 'api'],
@@ -44,7 +44,7 @@ const guidePrompts = [
     id: 'ai-work',
     label: 'AI work?',
     answer:
-      'The AI work is practical: reusable agent workflows, Copilot instructions, MCP integrations, documentation flows, debugging support, and context-aware engineering automation.',
+      'Practical AI work: agent workflows, Copilot instructions, MCP integrations, docs, debugging, and engineering automation.',
     workspace: 'projects' as const,
     cta: 'Open AI project',
     projectId: 'ai-workflows' as const,
@@ -55,7 +55,7 @@ const guidePrompts = [
     id: 'story',
     label: 'Show story',
     answer:
-      'The timeline connects education, RAKBANK production work, payment platforms, spatial UI, AI workflows, and full-stack product range.',
+      'The timeline connects education, banking production work, payments, spatial UI, AI workflows, and full-stack range.',
     workspace: 'experience' as const,
     cta: 'Open story',
     keywords: ['story', 'timeline', 'career', 'experience'],
@@ -65,7 +65,7 @@ const guidePrompts = [
     id: 'cv',
     label: 'Open CV',
     answer:
-      'The resume view is built for fast scanning, with a PDF preview, download action, core stack, and role-fit highlights.',
+      'The resume view has a fast scan, PDF preview, download action, core stack, and role-fit highlights.',
     workspace: 'resume' as const,
     cta: 'Open resume',
     keywords: ['cv', 'resume', 'download', 'pdf'],
@@ -75,7 +75,7 @@ const guidePrompts = [
     id: 'contact',
     label: 'Contact',
     answer:
-      'Use the contact workspace for email, phone, and LinkedIn. Best fit: product engineering, React Native, fintech, AI workflow, and frontend systems roles.',
+      'Use Contact for email, phone, and LinkedIn. Best fit: product engineering, mobile, fintech, AI workflow, and frontend systems.',
     workspace: 'contact' as const,
     cta: 'Open contact',
     keywords: ['contact', 'email', 'phone', 'linkedin'],
@@ -127,20 +127,20 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="mb-3 flex max-h-[calc(100svh-8rem)] w-[min(calc(100vw-1.5rem),28rem)] flex-col overflow-hidden rounded-2xl border border-stone-950/10 bg-white/94 shadow-2xl shadow-stone-950/15 backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-[#0d0c0b]/94 dark:shadow-black/30 sm:max-h-[calc(100svh-6rem)]"
+            className="mb-3 flex max-h-[calc(100svh-7.5rem)] w-[min(calc(100vw-1.5rem),28rem)] flex-col overflow-hidden rounded-2xl border border-stone-950/10 bg-white/94 shadow-2xl shadow-stone-950/15 backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-[#0d0c0b]/94 dark:shadow-black/30 sm:max-h-[calc(100svh-6rem)]"
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
-            <div className="flex shrink-0 items-center justify-between border-b border-stone-950/10 px-4 py-3 dark:border-white/10">
+            <div className="flex shrink-0 items-center justify-between border-b border-stone-950/10 px-3 py-2.5 dark:border-white/10 sm:px-4 sm:py-3">
               <div className="flex items-center gap-2">
                 <span className="grid size-8 place-items-center rounded-xl bg-stone-950 text-stone-50">
                   <Bot aria-hidden="true" className="size-4" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">Mini Hafis</p>
-                  <p className="text-xs text-stone-500 dark:text-stone-400">Portfolio concierge</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400">Quick answers</p>
                 </div>
               </div>
               <button
@@ -155,8 +155,8 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
                 <X aria-hidden="true" className="size-4" />
               </button>
             </div>
-            <div className="min-h-0 overflow-y-auto p-4">
-              <div className="flex items-center gap-2 rounded-xl border border-stone-950/10 bg-stone-950/[0.035] px-3 dark:border-white/10 dark:bg-white/[0.07]">
+            <div className="min-h-0 overflow-y-auto p-3 sm:p-4">
+              <div className="hidden items-center gap-2 rounded-xl border border-stone-950/10 bg-stone-950/[0.035] px-3 dark:border-white/10 dark:bg-white/[0.07] sm:flex">
                 <Search aria-hidden="true" className="size-4 text-stone-500 dark:text-stone-400" />
                 <input
                   aria-label="Ask Mini Hafis"
@@ -166,13 +166,13 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
                   value={query}
                 />
               </div>
-              <div className="mt-3 rounded-2xl bg-stone-950 p-4 text-stone-50">
+              <div className="rounded-2xl bg-stone-950 p-3 text-stone-50 sm:mt-3 sm:p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-200">
                   {activePrompt.label}
                 </p>
-                <p className="mt-2 text-sm leading-6 text-stone-300">{activePrompt.answer}</p>
+                <p className="mt-2 text-sm leading-5 text-stone-300 sm:leading-6">{activePrompt.answer}</p>
                 <button
-                  className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-50 px-3 text-sm font-semibold text-stone-950 transition hover:bg-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-stone-50 px-3 text-sm font-semibold text-stone-950 transition hover:bg-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-300 sm:mt-4"
                   onClick={openActiveWorkspace}
                   type="button"
                 >
@@ -180,13 +180,13 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
                   <ChevronRight aria-hidden="true" className="size-4" />
                 </button>
               </div>
-              <div className="mt-3 grid gap-2">
+              <div className="mt-2 grid gap-1.5 sm:mt-3 sm:gap-2">
                 {filteredPrompts.map((prompt) => {
                   const Icon = prompt.icon
 
                   return (
                     <button
-                      className="group flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-medium text-stone-700 transition hover:bg-stone-950/7 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:text-stone-200 dark:hover:bg-white/10 dark:focus:ring-stone-50"
+                      className="group flex min-h-10 items-center gap-2.5 rounded-xl px-3 text-left text-sm font-medium text-stone-700 transition hover:bg-stone-950/7 focus:outline-none focus:ring-2 focus:ring-stone-950 dark:text-stone-200 dark:hover:bg-white/10 dark:focus:ring-stone-50 sm:min-h-11 sm:gap-3"
                       key={prompt.id}
                       onClick={() => runPrompt(prompt)}
                       type="button"
