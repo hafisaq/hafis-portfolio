@@ -75,7 +75,7 @@ export const workspaces: Array<{
   {
     id: 'recruiter',
     label: 'Recruiter',
-    description: 'A focused 60-second hiring scan',
+    description: 'Fast role-fit proof for recruiters',
     icon: BadgeCheck,
   },
   {

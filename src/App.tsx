@@ -509,7 +509,15 @@ function WorkspaceStage({
   onOpenCommand: () => void
 }) {
   const isBuildWorkspace = activeWorkspace === 'build'
-  const workspaceTitle = isBuildWorkspace ? 'Behind the Build' : label
+  const isRecruiterWorkspace = activeWorkspace === 'recruiter'
+  const workspaceTitle = isBuildWorkspace
+    ? 'Behind the Build'
+    : isRecruiterWorkspace
+      ? 'Hey recruiters'
+      : label
+  const workspaceDescription = isRecruiterWorkspace
+    ? 'Start here for the fastest read on role fit, proof, and why I am worth a shortlist.'
+    : description
 
   return (
     <motion.section
@@ -528,7 +536,7 @@ function WorkspaceStage({
               Workspace
             </p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{workspaceTitle}</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{description}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{workspaceDescription}</p>
             {isBuildWorkspace ? (
               <div className="mt-5 flex flex-wrap gap-2">
                 {['Page scan', 'AI build pipeline', 'CI/CD release flow'].map((item) => (
