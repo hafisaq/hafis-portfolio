@@ -447,7 +447,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
           return (
             <button
-              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.035] focus:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.05] dark:focus:bg-white/[0.05] dark:focus:ring-stone-50"
+              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-amber-100/35 focus:bg-amber-100/35 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-400 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-amber-300/[0.07] dark:focus:bg-amber-300/[0.07] dark:focus:ring-amber-200"
               key={project.id}
               onClick={() => onOpenProject(project.id)}
               type="button"
@@ -478,7 +478,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
                     />
                   </span>
                   <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{project.summary}</p>
-                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-xs font-semibold text-stone-700 shadow-sm transition group-hover:border-stone-950/20 group-hover:bg-stone-950 group-hover:text-stone-50 dark:border-white/10 dark:bg-white/10 dark:text-stone-200 dark:group-hover:bg-stone-50 dark:group-hover:text-stone-950">
+                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/15 bg-stone-950 px-3 text-xs font-semibold text-stone-50 shadow-sm transition group-hover:border-amber-400 group-hover:bg-amber-300 group-hover:text-stone-950 dark:border-white/10 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
                     Open project
                     <ChevronRight aria-hidden="true" className="size-3.5" />
                   </span>
@@ -731,35 +731,41 @@ function ContactWorkspace() {
 
       <section className="grid gap-3">
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={`mailto:${email}`}
           onClick={() => trackEvent('contact_click', { method: 'email' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Mail aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Email</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">{email}</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">{email}</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Mail
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={`tel:${phone.replace(/\s/g, '')}`}
           onClick={() => trackEvent('contact_click', { method: 'phone' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Phone aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Phone</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">{phone}</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">{phone}</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Call
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={linkedInUrl}
           onClick={() => trackEvent('contact_click', { method: 'linkedin' })}
           rel="noreferrer"
@@ -768,11 +774,14 @@ function ContactWorkspace() {
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <ExternalLink aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">LinkedIn</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Open
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
       </section>
     </div>
