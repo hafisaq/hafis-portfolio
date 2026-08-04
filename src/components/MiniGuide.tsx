@@ -127,13 +127,13 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="mb-3 w-[min(calc(100vw-1.5rem),28rem)] overflow-hidden rounded-2xl border border-stone-950/10 bg-white/94 shadow-2xl shadow-stone-950/15 backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-[#0d0c0b]/94 dark:shadow-black/30"
+            className="mb-3 flex max-h-[calc(100svh-8rem)] w-[min(calc(100vw-1.5rem),28rem)] flex-col overflow-hidden rounded-2xl border border-stone-950/10 bg-white/94 shadow-2xl shadow-stone-950/15 backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-[#0d0c0b]/94 dark:shadow-black/30 sm:max-h-[calc(100svh-6rem)]"
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
-            <div className="flex items-center justify-between border-b border-stone-950/10 px-4 py-3 dark:border-white/10">
+            <div className="flex shrink-0 items-center justify-between border-b border-stone-950/10 px-4 py-3 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <span className="grid size-8 place-items-center rounded-xl bg-stone-950 text-stone-50">
                   <Bot aria-hidden="true" className="size-4" />
@@ -155,7 +155,7 @@ export function MiniGuide({ onOpenProject, onSelectWorkspace }: MiniGuideProps) 
                 <X aria-hidden="true" className="size-4" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="min-h-0 overflow-y-auto p-4">
               <div className="flex items-center gap-2 rounded-xl border border-stone-950/10 bg-stone-950/[0.035] px-3 dark:border-white/10 dark:bg-white/[0.07]">
                 <Search aria-hidden="true" className="size-4 text-stone-500 dark:text-stone-400" />
                 <input

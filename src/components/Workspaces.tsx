@@ -142,33 +142,35 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
 
 function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
   const fitSignals = [
-    ['4+ years', 'React Native, React.js, fintech, mobile and web product delivery.'],
-    ['Product range', 'Banking, payments, Vision Pro, AI workflows, and full-stack SaaS systems.'],
-    ['Delivery proof', 'Awards for Easy Payment Plan and Vision Pro work delivered from scratch.'],
+    ['01', 'Production fintech', '4+ years shipping React Native and React.js banking products.'],
+    ['02', 'Owns ambiguity', 'Vision Pro product owner and lead developer from concept to delivery.'],
+    ['03', 'Beyond frontend', 'Auth, APIs, databases, CI/CD, analytics, Docker, and AI workflows.'],
   ]
   const hiringAngles = [
-    ['Best fit', 'Product engineering roles that need fast UI delivery, clean systems, and ownership.'],
-    ['Strongest proof', 'Secure banking flows, payment platform ownership, spatial product delivery, and practical AI tooling.'],
-    ['Not just frontend', 'Comfortable across auth, APIs, Supabase, PostgreSQL, Docker, analytics, and release workflows.'],
+    ['Hire signal', 'He can ship polished interfaces without losing sight of reliability, release quality, and product constraints.'],
+    ['Strongest proof', 'Banking flows, payment platform ownership, Vision Pro delivery, AI workflows, and full-stack SaaS range.'],
+    ['Role fit', 'Product engineering, React Native, fintech, frontend systems, AI workflow, and full-stack product roles.'],
   ]
 
   return (
     <div className="grid gap-4">
-      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
-        <div className="grid gap-5 p-5 lg:grid-cols-[0.95fr_1.05fr] lg:p-6">
-          <div>
+      <section className="relative overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_8%,rgba(251,191,36,.22),transparent_32%),radial-gradient(circle_at_90%_20%,rgba(14,165,233,.18),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:42px_42px] opacity-40" />
+        <div className="relative grid gap-7 p-5 sm:p-7 lg:grid-cols-[1.02fr_0.98fr] lg:p-8">
+          <div className="flex min-h-[26rem] flex-col justify-center">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
               Recruiter Mode
             </p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
-              A 60-second scan for role fit.
+            <h2 className="mt-4 max-w-3xl text-5xl font-semibold leading-[0.95] sm:text-7xl">
+              Product engineer worth shortlisting.
             </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-stone-300">
-              Product engineer building engaging user experiences across mobile, web, and AI, with
-              production banking experience and enough full-stack range to understand the whole system.
+            <p className="mt-5 max-w-2xl text-base leading-7 text-stone-300 sm:text-lg">
+              Hafis builds engaging user experiences across mobile, web, and AI, with production
+              banking depth and enough full-stack range to move through the whole product system.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {['React Native', 'React.js', 'TypeScript', 'Fintech', 'AI workflows', 'Supabase'].map((skill) => (
+            <div className="mt-7 flex flex-wrap gap-2">
+              {['React Native', 'React.js', 'TypeScript', 'Fintech', 'Vision Pro', 'AI workflows', 'Supabase'].map((skill) => (
                 <span className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-stone-200" key={skill}>
                   {skill}
                 </span>
@@ -176,23 +178,28 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
             </div>
           </div>
           <div className="grid gap-3">
-            {fitSignals.map(([title, copy], index) => (
+            {fitSignals.map(([number, title, copy], index) => (
               <motion.div
-                className="rounded-2xl border border-white/10 bg-white/[0.07] p-4"
+                className="grid min-h-32 grid-cols-[auto_1fr] gap-4 rounded-2xl border border-white/10 bg-white/[0.075] p-4 backdrop-blur"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.06, duration: 0.2 }}
                 key={title}
               >
-                <p className="text-xl font-semibold">{title}</p>
-                <p className="mt-2 text-sm leading-6 text-stone-300">{copy}</p>
+                <span className="grid size-11 place-items-center rounded-xl bg-amber-200 text-sm font-semibold text-stone-950">
+                  {number}
+                </span>
+                <span>
+                  <span className="block text-xl font-semibold">{title}</span>
+                  <span className="mt-2 block text-sm leading-6 text-stone-300">{copy}</span>
+                </span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
         <section className="grid gap-3">
           {hiringAngles.map(([title, copy]) => (
             <article className="rounded-2xl border border-stone-950/10 bg-white/78 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.07]" key={title}>
