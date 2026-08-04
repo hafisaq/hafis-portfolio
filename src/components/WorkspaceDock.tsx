@@ -16,9 +16,9 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
     <>
       <nav
         aria-label="Mobile portfolio workspaces"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-900/10 bg-[#f8f4eb]/90 px-3 pb-[max(0.55rem,env(safe-area-inset-bottom))] pt-2 shadow-2xl shadow-stone-950/10 backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-[#0d0c0b]/90 dark:shadow-black/30"
+        className="fixed inset-x-3 bottom-2 z-40 rounded-[1.45rem] border border-white/55 bg-white/45 px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_18px_50px_rgba(28,25,23,0.16),inset_0_1px_0_rgba(255,255,255,0.72)] backdrop-blur-2xl backdrop-saturate-150 before:pointer-events-none before:absolute before:inset-x-4 before:top-1 before:h-px before:bg-white/75 after:pointer-events-none after:absolute after:inset-0 after:rounded-[1.45rem] after:bg-[linear-gradient(180deg,rgba(255,255,255,.34),transparent_42%,rgba(255,255,255,.12))] lg:hidden dark:border-white/12 dark:bg-stone-950/40 dark:shadow-[0_18px_52px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.14)] dark:before:bg-white/18 dark:after:bg-[linear-gradient(180deg,rgba(255,255,255,.12),transparent_44%,rgba(255,255,255,.04))]"
       >
-        <div className="mx-auto grid max-w-md grid-cols-5 gap-1">
+        <div className="relative z-10 mx-auto grid max-w-md grid-cols-5 gap-1">
           {mobileWorkspaces.map((workspace) => {
             const Icon = workspace.icon
             const isActive = workspace.id === activeWorkspace
@@ -26,10 +26,10 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
             return (
               <button
                 aria-current={isActive ? 'page' : undefined}
-                className={`grid min-h-12 place-items-center rounded-xl transition focus:outline-none focus:ring-2 focus:ring-stone-950 ${
+                className={`grid min-h-12 place-items-center rounded-[1rem] transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
                   isActive
-                    ? 'bg-stone-950 text-stone-50 shadow-lg shadow-stone-950/20 dark:bg-stone-50 dark:text-stone-950 dark:shadow-black/30'
-                    : 'text-stone-600 active:bg-stone-950/7 active:text-stone-950 dark:text-stone-400 dark:active:bg-white/10 dark:active:text-stone-50'
+                    ? 'bg-stone-950/92 text-stone-50 shadow-[0_10px_24px_rgba(28,25,23,0.22),inset_0_1px_0_rgba(255,255,255,0.16)] dark:bg-stone-50/92 dark:text-stone-950 dark:shadow-[0_10px_26px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.7)]'
+                    : 'text-stone-650 active:bg-white/60 active:text-stone-950 dark:text-stone-300 dark:active:bg-white/12 dark:active:text-stone-50'
                 }`}
                 key={workspace.id}
                 onClick={() => onSelectWorkspace(workspace.id)}
