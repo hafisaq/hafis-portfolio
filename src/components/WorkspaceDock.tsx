@@ -12,6 +12,7 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
   const shouldReduceMotion = useReducedMotion()
   const mobileDockRef = useRef<HTMLDivElement | null>(null)
   const dragStartXRef = useRef<number | null>(null)
+  const suppressNextMobileClickRef = useRef(false)
   const [draggedWorkspace, setDraggedWorkspace] = useState<WorkspaceId | null>(null)
   const mobileWorkspaces = workspaces.filter(
     (workspace) => workspace.id !== 'recruiter' && workspace.id !== 'build',
@@ -62,6 +63,7 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
       return
     }
 
+    suppressNextMobileClickRef.current = true
     const workspace = draggedWorkspace ?? findMobileWorkspaceFromPoint(clientX)
     setDraggedWorkspace(null)
 
@@ -113,13 +115,20 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
             return (
               <motion.button
                 aria-current={isActive ? 'page' : undefined}
-                className={`relative isolate grid min-h-12 place-items-center overflow-hidden rounded-[1rem] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+                className={`relative isolate grid min-h-12 place-items-center overflow-hidden rounded-[1rem] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-950/35 dark:focus-visible:ring-white/35 ${
                   isActive
                     ? 'text-stone-950 dark:text-stone-50'
                     : 'text-stone-650 active:bg-white/60 active:text-stone-950 dark:text-stone-300 dark:active:bg-white/12 dark:active:text-stone-50'
                 }`}
                 key={workspace.id}
-                onClick={() => onSelectWorkspace(workspace.id)}
+                onClick={() => {
+                  if (suppressNextMobileClickRef.current) {
+                    suppressNextMobileClickRef.current = false
+                    return
+                  }
+
+                  onSelectWorkspace(workspace.id)
+                }}
                 type="button"
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.93, y: 1 }}
               >
