@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import type { WorkspaceId } from '../data/portfolio'
 import { workspaces } from '../data/portfolio'
 
@@ -8,9 +8,13 @@ type WorkspaceDockProps = {
 }
 
 export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceDockProps) {
+  const shouldReduceMotion = useReducedMotion()
   const mobileWorkspaces = workspaces.filter(
     (workspace) => workspace.id !== 'recruiter' && workspace.id !== 'build',
   )
+  const liquidTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { type: 'spring' as const, stiffness: 420, damping: 34, mass: 0.7 }
 
   return (
     <>
@@ -18,26 +22,47 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
         aria-label="Mobile portfolio workspaces"
         className="fixed inset-x-3 bottom-2 z-40 rounded-[1.45rem] border border-white/55 bg-white/45 px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_18px_50px_rgba(28,25,23,0.16),inset_0_1px_0_rgba(255,255,255,0.72)] backdrop-blur-2xl backdrop-saturate-150 before:pointer-events-none before:absolute before:inset-x-4 before:top-1 before:h-px before:bg-white/75 after:pointer-events-none after:absolute after:inset-0 after:rounded-[1.45rem] after:bg-[linear-gradient(180deg,rgba(255,255,255,.34),transparent_42%,rgba(255,255,255,.12))] lg:hidden dark:border-white/12 dark:bg-stone-950/40 dark:shadow-[0_18px_52px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.14)] dark:before:bg-white/18 dark:after:bg-[linear-gradient(180deg,rgba(255,255,255,.12),transparent_44%,rgba(255,255,255,.04))]"
       >
+        <motion.span
+          aria-hidden="true"
+          animate={shouldReduceMotion ? undefined : { x: ['-22%', '22%', '-22%'] }}
+          className="pointer-events-none absolute inset-y-1 left-2 w-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,.55),transparent_64%)] blur-2xl"
+          transition={{ duration: 8, ease: 'easeInOut', repeat: Infinity }}
+        />
         <div className="relative z-10 mx-auto grid max-w-md grid-cols-5 gap-1">
           {mobileWorkspaces.map((workspace) => {
             const Icon = workspace.icon
             const isActive = workspace.id === activeWorkspace
 
             return (
-              <button
+              <motion.button
                 aria-current={isActive ? 'page' : undefined}
-                className={`grid min-h-12 place-items-center rounded-[1rem] transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+                className={`relative isolate grid min-h-12 place-items-center overflow-hidden rounded-[1rem] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
                   isActive
-                    ? 'bg-stone-950/92 text-stone-50 shadow-[0_10px_24px_rgba(28,25,23,0.22),inset_0_1px_0_rgba(255,255,255,0.16)] dark:bg-stone-50/92 dark:text-stone-950 dark:shadow-[0_10px_26px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.7)]'
+                    ? 'text-stone-50 dark:text-stone-950'
                     : 'text-stone-650 active:bg-white/60 active:text-stone-950 dark:text-stone-300 dark:active:bg-white/12 dark:active:text-stone-50'
                 }`}
                 key={workspace.id}
                 onClick={() => onSelectWorkspace(workspace.id)}
                 type="button"
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.93, y: 1 }}
               >
-                <Icon aria-hidden="true" className="size-5" />
+                {isActive ? (
+                  <motion.span
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-[1rem] bg-stone-950/92 shadow-[0_10px_24px_rgba(28,25,23,0.22),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-10px_18px_rgba(255,255,255,0.06)] dark:bg-stone-50/92 dark:shadow-[0_10px_26px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.78)]"
+                    layoutId="mobile-dock-liquid"
+                    transition={liquidTransition}
+                  />
+                ) : null}
+                <motion.span
+                  animate={isActive && !shouldReduceMotion ? { scale: 1.08, y: -1 } : { scale: 1, y: 0 }}
+                  className="relative z-10 grid place-items-center"
+                  transition={liquidTransition}
+                >
+                  <Icon aria-hidden="true" className="size-5" />
+                </motion.span>
                 <span className="sr-only">{workspace.label}</span>
-              </button>
+              </motion.button>
             )
           })}
         </div>
