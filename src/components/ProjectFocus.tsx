@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { ArrowLeft, Check, ExternalLink, X } from 'lucide-react'
+import { ArrowLeft, Check, X } from 'lucide-react'
 import { useEffect } from 'react'
 import type { Project } from '../data/portfolio'
 
@@ -91,9 +91,8 @@ export function ProjectFocus({ project, onClose }: ProjectFocusProps) {
 
               <div className="grid content-start gap-4">
                 <div className="rounded-3xl border border-white/10 bg-stone-950/38 p-4 shadow-2xl shadow-black/20 backdrop-blur">
-                  <div className="mb-4 flex items-center justify-between">
+                  <div className="mb-4">
                     <p className="text-sm font-semibold text-stone-100">Proof of work</p>
-                    <ExternalLink aria-hidden="true" className="size-4 text-stone-500" />
                   </div>
                   <ul className="grid gap-3">
                     {project.proof.map((item) => (
