@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
-import { Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
+import { BadgeCheck, Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
 import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
@@ -230,6 +230,14 @@ function App() {
                     type="button"
                   >
                     View projects
+                  </button>
+                  <button
+                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-amber-500/35 bg-amber-200/50 px-5 text-sm font-semibold text-stone-950 transition hover:bg-amber-200/75 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-amber-300/30 dark:bg-amber-300/15 dark:text-amber-50 dark:hover:bg-amber-300/20"
+                    onClick={() => selectWorkspace('recruiter', 'hero_recruiter_scan')}
+                    type="button"
+                  >
+                    <BadgeCheck aria-hidden="true" className="size-4" />
+                    Recruiter scan
                   </button>
                 </div>
               </motion.div>
