@@ -15,6 +15,7 @@ import {
   Moon,
   PackageCheck,
   Phone,
+  Play,
   RefreshCcw,
   Rocket,
   Server,
@@ -24,8 +25,10 @@ import { useEffect, useState } from 'react'
 import { trackEvent } from '../analytics'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
+import packageJson from '../../package.json'
 
 const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
+const memojiVideoUrl = '/assets/aqmemoji.mov'
 const email = 'hafisaq@gmail.com'
 const phone = '+971585017102'
 const linkedInUrl = 'https://www.linkedin.com/in/hafis-firosh-211a06185/'
@@ -129,12 +132,265 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
       transition={{ duration: 0.22, ease: 'easeOut' }}
     >
       {activeWorkspace === 'overview' ? <OverviewWorkspace onOpenCommand={onOpenCommand} /> : null}
+      {activeWorkspace === 'recruiter' ? <RecruiterWorkspace onOpenProject={onOpenProject} /> : null}
       {activeWorkspace === 'projects' ? <ProjectsWorkspace onOpenProject={onOpenProject} /> : null}
       {activeWorkspace === 'experience' ? <ExperienceWorkspace /> : null}
       {activeWorkspace === 'resume' ? <ResumeWorkspace /> : null}
       {activeWorkspace === 'contact' ? <ContactWorkspace /> : null}
       {activeWorkspace === 'build' ? <BuildWorkspace /> : null}
     </motion.section>
+  )
+}
+
+function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
+  const [activeRole, setActiveRole] = useState('Product Engineer')
+  const [activePlaybackStep, setActivePlaybackStep] = useState(0)
+  const fitSignals = [
+    ['01', 'Production fintech', '4+ years shipping React Native and React.js banking products.'],
+    ['02', 'Owns ambiguity', 'Vision Pro product owner and lead developer from concept to delivery.'],
+    ['03', 'Beyond frontend', 'Auth, APIs, databases, CI/CD, analytics, Docker, and AI workflows.'],
+  ]
+  const hiringAngles = [
+    ['Hire signal', 'I ship polished interfaces without losing sight of reliability, release quality, and product constraints.'],
+    ['Strongest proof', 'Banking flows, payment platform ownership, Vision Pro delivery, AI workflows, and full-stack SaaS range.'],
+    ['Role fit', 'Product engineering, React Native, fintech, frontend systems, AI workflow, and full-stack product roles.'],
+  ]
+  const roleProfiles = [
+    {
+      label: 'Product Engineer',
+      headline: 'Interfaces, systems, and ownership.',
+      proof: ['Vision Pro ownership', 'Fintech product delivery', 'Full-stack SaaS range'],
+    },
+    {
+      label: 'React Native',
+      headline: 'Mobile banking work with real production constraints.',
+      proof: ['React Native apps', 'SDK/API integrations', 'Payments and biometrics'],
+    },
+    {
+      label: 'Fintech',
+      headline: 'Secure flows where reliability and trust matter.',
+      proof: ['Digital banking', 'Easy Payment Plan', '3D Secure alternative'],
+    },
+    {
+      label: 'AI Workflow',
+      headline: 'AI used as engineering infrastructure.',
+      proof: ['MCP integrations', 'Agent workflows', 'Copilot instructions'],
+    },
+    {
+      label: 'Full-stack',
+      headline: 'Enough backend range to move beyond UI-only work.',
+      proof: ['Supabase Auth/RLS', 'PostgreSQL', 'Docker and CI/CD'],
+    },
+  ]
+  const playbackSteps = [
+    ['Education', 'First Class Honours, AI sign language project, UAE Golden Visa recognition.'],
+    ['Banking', 'React Native and React.js customer-facing digital banking flows.'],
+    ['Payments', 'Easy Payment Plan, 3D Secure alternative, SDK and gateway integrations.'],
+    ['Spatial', 'Vision Pro product owner and lead developer from scratch.'],
+    ['Systems', 'Micro-frontends, CI/CD, tests, AI workflows, and MCP integrations.'],
+    ['SaaS', 'Full-stack SaaS platform with auth, RBAC, database, billing, analytics, and AI features.'],
+  ]
+  const activeRoleProfile = roleProfiles.find((role) => role.label === activeRole) ?? roleProfiles[0]
+
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () => setActivePlaybackStep((currentStep) => (currentStep + 1) % playbackSteps.length),
+      1800,
+    )
+
+    return () => window.clearTimeout(timer)
+  }, [activePlaybackStep, playbackSteps.length])
+
+  return (
+    <div className="grid gap-4">
+      <section className="relative overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_8%,rgba(251,191,36,.22),transparent_32%),radial-gradient(circle_at_90%_20%,rgba(14,165,233,.18),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:42px_42px] opacity-40" />
+        <div className="relative grid gap-7 p-5 sm:p-7 lg:grid-cols-[1.02fr_0.98fr] lg:p-8">
+          <div className="flex min-h-[26rem] flex-col justify-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+              Recruiter Mode
+            </p>
+            <h2 className="mt-4 max-w-3xl text-5xl font-semibold leading-[0.95] sm:text-7xl">
+              Product engineer worth shortlisting.
+            </h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-stone-300 sm:text-lg">
+              I build engaging user experiences across mobile, web, and AI, with production
+              banking depth and enough full-stack range to move through the whole product system.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {['React Native', 'React.js', 'TypeScript', 'Fintech', 'Vision Pro', 'AI workflows', 'Supabase'].map((skill) => (
+                <span className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-stone-200" key={skill}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-3">
+            {fitSignals.map(([number, title, copy], index) => (
+              <motion.div
+                className="grid min-h-32 grid-cols-[auto_1fr] gap-4 rounded-2xl border border-white/10 bg-white/[0.075] p-4 backdrop-blur"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.06, duration: 0.2 }}
+                key={title}
+              >
+                <span className="grid size-11 place-items-center rounded-xl bg-amber-200 text-sm font-semibold text-stone-950">
+                  {number}
+                </span>
+                <span>
+                  <span className="block text-xl font-semibold">{title}</span>
+                  <span className="mt-2 block text-sm leading-6 text-stone-300">{copy}</span>
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 rounded-[1.75rem] border border-stone-950/10 bg-white/82 p-4 shadow-xl shadow-stone-950/10 dark:border-white/10 dark:bg-white/[0.07] sm:p-5 lg:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
+            Role Switcher
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-stone-950 dark:text-stone-50">
+            Reframe the same proof for the role.
+          </h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {roleProfiles.map((role) => (
+              <button
+                aria-pressed={role.label === activeRole}
+                className={`min-h-10 rounded-xl px-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-stone-950 dark:focus:ring-stone-50 ${
+                  role.label === activeRole
+                    ? 'bg-stone-950 text-stone-50 dark:bg-stone-50 dark:text-stone-950'
+                    : 'border border-stone-950/10 bg-white/70 text-stone-700 hover:bg-white dark:border-white/10 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/15'
+                }`}
+                key={role.label}
+                onClick={() => {
+                  trackEvent('recruiter_role_switch', { role: role.label })
+                  setActiveRole(role.label)
+                }}
+                type="button"
+              >
+                {role.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <motion.div
+          className="rounded-2xl bg-stone-950 p-5 text-stone-50"
+          key={activeRoleProfile.label}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+            {activeRoleProfile.label}
+          </p>
+          <p className="mt-3 text-2xl font-semibold leading-tight">{activeRoleProfile.headline}</p>
+          <div className="mt-5 grid gap-2 sm:grid-cols-3">
+            {activeRoleProfile.proof.map((proof) => (
+              <span className="rounded-xl border border-white/10 bg-white/[0.08] p-3 text-sm leading-5 text-stone-300" key={proof}>
+                {proof}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="grid gap-4">
+        <div className="overflow-hidden rounded-[1.75rem] border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-2xl shadow-stone-950/20">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+                Proof Timeline Playback
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold">Play the proof, not a resume list.</h2>
+            </div>
+            <button
+              aria-label="Play next proof timeline step"
+              className="grid size-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/10 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-300"
+              onClick={() => {
+                trackEvent('recruiter_timeline_playback_next')
+                setActivePlaybackStep((currentStep) => (currentStep + 1) % playbackSteps.length)
+              }}
+              type="button"
+            >
+              <Play aria-hidden="true" className="size-4 fill-current" />
+            </button>
+          </div>
+          <div className="mt-5 grid gap-3">
+            {playbackSteps.map(([label, detail], index) => {
+              const isActive = index === activePlaybackStep
+
+              return (
+                <button
+                  className={`grid grid-cols-[auto_1fr] gap-3 rounded-2xl border p-3 text-left transition focus:outline-none focus:ring-2 focus:ring-amber-300 ${
+                    isActive ? 'border-amber-200/50 bg-amber-200/14' : 'border-white/10 bg-white/[0.06] hover:bg-white/[0.09]'
+                  }`}
+                  key={label}
+                  onClick={() => setActivePlaybackStep(index)}
+                  type="button"
+                >
+                  <span className={`mt-1 size-2.5 rounded-full ${isActive ? 'bg-amber-200' : 'bg-white/25'}`} />
+                  <span>
+                    <span className="block text-sm font-semibold">{label}</span>
+                    <span className="mt-1 block text-sm leading-6 text-stone-300">{detail}</span>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+        <section className="grid gap-3">
+          {hiringAngles.map(([title, copy]) => (
+            <article className="rounded-2xl border border-stone-950/10 bg-white/78 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.07]" key={title}>
+              <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">{title}</p>
+              <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">{copy}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm dark:border-white/10 dark:bg-white/[0.07]">
+          <div className="border-b border-stone-950/10 p-4 dark:border-white/10">
+            <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">Open strongest proof</h2>
+            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+              Quick routes into the project screens recruiters usually care about first.
+            </p>
+          </div>
+          <div className="divide-y divide-stone-950/10 dark:divide-white/10">
+            {projects.slice(0, 4).map((project) => {
+              const Icon = project.icon
+
+              return (
+                <button
+                  className="group grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-4 text-left transition hover:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 dark:hover:bg-white/[0.05] dark:focus:ring-stone-50"
+                  key={project.id}
+                  onClick={() => onOpenProject(project.id)}
+                  type="button"
+                >
+                  <span className={`grid size-10 place-items-center rounded-xl ${project.accent} text-white`}>
+                    <Icon aria-hidden="true" className="size-5" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">
+                      {project.name}
+                    </span>
+                    <span className="mt-1 block text-sm leading-5 text-stone-500 dark:text-stone-400">
+                      {project.metrics.join(' / ')}
+                    </span>
+                  </span>
+                  <ChevronRight aria-hidden="true" className="size-4 text-stone-400 transition group-hover:translate-x-0.5 group-hover:text-amber-600 dark:group-hover:text-amber-200" />
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
   )
 }
 
@@ -191,7 +447,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
 
           return (
             <button
-              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-stone-950/[0.035] focus:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-white/[0.05] dark:focus:bg-white/[0.05] dark:focus:ring-stone-50"
+              className="group grid w-full gap-4 px-4 py-5 text-left transition hover:bg-amber-100/35 focus:bg-amber-100/35 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-400 sm:grid-cols-[4.5rem_1fr] sm:px-5 dark:hover:bg-amber-300/[0.07] dark:focus:bg-amber-300/[0.07] dark:focus:ring-amber-200"
               key={project.id}
               onClick={() => onOpenProject(project.id)}
               type="button"
@@ -222,7 +478,7 @@ function ProjectsWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proje
                     />
                   </span>
                   <p className="mt-3 text-sm leading-6 text-stone-650 dark:text-stone-300">{project.summary}</p>
-                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/10 bg-white px-3 text-xs font-semibold text-stone-700 shadow-sm transition group-hover:border-stone-950/20 group-hover:bg-stone-950 group-hover:text-stone-50 dark:border-white/10 dark:bg-white/10 dark:text-stone-200 dark:group-hover:bg-stone-50 dark:group-hover:text-stone-950">
+                  <span className="mt-4 inline-flex min-h-9 items-center gap-2 rounded-xl border border-stone-950/15 bg-stone-950 px-3 text-xs font-semibold text-stone-50 shadow-sm transition group-hover:border-amber-400 group-hover:bg-amber-300 group-hover:text-stone-950 dark:border-white/10 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
                     Open project
                     <ChevronRight aria-hidden="true" className="size-3.5" />
                   </span>
@@ -445,47 +701,71 @@ function ResumeWorkspace() {
 function ContactWorkspace() {
   return (
     <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-      <section className="rounded-2xl border border-stone-950/10 bg-stone-950 p-5 text-stone-50 shadow-xl shadow-stone-950/15">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
-          Contact
-        </p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight">Let’s build something people remember.</h2>
-        <p className="mt-4 text-sm leading-6 text-stone-300">
-          Best for frontend, React Native, fintech, AI workflow, and product engineering roles.
-        </p>
+      <section className="relative overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-xl shadow-stone-950/15">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_10%,rgba(251,191,36,.22),transparent_30%),radial-gradient(circle_at_86%_70%,rgba(14,165,233,.16),transparent_28%)]" />
+        <div className="relative grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+              Contact
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight">Let’s build something people remember.</h2>
+            <p className="mt-4 text-sm leading-6 text-stone-300">
+              Best for frontend, React Native, fintech, AI workflow, and product engineering roles.
+            </p>
+          </div>
+          <div className="relative mx-auto grid size-36 shrink-0 place-items-end overflow-hidden rounded-3xl border border-white/10 bg-white/[0.08] shadow-2xl shadow-black/20 sm:mx-0 sm:size-44">
+            <video
+              aria-label="Animated Hafis memoji"
+              autoPlay
+              className="h-full w-full object-cover"
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              src={memojiVideoUrl}
+            />
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+          </div>
+        </div>
       </section>
 
       <section className="grid gap-3">
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={`mailto:${email}`}
           onClick={() => trackEvent('contact_click', { method: 'email' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Mail aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Email</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">{email}</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">{email}</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Mail
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={`tel:${phone.replace(/\s/g, '')}`}
           onClick={() => trackEvent('contact_click', { method: 'phone' })}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <Phone aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">Phone</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">{phone}</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">{phone}</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Call
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
         <a
-          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-stone-950/20 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-white/[0.1] dark:focus:ring-stone-50"
+          className="group flex min-h-16 items-center gap-3 rounded-2xl border border-stone-950/10 bg-white/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-400/60 hover:bg-amber-100/45 hover:shadow-lg hover:shadow-stone-950/10 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-white/10 dark:bg-white/[0.07] dark:hover:bg-amber-300/[0.08] dark:focus:ring-amber-200"
           href={linkedInUrl}
           onClick={() => trackEvent('contact_click', { method: 'linkedin' })}
           rel="noreferrer"
@@ -494,11 +774,14 @@ function ContactWorkspace() {
           <span className="grid size-10 place-items-center rounded-xl bg-stone-950 text-stone-50">
             <ExternalLink aria-hidden="true" className="size-5" />
           </span>
-          <span>
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">LinkedIn</span>
-            <span className="text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
+            <span className="block truncate text-sm text-stone-600 dark:text-stone-300">hafis-firosh-211a06185</span>
           </span>
-          <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-stone-400 transition group-hover:text-stone-950 dark:group-hover:text-stone-50" />
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-stone-50 transition group-hover:bg-amber-300 group-hover:text-stone-950 dark:bg-stone-50 dark:text-stone-950 dark:group-hover:bg-amber-200">
+            Open
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </span>
         </a>
       </section>
     </div>
@@ -532,6 +815,13 @@ function BuildWorkspace() {
       copy: 'Keyboard command navigation, focus rings, semantic dialogs, visible labels, and reduced-motion support.',
       icon: Moon,
     },
+  ]
+  const systemStatus = [
+    ['Version', `v${packageJson.version}`, 'Read from package metadata at build time.'],
+    ['Analytics', 'enabled', 'GA page views and key portfolio interactions are tracked.'],
+    ['SEO', 'ready', 'Sitemap, robots, canonical tags, and social preview metadata are configured.'],
+    ['Release', 'single push', 'Promote release merges main, bumps version, validates, then deploys once.'],
+    ['Compiler', 'stable TS 5', 'Pinned away from TypeScript prerelease builds for Hostinger reliability.'],
   ]
   const [revealedCount, setRevealedCount] = useState(0)
   const [activeFinding, setActiveFinding] = useState(0)
@@ -868,6 +1158,43 @@ function BuildWorkspace() {
               </motion.article>
             )
           })}
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+        <div className="grid gap-2 border-b border-stone-950/10 px-4 py-4 dark:border-white/10 sm:grid-cols-[1fr_auto] sm:items-end sm:px-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
+              Live System Status
+            </p>
+            <h2 className="mt-2 text-lg font-semibold text-stone-950 dark:text-stone-50">
+              Current portfolio health
+            </h2>
+          </div>
+          <span className="w-fit rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white dark:bg-emerald-300 dark:text-stone-950">
+            live-ready
+          </span>
+        </div>
+        <div className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
+          {systemStatus.map(([label, value, detail], index) => (
+            <motion.article
+              className="rounded-2xl border border-stone-950/10 bg-stone-950/[0.035] p-4 dark:border-white/10 dark:bg-white/[0.06]"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05, duration: 0.2 }}
+              key={label}
+            >
+              <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
+                {label}
+              </span>
+              <span className="mt-2 block text-xl font-semibold text-stone-950 dark:text-stone-50">
+                {value}
+              </span>
+              <span className="mt-2 block text-xs leading-5 text-stone-600 dark:text-stone-300">
+                {detail}
+              </span>
+            </motion.article>
+          ))}
         </div>
       </section>
 

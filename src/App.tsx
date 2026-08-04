@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
-import { Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
+import { BadgeCheck, Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
 import { MiniGuide } from './components/MiniGuide'
 import { ProjectFocus } from './components/ProjectFocus'
@@ -231,6 +231,14 @@ function App() {
                   >
                     View projects
                   </button>
+                  <button
+                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-amber-500/35 bg-amber-200/50 px-5 text-sm font-semibold text-stone-950 transition hover:bg-amber-200/75 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-amber-300/30 dark:bg-amber-300/15 dark:text-amber-50 dark:hover:bg-amber-300/20"
+                    onClick={() => selectWorkspace('recruiter', 'hero_recruiter_scan')}
+                    type="button"
+                  >
+                    <BadgeCheck aria-hidden="true" className="size-4" />
+                    Recruiter scan
+                  </button>
                 </div>
               </motion.div>
 
@@ -277,9 +285,13 @@ function App() {
           actions={commandActions}
           isOpen={isCommandOpen}
           onClose={() => setIsCommandOpen(false)}
+          onOpenProject={(projectId) => openProject(projectId, 'command_palette')}
           onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'command_palette')}
         />
-        <MiniGuide onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'mini_hafis')} />
+        <MiniGuide
+          onOpenProject={(projectId) => openProject(projectId, 'mini_hafis')}
+          onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'mini_hafis')}
+        />
         <ProjectFocus
           project={activeProject}
           onClose={() => {
@@ -319,7 +331,7 @@ function FirstLoadGuide({
   const guideItems = [
     {
       title: 'Open workspaces',
-      copy: 'Projects, Story, Resume, Contact, and Build each open as their own focused screen.',
+      copy: 'Recruiter, Projects, Story, Resume, Contact, and Build each open as their own focused screen.',
       icon: Layers3,
     },
     {
@@ -365,7 +377,7 @@ function FirstLoadGuide({
                     </span>
                   </div>
                   <div className="grid gap-2 sm:gap-3">
-                    {['Home', 'Projects', 'Story', 'Resume', 'Build'].map((item, index) => (
+                    {['Home', 'Recruiter', 'Projects', 'Story', 'Resume', 'Build'].map((item, index) => (
                       <motion.div
                         className="flex min-h-10 items-center justify-between rounded-xl border border-white/10 bg-white/[0.07] px-3 sm:min-h-12"
                         key={item}
@@ -505,7 +517,15 @@ function WorkspaceStage({
   onOpenCommand: () => void
 }) {
   const isBuildWorkspace = activeWorkspace === 'build'
-  const workspaceTitle = isBuildWorkspace ? 'Behind the Build' : label
+  const isRecruiterWorkspace = activeWorkspace === 'recruiter'
+  const workspaceTitle = isBuildWorkspace
+    ? 'Behind the Build'
+    : isRecruiterWorkspace
+      ? 'Hey recruiters'
+      : label
+  const workspaceDescription = isRecruiterWorkspace
+    ? 'Start here for the fastest read on role fit, proof, and why I am worth a shortlist.'
+    : description
 
   return (
     <motion.section
@@ -524,7 +544,7 @@ function WorkspaceStage({
               Workspace
             </p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">{workspaceTitle}</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{description}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-300">{workspaceDescription}</p>
             {isBuildWorkspace ? (
               <div className="mt-5 flex flex-wrap gap-2">
                 {['Page scan', 'AI build pipeline', 'CI/CD release flow'].map((item) => (

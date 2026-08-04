@@ -2,12 +2,13 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Search, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { trackEvent } from '../analytics'
-import type { CommandAction, WorkspaceId } from '../data/portfolio'
+import type { CommandAction, ProjectId, WorkspaceId } from '../data/portfolio'
 
 type CommandPaletteProps = {
   actions: CommandAction[]
   isOpen: boolean
   onClose: () => void
+  onOpenProject: (projectId: ProjectId) => void
   onSelectWorkspace: (workspace: WorkspaceId) => void
 }
 
@@ -15,6 +16,7 @@ export function CommandPalette({
   actions,
   isOpen,
   onClose,
+  onOpenProject,
   onSelectWorkspace,
 }: CommandPaletteProps) {
   const [query, setQuery] = useState('')
@@ -27,9 +29,30 @@ export function CommandPalette({
       return actions
     }
 
-    return actions.filter((action) => {
-      return `${action.label} ${action.hint}`.toLowerCase().includes(normalizedQuery)
-    })
+    return actions
+      .map((action) => {
+        const searchable = [
+          action.label,
+          action.hint,
+          action.workspace,
+          action.projectId ?? '',
+          ...(action.keywords ?? []),
+        ]
+          .join(' ')
+          .toLowerCase()
+        const score = action.label.toLowerCase().includes(normalizedQuery)
+          ? 3
+          : action.hint.toLowerCase().includes(normalizedQuery)
+            ? 2
+            : searchable.includes(normalizedQuery)
+              ? 1
+              : 0
+
+        return { action, score }
+      })
+      .filter((result) => result.score > 0)
+      .sort((first, second) => second.score - first.score)
+      .map((result) => result.action)
   }, [actions, query])
 
   useEffect(() => {
@@ -66,6 +89,10 @@ export function CommandPalette({
     onSelectWorkspace(action.workspace)
     onClose()
 
+    if (action.projectId) {
+      window.setTimeout(() => onOpenProject(action.projectId as ProjectId), 180)
+    }
+
     if (action.external) {
       window.location.href = action.external
     }
@@ -100,7 +127,7 @@ export function CommandPalette({
                 aria-label="Search portfolio commands"
                 className="min-h-11 flex-1 bg-transparent text-base text-stone-50 outline-none placeholder:text-stone-500"
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search projects, story, resume, made..."
+                placeholder="Search projects, story, resume, build..."
                 value={query}
               />
               <button
@@ -140,7 +167,7 @@ export function CommandPalette({
               })}
               {filteredActions.length === 0 ? (
                 <p className="px-4 py-8 text-center text-sm text-stone-400">
-                  No matching command.
+                  No match yet. Try “AI”, “payments”, “Vision Pro”, “CV”, or “recruiter”.
                 </p>
               ) : null}
             </div>
