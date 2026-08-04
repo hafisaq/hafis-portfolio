@@ -14,10 +14,16 @@ export function initializeAnalytics() {
     return
   }
 
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`
-  document.head.appendChild(script)
+  const existingScript = document.querySelector<HTMLScriptElement>(
+    `script[src="https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}"]`,
+  )
+
+  if (!existingScript) {
+    const script = document.createElement('script')
+    script.async = true
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`
+    document.head.appendChild(script)
+  }
 
   window.dataLayer = window.dataLayer ?? []
   window.gtag = (...args: unknown[]) => {

@@ -48,7 +48,8 @@ export function ProjectOrbit({ onOpenProject }: ProjectOrbitProps) {
 
             return (
               <button
-                className="group grid min-h-16 grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.075] px-3 py-2.5 text-left shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-amber-200/35 hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-amber-300"
+                aria-label={`Open ${project.name} project`}
+                className="group grid min-h-16 grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.085] px-3 py-2.5 text-left shadow-sm shadow-black/15 backdrop-blur transition hover:-translate-y-0.5 hover:border-amber-200/45 hover:bg-white/[0.14] hover:shadow-lg hover:shadow-amber-950/20 focus:outline-none focus:ring-2 focus:ring-amber-300"
                 key={project.id}
                 onClick={() => onOpenProject(project.id)}
                 type="button"
@@ -64,14 +65,17 @@ export function ProjectOrbit({ onOpenProject }: ProjectOrbitProps) {
                     {project.context}
                   </span>
                 </span>
-                <span className="grid gap-1 justify-items-end">
+                <span className="grid gap-1.5 justify-items-end">
                   <span className="text-[0.68rem] font-semibold tabular-nums text-stone-500">
                     0{index + 1}
                   </span>
-                  <ArrowUpRight
-                    aria-hidden="true"
-                    className="size-3.5 text-stone-500 transition group-hover:text-amber-200"
-                  />
+                  <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-normal text-stone-300 transition group-hover:border-amber-200/40 group-hover:bg-amber-200 group-hover:text-stone-950">
+                    Open
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="size-3 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </span>
                 </span>
               </button>
             )
