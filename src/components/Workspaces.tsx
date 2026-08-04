@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react'
 import { trackEvent } from '../analytics'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
+import packageJson from '../../package.json'
 
 const cvUrl = '/assets/CV_HAFIS_FIROSH.pdf'
 const email = 'hafisaq@gmail.com'
@@ -129,12 +130,115 @@ export function Workspaces({ activeWorkspace, onOpenCommand, onOpenProject }: Wo
       transition={{ duration: 0.22, ease: 'easeOut' }}
     >
       {activeWorkspace === 'overview' ? <OverviewWorkspace onOpenCommand={onOpenCommand} /> : null}
+      {activeWorkspace === 'recruiter' ? <RecruiterWorkspace onOpenProject={onOpenProject} /> : null}
       {activeWorkspace === 'projects' ? <ProjectsWorkspace onOpenProject={onOpenProject} /> : null}
       {activeWorkspace === 'experience' ? <ExperienceWorkspace /> : null}
       {activeWorkspace === 'resume' ? <ResumeWorkspace /> : null}
       {activeWorkspace === 'contact' ? <ContactWorkspace /> : null}
       {activeWorkspace === 'build' ? <BuildWorkspace /> : null}
     </motion.section>
+  )
+}
+
+function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: ProjectId) => void }) {
+  const fitSignals = [
+    ['4+ years', 'React Native, React.js, fintech, mobile and web product delivery.'],
+    ['Product range', 'Banking, payments, Vision Pro, AI workflows, and full-stack SaaS systems.'],
+    ['Delivery proof', 'Awards for Easy Payment Plan and Vision Pro work delivered from scratch.'],
+  ]
+  const hiringAngles = [
+    ['Best fit', 'Product engineering roles that need fast UI delivery, clean systems, and ownership.'],
+    ['Strongest proof', 'Secure banking flows, payment platform ownership, spatial product delivery, and practical AI tooling.'],
+    ['Not just frontend', 'Comfortable across auth, APIs, Supabase, PostgreSQL, Docker, analytics, and release workflows.'],
+  ]
+
+  return (
+    <div className="grid gap-4">
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20">
+        <div className="grid gap-5 p-5 lg:grid-cols-[0.95fr_1.05fr] lg:p-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
+              Recruiter Mode
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
+              A 60-second scan for role fit.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-stone-300">
+              Product engineer building engaging user experiences across mobile, web, and AI, with
+              production banking experience and enough full-stack range to understand the whole system.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['React Native', 'React.js', 'TypeScript', 'Fintech', 'AI workflows', 'Supabase'].map((skill) => (
+                <span className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-stone-200" key={skill}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-3">
+            {fitSignals.map(([title, copy], index) => (
+              <motion.div
+                className="rounded-2xl border border-white/10 bg-white/[0.07] p-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.06, duration: 0.2 }}
+                key={title}
+              >
+                <p className="text-xl font-semibold">{title}</p>
+                <p className="mt-2 text-sm leading-6 text-stone-300">{copy}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="grid gap-3">
+          {hiringAngles.map(([title, copy]) => (
+            <article className="rounded-2xl border border-stone-950/10 bg-white/78 p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.07]" key={title}>
+              <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">{title}</p>
+              <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">{copy}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm dark:border-white/10 dark:bg-white/[0.07]">
+          <div className="border-b border-stone-950/10 p-4 dark:border-white/10">
+            <h2 className="text-lg font-semibold text-stone-950 dark:text-stone-50">Open strongest proof</h2>
+            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+              Quick routes into the project screens recruiters usually care about first.
+            </p>
+          </div>
+          <div className="divide-y divide-stone-950/10 dark:divide-white/10">
+            {projects.slice(0, 4).map((project) => {
+              const Icon = project.icon
+
+              return (
+                <button
+                  className="group grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-4 text-left transition hover:bg-stone-950/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-950 dark:hover:bg-white/[0.05] dark:focus:ring-stone-50"
+                  key={project.id}
+                  onClick={() => onOpenProject(project.id)}
+                  type="button"
+                >
+                  <span className={`grid size-10 place-items-center rounded-xl ${project.accent} text-white`}>
+                    <Icon aria-hidden="true" className="size-5" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">
+                      {project.name}
+                    </span>
+                    <span className="mt-1 block text-sm leading-5 text-stone-500 dark:text-stone-400">
+                      {project.metrics.join(' / ')}
+                    </span>
+                  </span>
+                  <ChevronRight aria-hidden="true" className="size-4 text-stone-400 transition group-hover:translate-x-0.5 group-hover:text-amber-600 dark:group-hover:text-amber-200" />
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
   )
 }
 
@@ -533,6 +637,13 @@ function BuildWorkspace() {
       icon: Moon,
     },
   ]
+  const systemStatus = [
+    ['Version', `v${packageJson.version}`, 'Read from package metadata at build time.'],
+    ['Analytics', 'enabled', 'GA page views and key portfolio interactions are tracked.'],
+    ['SEO', 'ready', 'Sitemap, robots, canonical tags, and social preview metadata are configured.'],
+    ['Release', 'single push', 'Promote release merges main, bumps version, validates, then deploys once.'],
+    ['Compiler', 'stable TS 5', 'Pinned away from TypeScript prerelease builds for Hostinger reliability.'],
+  ]
   const [revealedCount, setRevealedCount] = useState(0)
   const [activeFinding, setActiveFinding] = useState(0)
   const [activeAiStage, setActiveAiStage] = useState(0)
@@ -868,6 +979,43 @@ function BuildWorkspace() {
               </motion.article>
             )
           })}
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-stone-950/10 bg-white/78 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]">
+        <div className="grid gap-2 border-b border-stone-950/10 px-4 py-4 dark:border-white/10 sm:grid-cols-[1fr_auto] sm:items-end sm:px-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-200">
+              Live System Status
+            </p>
+            <h2 className="mt-2 text-lg font-semibold text-stone-950 dark:text-stone-50">
+              Current portfolio health
+            </h2>
+          </div>
+          <span className="w-fit rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white dark:bg-emerald-300 dark:text-stone-950">
+            live-ready
+          </span>
+        </div>
+        <div className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
+          {systemStatus.map(([label, value, detail], index) => (
+            <motion.article
+              className="rounded-2xl border border-stone-950/10 bg-stone-950/[0.035] p-4 dark:border-white/10 dark:bg-white/[0.06]"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05, duration: 0.2 }}
+              key={label}
+            >
+              <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
+                {label}
+              </span>
+              <span className="mt-2 block text-xl font-semibold text-stone-950 dark:text-stone-50">
+                {value}
+              </span>
+              <span className="mt-2 block text-xs leading-5 text-stone-600 dark:text-stone-300">
+                {detail}
+              </span>
+            </motion.article>
+          ))}
         </div>
       </section>
 

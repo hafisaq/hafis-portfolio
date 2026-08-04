@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Banknote,
+  BadgeCheck,
   BrainCircuit,
   BriefcaseBusiness,
   Code2,
@@ -13,7 +14,14 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-export type WorkspaceId = 'overview' | 'projects' | 'experience' | 'resume' | 'contact' | 'build'
+export type WorkspaceId =
+  | 'overview'
+  | 'recruiter'
+  | 'projects'
+  | 'experience'
+  | 'resume'
+  | 'contact'
+  | 'build'
 export type ProjectId = 'rakbank' | 'ai-workflows' | 'vision-pro' | 'saas'
 
 export type Project = {
@@ -47,6 +55,8 @@ export type CommandAction = {
   hint: string
   icon: LucideIcon
   workspace: WorkspaceId
+  keywords?: string[]
+  projectId?: ProjectId
   external?: string
 }
 
@@ -61,6 +71,12 @@ export const workspaces: Array<{
     label: 'Home',
     description: 'Portfolio OS launch surface',
     icon: PanelsTopLeft,
+  },
+  {
+    id: 'recruiter',
+    label: 'Recruiter',
+    description: 'A focused 60-second hiring scan',
+    icon: BadgeCheck,
   },
   {
     id: 'projects',
@@ -264,6 +280,15 @@ export const commandActions: CommandAction[] = [
     hint: 'Return to launch surface',
     icon: PanelsTopLeft,
     workspace: 'overview',
+    keywords: ['home', 'start', 'overview', 'launch'],
+  },
+  {
+    id: 'open-recruiter',
+    label: 'Recruiter Mode',
+    hint: '60-second hiring scan',
+    icon: BadgeCheck,
+    workspace: 'recruiter',
+    keywords: ['hire', 'hiring', 'recruiter', 'summary', 'fit', 'shortlist', 'quick scan'],
   },
   {
     id: 'open-projects',
@@ -271,6 +296,7 @@ export const commandActions: CommandAction[] = [
     hint: 'View selected workspaces',
     icon: Layers3,
     workspace: 'projects',
+    keywords: ['projects', 'work', 'portfolio', 'proof'],
   },
   {
     id: 'open-story',
@@ -278,6 +304,7 @@ export const commandActions: CommandAction[] = [
     hint: 'Career timeline',
     icon: BriefcaseBusiness,
     workspace: 'experience',
+    keywords: ['story', 'experience', 'timeline', 'career', 'rakbank', 'education'],
   },
   {
     id: 'open-resume',
@@ -285,6 +312,7 @@ export const commandActions: CommandAction[] = [
     hint: 'Recruiter scan view',
     icon: FileDown,
     workspace: 'resume',
+    keywords: ['resume', 'cv', 'download', 'pdf', 'skills'],
   },
   {
     id: 'email',
@@ -292,6 +320,7 @@ export const commandActions: CommandAction[] = [
     hint: 'Start a message',
     icon: Mail,
     workspace: 'contact',
+    keywords: ['email', 'contact', 'hire', 'message'],
     external: 'mailto:hafisaq@gmail.com',
   },
   {
@@ -300,5 +329,42 @@ export const commandActions: CommandAction[] = [
     hint: 'Tech stack and interaction system',
     icon: Code2,
     workspace: 'build',
+    keywords: ['build', 'made', 'stack', 'analytics', 'seo', 'ci/cd', 'hostinger', 'release'],
+  },
+  {
+    id: 'open-digital-banking',
+    label: 'Digital Banking Work',
+    hint: 'RAKBANK, payments, SDKs, secure banking flows',
+    icon: Banknote,
+    workspace: 'projects',
+    projectId: 'rakbank',
+    keywords: ['banking', 'rakbank', 'payment', 'payments', 'biometric', 'sdk', '3d secure'],
+  },
+  {
+    id: 'open-ai-workflows',
+    label: 'AI + MCP Workflows',
+    hint: 'Agent workflows, MCP, engineering productivity',
+    icon: BrainCircuit,
+    workspace: 'projects',
+    projectId: 'ai-workflows',
+    keywords: ['ai', 'mcp', 'agents', 'copilot', 'automation', 'workflow'],
+  },
+  {
+    id: 'open-vision-pro',
+    label: 'Vision Pro Work',
+    hint: 'Spatial computing ownership and delivery',
+    icon: Cpu,
+    workspace: 'projects',
+    projectId: 'vision-pro',
+    keywords: ['vision pro', 'spatial', 'apple', 'swift', 'product owner', 'award'],
+  },
+  {
+    id: 'open-saas-platform',
+    label: 'SaaS Platform Work',
+    hint: 'Full-stack product, Supabase, PostgreSQL, Docker',
+    icon: Sparkles,
+    workspace: 'projects',
+    projectId: 'saas',
+    keywords: ['saas', 'full-stack', 'backend', 'supabase', 'postgresql', 'docker', 'rbac', 'rls'],
   },
 ]

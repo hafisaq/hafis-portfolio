@@ -13,7 +13,7 @@ export function WorkspaceDock({ activeWorkspace, onSelectWorkspace }: WorkspaceD
       aria-label="Portfolio workspaces"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-900/10 bg-[#f8f4eb]/88 px-2 py-2 shadow-2xl shadow-stone-950/10 backdrop-blur-xl transition-all duration-200 sm:bottom-5 sm:left-1/2 sm:right-auto sm:w-auto sm:-translate-x-1/2 sm:rounded-2xl sm:border sm:hover:px-3 sm:hover:py-3 dark:border-white/10 dark:bg-[#0d0c0b]/88 dark:shadow-black/30"
     >
-      <div className="mx-auto grid max-w-lg grid-cols-6 gap-1 sm:flex sm:max-w-none sm:items-end sm:gap-2">
+      <div className="mx-auto grid max-w-lg grid-cols-7 gap-1 sm:flex sm:max-w-none sm:items-end sm:gap-2">
         {workspaces.map((workspace) => {
           const Icon = workspace.icon
           const isActive = workspace.id === activeWorkspace

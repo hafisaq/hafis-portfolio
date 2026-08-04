@@ -277,9 +277,13 @@ function App() {
           actions={commandActions}
           isOpen={isCommandOpen}
           onClose={() => setIsCommandOpen(false)}
+          onOpenProject={(projectId) => openProject(projectId, 'command_palette')}
           onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'command_palette')}
         />
-        <MiniGuide onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'mini_hafis')} />
+        <MiniGuide
+          onOpenProject={(projectId) => openProject(projectId, 'mini_hafis')}
+          onSelectWorkspace={(workspace) => selectWorkspace(workspace, 'mini_hafis')}
+        />
         <ProjectFocus
           project={activeProject}
           onClose={() => {
@@ -319,7 +323,7 @@ function FirstLoadGuide({
   const guideItems = [
     {
       title: 'Open workspaces',
-      copy: 'Projects, Story, Resume, Contact, and Build each open as their own focused screen.',
+      copy: 'Recruiter, Projects, Story, Resume, Contact, and Build each open as their own focused screen.',
       icon: Layers3,
     },
     {
@@ -365,7 +369,7 @@ function FirstLoadGuide({
                     </span>
                   </div>
                   <div className="grid gap-2 sm:gap-3">
-                    {['Home', 'Projects', 'Story', 'Resume', 'Build'].map((item, index) => (
+                    {['Home', 'Recruiter', 'Projects', 'Story', 'Resume', 'Build'].map((item, index) => (
                       <motion.div
                         className="flex min-h-10 items-center justify-between rounded-xl border border-white/10 bg-white/[0.07] px-3 sm:min-h-12"
                         key={item}
