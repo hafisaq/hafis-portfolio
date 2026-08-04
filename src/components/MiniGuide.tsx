@@ -14,7 +14,7 @@ const guidePrompts = [
     id: 'why-hafis',
     label: 'Why Hafis?',
     answer:
-      'Hafis has 4+ years building production mobile and web experiences across fintech, secure payments, Vision Pro delivery, AI/MCP workflows, and full-stack SaaS systems.',
+      'I have 4+ years building production mobile and web experiences across fintech, secure payments, Vision Pro delivery, AI/MCP workflows, and full-stack SaaS systems.',
     workspace: 'recruiter' as const,
     cta: 'Open recruiter mode',
     keywords: ['why', 'hire', 'fit', 'summary', 'recruiter'],

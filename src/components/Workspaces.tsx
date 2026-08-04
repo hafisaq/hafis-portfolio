@@ -147,7 +147,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
     ['03', 'Beyond frontend', 'Auth, APIs, databases, CI/CD, analytics, Docker, and AI workflows.'],
   ]
   const hiringAngles = [
-    ['Hire signal', 'He can ship polished interfaces without losing sight of reliability, release quality, and product constraints.'],
+    ['Hire signal', 'I ship polished interfaces without losing sight of reliability, release quality, and product constraints.'],
     ['Strongest proof', 'Banking flows, payment platform ownership, Vision Pro delivery, AI workflows, and full-stack SaaS range.'],
     ['Role fit', 'Product engineering, React Native, fintech, frontend systems, AI workflow, and full-stack product roles.'],
   ]
@@ -166,7 +166,7 @@ function RecruiterWorkspace({ onOpenProject }: { onOpenProject: (projectId: Proj
               Product engineer worth shortlisting.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-stone-300 sm:text-lg">
-              Hafis builds engaging user experiences across mobile, web, and AI, with production
+              I build engaging user experiences across mobile, web, and AI, with production
               banking depth and enough full-stack range to move through the whole product system.
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
