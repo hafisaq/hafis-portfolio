@@ -71,7 +71,7 @@ const aiBuildStages = [
   },
   {
     title: 'Human Review',
-    copy: 'The design changed through your feedback: less vibe-coded, cleaner copy, better project screens, and this Made scan.',
+    copy: 'The design changed through your feedback: less vibe-coded, cleaner copy, better project screens, and this build scan.',
   },
   {
     title: 'Polish Loop',

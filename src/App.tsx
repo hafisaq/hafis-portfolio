@@ -316,7 +316,7 @@ function FirstLoadGuide({
   const guideItems = [
     {
       title: 'Open workspaces',
-      copy: 'Projects, Story, Resume, Contact, and Made each open as their own focused screen.',
+      copy: 'Projects, Story, Resume, Contact, and Build each open as their own focused screen.',
       icon: Layers3,
     },
     {
@@ -352,12 +352,6 @@ function FirstLoadGuide({
           >
             <div className="grid gap-4 p-4 sm:grid-cols-[0.9fr_1.1fr] sm:gap-5 sm:p-6">
               <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 sm:p-4">
-                <motion.div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-amber-300/24 to-transparent"
-                  animate={{ y: ['-35%', '285%'] }}
-                  transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.5 }}
-                />
                 <div className="relative">
                   <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3 sm:mb-7">
                     <span className="grid size-9 place-items-center rounded-xl bg-stone-50 text-sm font-bold text-stone-950">
@@ -368,7 +362,7 @@ function FirstLoadGuide({
                     </span>
                   </div>
                   <div className="grid gap-2 sm:gap-3">
-                    {['Home', 'Projects', 'Story', 'Resume', 'Made'].map((item, index) => (
+                    {['Home', 'Projects', 'Story', 'Resume', 'Build'].map((item, index) => (
                       <motion.div
                         className="flex min-h-10 items-center justify-between rounded-xl border border-white/10 bg-white/[0.07] px-3 sm:min-h-12"
                         key={item}
