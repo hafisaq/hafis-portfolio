@@ -207,14 +207,14 @@ function App() {
               >
                 <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-stone-200">
                   <Zap aria-hidden="true" className="size-4 text-amber-600" />
-                  Mobile-first product portfolio
+                  Dubai-based product engineer
                 </div>
                 <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
-                  Creating enganging user experiences
+                  Creating engaging user experiences
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
-                  I build fast, reliable interfaces across mobile, web, fintech, spatial products,
-                  SaaS platforms, and practical AI workflows.
+                  I build fast, reliable React Native and React.js products across mobile, web,
+                  fintech, spatial products, SaaS platforms, and practical AI workflows.
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <button
