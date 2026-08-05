@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import {
   ArrowUpRight,
   Bot,
@@ -21,7 +21,7 @@ import {
   Server,
   Sparkles,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { trackEvent } from '../analytics'
 import type { ProjectId, WorkspaceId } from '../data/portfolio'
 import { projects, timeline } from '../data/portfolio'
@@ -402,27 +402,236 @@ function OverviewWorkspace({ onOpenCommand }: { onOpenCommand: () => void }) {
   ]
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
-      {principles.map(([title, copy]) => (
-        <div
-          className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]"
-          key={title}
-        >
-          <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">{title}</p>
-          <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">
-            {copy}
-          </p>
-        </div>
-      ))}
-      <button
-        className="rounded-2xl border border-stone-950 bg-stone-950 p-4 text-left text-stone-50 shadow-xl shadow-stone-950/15 transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:col-span-3"
-        onClick={onOpenCommand}
-        type="button"
-      >
-        <span className="text-xs uppercase tracking-[0.18em] text-amber-200">Command center</span>
-        <span className="mt-3 block text-xl font-semibold">Press ⌘ K or tap here to move through the portfolio.</span>
-      </button>
+    <div className="grid gap-5">
+      <div className="grid gap-4 sm:grid-cols-3">
+        {principles.map(([title, copy]) => (
+          <motion.div
+            className="rounded-2xl border border-stone-950/10 bg-white/70 p-4 shadow-sm transition-colors dark:border-white/10 dark:bg-white/[0.07]"
+            initial={{ opacity: 0, y: 16 }}
+            key={title}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            viewport={{ once: true, margin: '-80px' }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <p className="text-sm font-semibold text-stone-950 dark:text-stone-50">{title}</p>
+            <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">{copy}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      <ScrollProofShowcase onOpenCommand={onOpenCommand} />
     </div>
+  )
+}
+
+function ScrollProofShowcase({ onOpenCommand }: { onOpenCommand: () => void }) {
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const railScale = useTransform(scrollYProgress, [0.12, 0.9], [0, 1])
+  const scanY = useTransform(scrollYProgress, [0.12, 0.9], ['4%', '90%'])
+  const panelY = useTransform(scrollYProgress, [0.08, 0.55, 0.9], shouldReduceMotion ? [0, 0, 0] : [16, -6, -14])
+  const panelRotate = useTransform(scrollYProgress, [0.08, 0.9], shouldReduceMotion ? [0, 0] : [-1.4, 1.4])
+  const orbX = useTransform(scrollYProgress, [0.1, 0.5, 0.9], shouldReduceMotion ? ['50%', '50%', '50%'] : ['16%', '72%', '36%'])
+  const orbY = useTransform(scrollYProgress, [0.1, 0.5, 0.9], shouldReduceMotion ? ['38%', '38%', '38%'] : ['18%', '42%', '70%'])
+  const glowOpacity = useTransform(scrollYProgress, [0.16, 0.42, 0.74, 0.92], [0.25, 0.95, 0.55, 0.8])
+  const evidence = [
+    {
+      label: '01',
+      title: 'It starts like a product, not a page.',
+      detail: 'The first scan is direct: product engineer, mobile, web, AI, fintech, and proof routes without forcing a recruiter to hunt.',
+      chip: 'Positioning',
+      stat: '6 sec',
+    },
+    {
+      label: '02',
+      title: 'The evidence unlocks in layers.',
+      detail: 'Banking delivery, Vision Pro ownership, AI workflows, and SaaS range come forward as separate proof moments.',
+      chip: 'Evidence',
+      stat: '4 tracks',
+    },
+    {
+      label: '03',
+      title: 'Every control has a job.',
+      detail: 'Command, dock, Mini Hafis, and project workspaces all route into a focused reading path.',
+      chip: 'Interaction',
+      stat: 'cmd+k',
+    },
+    {
+      label: '04',
+      title: 'The build itself becomes proof.',
+      detail: 'Motion, accessibility, analytics, release flow, and AI-assisted workflow are visible as product decisions.',
+      chip: 'System',
+      stat: 'ship',
+    },
+  ]
+
+  return (
+    <section
+      className="relative overflow-hidden rounded-[2rem] border border-stone-950/10 bg-stone-950 text-stone-50 shadow-2xl shadow-stone-950/20 dark:border-white/10"
+      ref={sectionRef}
+    >
+      <motion.div
+        className="absolute h-80 w-80 rounded-full bg-amber-200/20 blur-3xl"
+        style={{ left: orbX, opacity: glowOpacity, top: orbY, translateX: '-50%', translateY: '-50%' }}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_14%,rgba(251,191,36,.24),transparent_30%),radial-gradient(circle_at_88%_22%,rgba(14,165,233,.18),transparent_28%),linear-gradient(135deg,rgba(255,255,255,.08),transparent_42%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] bg-[size:40px_40px] opacity-60" />
+
+      <div className="relative grid gap-6 p-5 sm:p-7 lg:grid-cols-[0.92fr_1.08fr] lg:p-8">
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-200">
+            Interactive Scroll System
+          </p>
+          <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-[0.96] sm:text-5xl">
+            The page starts building the case as you move.
+          </h2>
+          <p className="mt-5 max-w-lg text-sm leading-7 text-stone-300 sm:text-base">
+            This is the kind of motion that should feel like a system turning on: evidence,
+            interface, and story all moving together.
+          </p>
+
+          <div className="mt-7 grid gap-3 rounded-[1.75rem] border border-white/10 bg-white/[0.07] p-3 backdrop-blur">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">
+                Recruiter Lens
+              </span>
+              <span className="rounded-full bg-emerald-400/15 px-2.5 py-1 text-xs font-semibold text-emerald-200">
+                live
+              </span>
+            </div>
+
+            <motion.div
+              className="relative min-h-[18rem] overflow-hidden rounded-2xl border border-white/10 bg-black/50 p-4"
+              style={{ rotate: panelRotate, y: panelY }}
+            >
+              <motion.div
+                className="absolute left-0 right-0 h-24 bg-gradient-to-b from-amber-200/0 via-amber-200/24 to-amber-200/0 blur-sm"
+                style={{ opacity: glowOpacity, top: scanY }}
+              />
+              <motion.div
+                animate={{ rotate: 360 }}
+                className="absolute -right-16 -top-16 size-40 rounded-full border border-dashed border-amber-200/30"
+                transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
+              />
+              <div className="relative flex items-center gap-2">
+                <span className="size-2.5 rounded-full bg-red-400" />
+                <span className="size-2.5 rounded-full bg-amber-300" />
+                <span className="size-2.5 rounded-full bg-emerald-400" />
+                <span className="ml-auto text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-stone-500">
+                  HAFIS.SIGNAL
+                </span>
+              </div>
+
+              <div className="relative mt-6 grid grid-cols-[0.76fr_1fr] gap-3">
+                <div className="rounded-2xl border border-amber-200/25 bg-amber-200/12 p-4">
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-amber-100">
+                    Mode
+                  </p>
+                  <p className="mt-5 text-4xl font-semibold leading-none text-white">Hire</p>
+                  <p className="mt-2 text-xs leading-5 text-stone-300">signal density: high</p>
+                </div>
+                <div className="grid gap-2">
+                  {['Product engineer', 'React Native + React.js', 'Fintech production depth', 'AI workflow systems'].map(
+                  (item, index) => (
+                    <motion.div
+                      className="rounded-2xl border border-white/10 bg-white/[0.08] px-3 py-2.5"
+                      initial={{ opacity: 0.55, x: 12 }}
+                      key={item}
+                      transition={{ delay: index * 0.04, duration: 0.3 }}
+                      viewport={{ once: false, margin: '-80px' }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                    >
+                      <span className="block text-[0.58rem] font-semibold text-amber-100">0{index + 1}</span>
+                      <span className="mt-1 block text-xs font-semibold text-stone-100">{item}</span>
+                    </motion.div>
+                  ),
+                )}
+                </div>
+              </div>
+
+              <div className="relative mt-3 grid grid-cols-3 gap-2">
+                {['scan', 'match', 'open'].map((item, index) => (
+                  <motion.div
+                    animate={{ opacity: [0.45, 1, 0.45] }}
+                    className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-center text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-stone-300"
+                    key={item}
+                    transition={{ delay: index * 0.35, duration: 1.8, repeat: Infinity }}
+                  >
+                    {item}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            <button
+              className="grid min-h-12 grid-cols-[1fr_auto] items-center rounded-2xl bg-stone-50 px-4 text-left text-sm font-semibold text-stone-950 transition hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-300"
+              onClick={onOpenCommand}
+              type="button"
+            >
+              Open command center
+              <ChevronRight aria-hidden="true" className="size-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative grid gap-4 py-2 lg:py-4">
+          <div className="absolute bottom-8 left-5 top-8 hidden w-px bg-white/10 sm:block">
+            <motion.div
+              className="absolute left-0 top-0 h-full w-px origin-top bg-amber-200"
+              style={{ scaleY: railScale }}
+            />
+          </div>
+
+          {evidence.map((item, index) => (
+            <motion.article
+              className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-5 shadow-xl shadow-black/15 backdrop-blur sm:ml-12 sm:p-6"
+              initial={{ opacity: 0, y: 34, scale: 0.97 }}
+              key={item.title}
+              transition={{ duration: 0.38, delay: index * 0.035, ease: 'easeOut' }}
+              viewport={{ once: false, margin: '-12% 0px -12% 0px' }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            >
+              <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-amber-200/8 to-transparent" />
+              <span className="absolute -left-[3.38rem] top-7 hidden size-4 rounded-full border border-amber-200 bg-stone-950 shadow-[0_0_0_8px_rgba(251,191,36,.12)] sm:block" />
+              <div className="relative grid gap-5 lg:grid-cols-[1fr_auto]">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-amber-200 px-2.5 py-1 text-xs font-bold text-stone-950">
+                      {item.label}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-xs font-semibold text-stone-300">
+                      {item.chip}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 text-2xl font-semibold leading-tight sm:text-4xl">{item.title}</h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-300 sm:text-base">{item.detail}</p>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-4 lg:w-44 lg:grid-cols-1">
+                  <span className="rounded-2xl border border-amber-200/30 bg-amber-200/10 px-4 py-3 text-xl font-semibold text-amber-100">
+                    {item.stat}
+                  </span>
+                  {['readable', 'focused', 'fast'].map((pill, pillIndex) => (
+                    <motion.span
+                      className="rounded-2xl border border-white/10 bg-white/[0.07] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-stone-300"
+                      initial={{ opacity: 0, y: 12 }}
+                      key={pill}
+                      transition={{ delay: pillIndex * 0.06, duration: 0.24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                    >
+                      {pill}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 

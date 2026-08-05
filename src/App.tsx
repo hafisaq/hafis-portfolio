@@ -1,5 +1,12 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, MotionConfig, motion } from 'motion/react'
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'motion/react'
 import { BadgeCheck, Command, Compass, Eye, Layers3, Menu, Moon, Sun, Zap } from 'lucide-react'
 import { CommandPalette } from './components/CommandPalette'
 import { MiniGuide } from './components/MiniGuide'
@@ -133,6 +140,7 @@ function App() {
       <main className="min-h-svh overflow-hidden bg-[#f8f4eb] text-stone-950 transition-colors duration-300 dark:bg-[#080706] dark:text-stone-50">
         <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(28,25,23,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(28,25,23,.05)_1px,transparent_1px)] bg-[size:44px_44px] dark:bg-[linear-gradient(rgba(255,255,255,.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.055)_1px,transparent_1px)]" />
         <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_48%_0%,rgba(251,191,36,.22),transparent_34%),linear-gradient(180deg,rgba(255,255,255,.7),transparent_34%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(251,191,36,.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,.055),transparent_36%)]" />
+        <LivingBackground isActive={isHome} />
 
         <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a
@@ -190,67 +198,12 @@ function App() {
 
         <AnimatePresence mode="wait">
           {isHome ? (
-            <motion.section
-              animate={{ opacity: 1, y: 0 }}
-              className="relative z-10 mx-auto grid w-full max-w-6xl gap-8 px-4 pb-8 pt-4 sm:px-6 sm:pt-10 lg:grid-cols-[1.08fr_0.92fr] lg:px-8"
-              exit={{ opacity: 0, y: -12 }}
-              id="top"
-              initial={{ opacity: 0, y: 12 }}
+            <HomeHero
               key="hero"
-              transition={{ duration: 0.24, ease: 'easeOut' }}
-            >
-              <motion.div
-                animate={{ opacity: 1, y: 0 }}
-                className="flex min-h-[58svh] flex-col justify-center"
-                initial={{ opacity: 0, y: 14 }}
-                transition={{ duration: 0.34, ease: 'easeOut' }}
-              >
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/70 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-stone-200">
-                  <Zap aria-hidden="true" className="size-4 text-amber-600" />
-                  Product engineer across mobile, web, and AI
-                </div>
-                <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
-                  Creating engaging user experiences
-                </h1>
-                <p className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300">
-                  I build fast, reliable React Native and React.js products across mobile, web,
-                  fintech, spatial products, SaaS platforms, and practical AI workflows.
-                </p>
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <button
-                    className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
-                    onClick={() => openCommand('hero_primary')}
-                    type="button"
-                  >
-                    Open command center
-                  </button>
-                  <button
-                    className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
-                    onClick={() => selectWorkspace('projects', 'hero_secondary')}
-                    type="button"
-                  >
-                    View projects
-                  </button>
-                  <button
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-amber-500/35 bg-amber-200/50 px-5 text-sm font-semibold text-stone-950 transition hover:bg-amber-200/75 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-amber-300/30 dark:bg-amber-300/15 dark:text-amber-50 dark:hover:bg-amber-300/20"
-                    onClick={() => selectWorkspace('recruiter', 'hero_recruiter_scan')}
-                    type="button"
-                  >
-                    <BadgeCheck aria-hidden="true" className="size-4" />
-                    Recruiter scan
-                  </button>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center justify-center pb-4 lg:pb-0"
-                initial={{ opacity: 0, scale: 0.97 }}
-                transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
-              >
-                <ProjectOrbit onOpenProject={(projectId) => openProject(projectId, 'hero_orbit')} />
-              </motion.div>
-            </motion.section>
+              onOpenCommand={openCommand}
+              onOpenProject={openProject}
+              onSelectWorkspace={selectWorkspace}
+            />
           ) : (
             <WorkspaceStage
               activeWorkspace={activeWorkspace}
@@ -502,6 +455,229 @@ function BootIntro({ isVisible }: { isVisible: boolean }) {
         </motion.div>
       ) : null}
     </AnimatePresence>
+  )
+}
+
+function LivingBackground({ isActive }: { isActive: boolean }) {
+  return (
+    <AnimatePresence>
+      {isActive ? (
+        <motion.div
+          animate={{ opacity: 1 }}
+          className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <motion.div
+            animate={{ x: ['-12%', '8%', '-12%'], y: ['-6%', '4%', '-6%'] }}
+            className="absolute left-[8%] top-[18%] h-56 w-56 rounded-full border border-amber-500/10 bg-amber-300/10 blur-3xl dark:bg-amber-300/8"
+            transition={{ duration: 14, ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.div
+            animate={{ x: ['10%', '-8%', '10%'], y: ['8%', '-4%', '8%'] }}
+            className="absolute right-[6%] top-[30%] h-64 w-64 rounded-full border border-cyan-500/10 bg-cyan-300/10 blur-3xl dark:bg-cyan-300/8"
+            transition={{ duration: 16, ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.div
+            animate={{ backgroundPosition: ['0px 0px', '88px 88px'] }}
+            className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(115deg,transparent_0%,transparent_48%,rgba(251,191,36,.28)_49%,transparent_52%,transparent_100%)] [background-size:88px_88px]"
+            transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
+          />
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  )
+}
+
+function HomeHero({
+  onOpenCommand,
+  onOpenProject,
+  onSelectWorkspace,
+}: {
+  onOpenCommand: (source?: string) => void
+  onOpenProject: (projectId: ProjectId, source?: string) => void
+  onSelectWorkspace: (workspace: WorkspaceId, source?: string) => void
+}) {
+  const pointerX = useMotionValue(0)
+  const pointerY = useMotionValue(0)
+  const springX = useSpring(pointerX, { stiffness: 90, damping: 22, mass: 0.6 })
+  const springY = useSpring(pointerY, { stiffness: 90, damping: 22, mass: 0.6 })
+  const previewX = useTransform(springX, [-1, 1], [-18, 18])
+  const previewY = useTransform(springY, [-1, 1], [14, -14])
+  const previewRotate = useTransform(springX, [-1, 1], [-1.8, 1.8])
+  const spotlightX = useTransform(springX, [-1, 1], ['18%', '82%'])
+  const spotlightY = useTransform(springY, [-1, 1], ['18%', '72%'])
+  const spotlightBackground = useTransform(
+    [spotlightX, spotlightY],
+    ([x, y]) => `radial-gradient(circle at ${x} ${y}, rgba(251,191,36,.26), transparent 34%)`,
+  )
+  const headlineWords = ['Creating', 'engaging', 'user', 'experiences']
+  const signals = [
+    ['4+', 'years shipping'],
+    ['Mobile', 'React Native'],
+    ['Web', 'React.js'],
+    ['AI', 'workflow systems'],
+  ]
+
+  return (
+    <motion.section
+      animate={{ opacity: 1, y: 0 }}
+      className="relative z-10 mx-auto grid w-full max-w-6xl gap-8 px-4 pb-8 pt-4 sm:px-6 sm:pt-10 lg:grid-cols-[1.08fr_0.92fr] lg:px-8"
+      exit={{ opacity: 0, y: -12 }}
+      id="top"
+      initial={{ opacity: 0, y: 12 }}
+      onPointerMove={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect()
+        pointerX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 2)
+        pointerY.set(((event.clientY - bounds.top) / bounds.height - 0.5) * 2)
+      }}
+      onPointerLeave={() => {
+        pointerX.set(0)
+        pointerY.set(0)
+      }}
+      transition={{ duration: 0.24, ease: 'easeOut' }}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] opacity-70 blur-3xl"
+        style={{ background: spotlightBackground }}
+      />
+
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        className="flex min-h-[58svh] flex-col justify-center"
+        initial={{ opacity: 0, y: 14 }}
+        transition={{ duration: 0.34, ease: 'easeOut' }}
+      >
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-950/10 bg-white/75 px-3 py-2 text-xs font-semibold text-stone-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-stone-200"
+          initial={{ opacity: 0, y: 10 }}
+          transition={{ delay: 0.08, duration: 0.28 }}
+        >
+          <motion.span
+            animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.08, 1] }}
+            transition={{ duration: 2.4, ease: 'easeInOut', repeat: Infinity, repeatDelay: 1.2 }}
+          >
+            <Zap aria-hidden="true" className="size-4 text-amber-600" />
+          </motion.span>
+          Product engineer across mobile, web, and AI
+        </motion.div>
+
+        <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-normal text-stone-950 sm:text-7xl lg:text-8xl dark:text-stone-50">
+          {headlineWords.map((word, index) => (
+            <motion.span
+              className="mr-[0.16em] inline-block"
+              initial={{ opacity: 0, y: 34, rotateX: -28 }}
+              key={word}
+              transition={{ delay: 0.1 + index * 0.075, duration: 0.48, ease: 'easeOut' }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+
+        <motion.p
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-5 max-w-xl text-base leading-7 text-stone-650 sm:text-lg dark:text-stone-300"
+          initial={{ opacity: 0, y: 14 }}
+          transition={{ delay: 0.38, duration: 0.32 }}
+        >
+          I build fast, reliable React Native and React.js products across mobile, web, fintech,
+          spatial products, SaaS platforms, and practical AI workflows.
+        </motion.p>
+
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 grid max-w-2xl grid-cols-2 gap-2 sm:grid-cols-4"
+          initial={{ opacity: 0, y: 16 }}
+          transition={{ delay: 0.46, duration: 0.32 }}
+        >
+          {signals.map(([label, detail], index) => (
+            <motion.div
+              className="rounded-2xl border border-stone-950/10 bg-white/70 p-3 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.07]"
+              key={label}
+              whileHover={{ y: -3 }}
+              transition={{ delay: index * 0.03 }}
+            >
+              <span className="block text-sm font-semibold text-stone-950 dark:text-stone-50">
+                {label}
+              </span>
+              <span className="mt-1 block text-xs leading-5 text-stone-500 dark:text-stone-400">
+                {detail}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-7 flex flex-col gap-3 sm:flex-row"
+          initial={{ opacity: 0, y: 16 }}
+          transition={{ delay: 0.54, duration: 0.32 }}
+        >
+          <button
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-stone-950 px-5 text-sm font-semibold text-stone-50 shadow-xl shadow-stone-950/15 transition hover:-translate-y-0.5 hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-stone-50 dark:text-stone-950 dark:hover:bg-stone-200"
+            onClick={() => onOpenCommand('hero_primary')}
+            type="button"
+          >
+            Open command center
+          </button>
+          <button
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-stone-950/12 bg-white/75 px-5 text-sm font-semibold text-stone-800 shadow-sm transition hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-stone-950 dark:border-white/10 dark:bg-white/10 dark:text-stone-100 dark:hover:bg-white/15 dark:focus:ring-stone-50"
+            onClick={() => onSelectWorkspace('projects', 'hero_secondary')}
+            type="button"
+          >
+            View projects
+          </button>
+          <button
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-amber-500/35 bg-amber-200/50 px-5 text-sm font-semibold text-stone-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-amber-200/75 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-amber-300/30 dark:bg-amber-300/15 dark:text-amber-50 dark:hover:bg-amber-300/20"
+            onClick={() => onSelectWorkspace('recruiter', 'hero_recruiter_scan')}
+            type="button"
+          >
+            <BadgeCheck aria-hidden="true" className="size-4" />
+            Recruiter scan
+          </button>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex items-center justify-center pb-4 lg:pb-0"
+        initial={{ opacity: 0, scale: 0.97 }}
+        style={{ rotate: previewRotate, x: previewX, y: previewY }}
+        transition={{ delay: 0.08, duration: 0.34, ease: 'easeOut' }}
+      >
+        <ProjectOrbit onOpenProject={(projectId) => onOpenProject(projectId, 'hero_orbit')} />
+      </motion.div>
+
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        className="relative col-span-full overflow-hidden rounded-2xl border border-stone-950/10 bg-white/60 py-3 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.06]"
+        initial={{ opacity: 0, y: 18 }}
+        transition={{ delay: 0.62, duration: 0.32 }}
+      >
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#f8f4eb] to-transparent dark:from-[#080706]" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#f8f4eb] to-transparent dark:from-[#080706]" />
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          className="flex w-max gap-3 px-3"
+          transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+        >
+          {[...['React Native banking', 'React.js systems', 'Vision Pro ownership', 'AI workflow infrastructure', 'SaaS product range', 'Fintech reliability'], ...['React Native banking', 'React.js systems', 'Vision Pro ownership', 'AI workflow infrastructure', 'SaaS product range', 'Fintech reliability']].map(
+            (item, index) => (
+              <span
+                className="rounded-full border border-stone-950/10 bg-white/75 px-4 py-2 text-xs font-semibold text-stone-700 dark:border-white/10 dark:bg-white/10 dark:text-stone-300"
+                key={`${item}-${index}`}
+              >
+                {item}
+              </span>
+            ),
+          )}
+        </motion.div>
+      </motion.div>
+    </motion.section>
   )
 }
 
