@@ -14,26 +14,20 @@ export function initializeAnalytics() {
     return
   }
 
-  const existingScript = document.querySelector<HTMLScriptElement>(
-    `script[src="https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}"]`,
-  )
-
-  if (!existingScript) {
+  if (!window.gtag) {
     const script = document.createElement('script')
     script.async = true
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`
     document.head.appendChild(script)
-  }
 
-  window.dataLayer = window.dataLayer ?? []
-  window.gtag = (...args: unknown[]) => {
-    window.dataLayer?.push(args)
-  }
+    window.dataLayer = window.dataLayer ?? []
+    window.gtag = (...args: unknown[]) => {
+      window.dataLayer?.push(args)
+    }
 
-  window.gtag('js', new Date())
-  window.gtag('config', gaMeasurementId, {
-    page_path: window.location.pathname,
-  })
+    window.gtag('js', new Date())
+    window.gtag('config', gaMeasurementId)
+  }
 }
 
 export function trackEvent(eventName: string, params: Record<string, unknown> = {}) {
